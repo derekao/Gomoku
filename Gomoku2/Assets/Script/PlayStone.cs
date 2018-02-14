@@ -148,8 +148,8 @@ public class PlayStone : MonoBehaviour {
 		for (int i = 0; i < GameManager.iHeightBoard; i++) {
 			for (int j = 0; j < GameManager.iWidthBoard; j++) {
 
-				if (gameManager.Board[i, j] != GameManager.Stone.Black && gameManager.Board[i, j] != GameManager.Stone.White) {
-					if (gameManager.Board[i, j] != 0) {
+				if ((gameManager.Board[i, j] & GameManager.Stone.Black) == 0 && (gameManager.Board[i, j] & GameManager.Stone.White) == 0) {
+					if ((gameManager.Board[i, j] & 0) == 0) {
 						gameManager.Board[i, j] = GameManager.Stone.Empty;
 						changeBoxState(j , i, Type.Empty);
 					}
