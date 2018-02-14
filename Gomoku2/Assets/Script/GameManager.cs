@@ -17,13 +17,13 @@ public class GameManager : MonoBehaviour {
 	static public int iWidthBoard = 19;
 	static public int iHeightBoard = 19;
 	
-	public List<int[,]> lBoardHisto;
-	public bool	bPlayerOneTurn;
-	public int iTurn = 0;
-	public int[,] Board;
+	static public List<int[,]> lBoardHisto;
+	static public bool	bPlayerOneTurn = true;
+	static public int iTurn = 0;
+	static public int[,] Board;
 
-	public int BlackScore = 0;
-	public int WhiteScore = 0;
+	static public int BlackScore = 0;
+	static public int WhiteScore = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -35,4 +35,5 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		
 	}
+
 }

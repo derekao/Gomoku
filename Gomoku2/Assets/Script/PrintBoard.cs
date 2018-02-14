@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class PrintBoard : MonoBehaviour {
 
-	private GameManager gameManager;
-
-	void Start() {
-
-		gameManager = GameObject.Find("Main Camera").GetComponent<GameManager>();
-	}
-	
 	public void OnClickBoard () {
 
 		string szBoard = "";
@@ -18,7 +11,7 @@ public class PrintBoard : MonoBehaviour {
 		{
 			for (int j = 0; j < GameManager.iWidthBoard; j++)
 			{
-				szBoard += gameManager.Board[i,j].ToString();
+				szBoard += GameManager.Board[i,j].ToString();
 				szBoard += ' ';
 			}
 			Debug.Log(szBoard);
