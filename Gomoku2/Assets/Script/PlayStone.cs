@@ -66,13 +66,14 @@ public class PlayStone : MonoBehaviour {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled) 
 		{
-			checkBoardState();
+			checkStoneEaten();
 			BlackStoneImage.enabled = true;
 			gameManager.bPlayerOneTurn = false;
 			gameManager.Board[y, x] = GameManager.Stone.Black;
 			int[,] tmpArray = gameManager.Board.Clone() as int[,];
 			gameManager.lBoardHisto.Add(tmpArray);
 			gameManager.iTurn += 1;
+			checkBoardState();
 			DisplayBoard();
 		}
 
@@ -82,13 +83,14 @@ public class PlayStone : MonoBehaviour {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled)
 		{
-			checkBoardState();
+			checkStoneEaten();
 			WhiteStoneImage.enabled = true;
 			gameManager.bPlayerOneTurn = true;
 			gameManager.Board[y, x] = GameManager.Stone.White;
 			int[,] tmpArray = gameManager.Board.Clone() as int[,];
 			gameManager.lBoardHisto.Add(tmpArray);
 			gameManager.iTurn += 1;
+			checkBoardState();
 			DisplayBoard();
 		}
 
@@ -142,15 +144,21 @@ public class PlayStone : MonoBehaviour {
 	}
 
 	private void checkBoardState() {
-		checkStoneEaten();
+		// checkStoneEaten();
+		for (int i = 0; i < GameManager.iHeightBoard; i++) {
+			for (int j = 0; j < GameManager.iWidthBoard; j++) {
+
+				if (gameManager.Board[i, j] != GameManager.Stone.Black && gameManager.Board[i, j] != GameManager.Stone.White)
+					checkForbiddenBox(i, j);
+			}
+		}
+		
 	}
 
 	private bool EmptyCase(int Content){
 
 		if ((Content & GameManager.Stone.Black) == 0 && (Content & GameManager.Stone.White) == 0)
-		{
 			return true;
-		}
 		else
 			return false;
 	}
@@ -171,206 +179,57 @@ public class PlayStone : MonoBehaviour {
 			Player2 = GameManager.Stone.Black;
 		}
 
-		//
-		//  
-		//
 		if (x >= 3) // Manger à gauche
-		{
 			if (gameManager.Board[y, x - 1] == Player2 && gameManager.Board[y, x - 2] == Player2 && gameManager.Board[y, x - 3] == Player1)
 			{
 				changeBoxState(x - 1, y, Type.Eat);
 				changeBoxState(x - 2, y, Type.Eat);
 			}
-			else if (gameManager.Board[y, x - 1] == Player2 && EmptyCase(gameManager.Board[y, x - 2]) && gameManager.Board[y, x - 3] == Player1)
-			{
-				FillForbiddenBoard(x - 2, y, !gameManager.bPlayerOneTurn);
-			}
-			else if (EmptyCase(gameManager.Board[y, x - 1]) && gameManager.Board[y, x - 2] == Player2 && gameManager.Board[y, x - 3] == Player1)
-			{
-				FillForbiddenBoard(x - 1, y, !gameManager.bPlayerOneTurn);
-			}
-
-		}
 		if (x <= GameManager.iWidthBoard - 3) // Manger à droite
-		{
 			if (gameManager.Board[y, x + 1] == Player2 && gameManager.Board[y, x + 2] == Player2 && gameManager.Board[y, x + 3] == Player1)
 			{
 				changeBoxState(x + 1, y, Type.Eat);
 				changeBoxState(x + 2, y, Type.Eat);
 			}
-			else if (gameManager.Board[y, x + 1] == Player2 && EmptyCase(gameManager.Board[y, x + 2]) && gameManager.Board[y, x + 3] == Player1)
-			{
-				FillForbiddenBoard(x + 2, y, !gameManager.bPlayerOneTurn);
-			}
-			else if (EmptyCase(gameManager.Board[y, x + 1]) && gameManager.Board[y, x + 2] == Player2 && gameManager.Board[y, x + 3] == Player1)
-			{
-				FillForbiddenBoard(x + 1, y, !gameManager.bPlayerOneTurn);
-			}
-		}
 		if (y >= 3) // Manger en haut
-		{
 			if (gameManager.Board[y - 1, x] == Player2 && gameManager.Board[y - 2, x] == Player2 && gameManager.Board[y - 3, x] == Player1)
 			{
 				changeBoxState(x, y - 1, Type.Eat);
 				changeBoxState(x, y - 2, Type.Eat);
 			}
-			else if (gameManager.Board[y - 1, x] == Player2 && EmptyCase(gameManager.Board[y - 2, x]) && gameManager.Board[y - 3, x] == Player1)
-			{
-				FillForbiddenBoard(x, y - 2, !gameManager.bPlayerOneTurn);
-			}
-			else if (EmptyCase(gameManager.Board[y - 1, x]) && gameManager.Board[y - 2, x] == Player2 && gameManager.Board[y - 3, x] == Player1)
-			{
-				FillForbiddenBoard(x, y - 1, !gameManager.bPlayerOneTurn);
-			}
-		}
-		if (y <= GameManager.iHeightBoard - 3) // Manger en bas
-		{
+		if (y < GameManager.iHeightBoard - 3) // Manger en bas
 			if (gameManager.Board[y + 1, x] == Player2 && gameManager.Board[y + 2, x] == Player2 && gameManager.Board[y + 3, x] == Player1)
 			{
 				changeBoxState(x, y + 1, Type.Eat);
 				changeBoxState(x, y + 2, Type.Eat);
 			}
-			else if (gameManager.Board[y + 1, x] == Player2 && EmptyCase(gameManager.Board[y + 2, x]) && gameManager.Board[y + 3, x] == Player1)
-			{
-				FillForbiddenBoard(x, y + 2, !gameManager.bPlayerOneTurn);
-			}
-			else if (EmptyCase(gameManager.Board[y + 1, x]) && gameManager.Board[y + 2, x] == Player2 && gameManager.Board[y + 3, x] == Player1)
-			{
-				FillForbiddenBoard(x, y + 1, !gameManager.bPlayerOneTurn);
-			}
-		}
 		if (x >= 3 && y >= 3) // Manger en haut gauche
-		{
 			if (gameManager.Board[y - 1, x - 1] == Player2 && gameManager.Board[y - 2, x - 2] == Player2 && gameManager.Board[y - 3, x - 3] == Player1)
 			{
 				changeBoxState(x - 1, y - 1, Type.Eat);
 				changeBoxState(x - 2, y - 2, Type.Eat);
 			}
-			else if (gameManager.Board[y - 1, x - 1] == Player2 && EmptyCase(gameManager.Board[y - 2, x - 2]) && gameManager.Board[y - 3, x - 3] == Player1)
-			{
-				FillForbiddenBoard(x - 2, y - 2, !gameManager.bPlayerOneTurn);
-			}
-			else if (EmptyCase(gameManager.Board[y - 1, x - 1]) && gameManager.Board[y - 2, x - 2] == Player2 && gameManager.Board[y - 3, x - 3] == Player1)
-			{
-				FillForbiddenBoard(x - 1, y - 1, !gameManager.bPlayerOneTurn);
-			}
-		}
-		if (x <= GameManager.iWidthBoard - 3 && y >= 3) // Manger en haut droite
-		{
+		if (x < GameManager.iWidthBoard - 3 && y >= 3) // Manger en haut droite
 			if (gameManager.Board[y - 1, x + 1] == Player2 && gameManager.Board[y - 2, x + 2] == Player2 && gameManager.Board[y - 3, x + 3] == Player1)
 			{
 				changeBoxState(x + 1, y - 1, Type.Eat);
 				changeBoxState(x + 2, y - 2, Type.Eat);
 			}
-			else if (gameManager.Board[y - 1, x + 1] == Player2 && EmptyCase(gameManager.Board[y - 2, x + 2]) && gameManager.Board[y - 3, x + 3] == Player1)
-			{
-				FillForbiddenBoard(x + 2, y - 2, !gameManager.bPlayerOneTurn);
-			}
-			else if (EmptyCase(gameManager.Board[y - 1, x + 1]) && gameManager.Board[y - 2, x + 2] == Player2 && gameManager.Board[y - 3, x + 3] == Player1)
-			{
-				FillForbiddenBoard(x + 1, y - 1, !gameManager.bPlayerOneTurn);
-			}
-		}
-		if (x <= GameManager.iWidthBoard - 3 && y <= GameManager.iHeightBoard - 3) // Manger en bas  droite
-		{
+		if (x < GameManager.iWidthBoard - 3 && y < GameManager.iHeightBoard - 3) // Manger en bas  droite
 			if (gameManager.Board[y + 1, x + 1] == Player2 && gameManager.Board[y + 2, x + 2] == Player2 && gameManager.Board[y + 3, x + 3] == Player1)
 			{
 				changeBoxState(x + 1, y + 1, Type.Eat);
 				changeBoxState(x + 2, y + 2, Type.Eat);
 			}
-			else if (gameManager.Board[y + 1, x + 1] == Player2 && EmptyCase(gameManager.Board[y + 2, x + 2])  && gameManager.Board[y + 3, x + 3] == Player1)
-			{
-				FillForbiddenBoard(x + 2, y + 2, !gameManager.bPlayerOneTurn);
-			}
-			else if (EmptyCase(gameManager.Board[y + 1, x + 1]) && gameManager.Board[y + 2, x + 2] == Player2 && gameManager.Board[y + 3, x + 3] == Player1)
-			{
-				FillForbiddenBoard(x + 1, y + 1, !gameManager.bPlayerOneTurn);
-			}
-		}
-		if (x >= 3 && y <= GameManager.iHeightBoard - 3) // Manger en bas gauche
-		{
+		if (x >= 3 && y < GameManager.iHeightBoard - 3) // Manger en bas gauche
 			if (gameManager.Board[y + 1, x - 1] == Player2 && gameManager.Board[y + 2, x - 2] == Player2 && gameManager.Board[y + 3, x - 3] == Player1)
 			{
 				changeBoxState(x - 1, y + 1, Type.Eat);
 				changeBoxState(x - 2, y + 2, Type.Eat);
 			}
-			else if (gameManager.Board[y + 1, x - 1] == Player2 && EmptyCase(gameManager.Board[y + 2, x - 2]) && gameManager.Board[y + 3, x - 3] == Player1)
-			{
-				FillForbiddenBoard(x - 2, y + 2, !gameManager.bPlayerOneTurn);
-			}
-			else if (EmptyCase(gameManager.Board[y + 1, x - 1]) && gameManager.Board[y + 2, x - 2] == Player2 && gameManager.Board[y + 3, x - 3] == Player1)
-			{
-				FillForbiddenBoard(x - 1, y + 1, !gameManager.bPlayerOneTurn);
-			}
-		}
-
-		//
-		//
-		//
-		if (x >= 1) // Gauche
-		{
-			if (gameManager.Board[y, x - 1] == Player2 && EmptyCase(gameManager.Board[y, x + 1]) && gameManager.Board[y, x + 2] == Player2)
-			{
-				FillForbiddenBoard(x + 1, y, gameManager.bPlayerOneTurn);
-			}
-		}
-		if (x <= GameManager.iWidthBoard - 1) // Droite
-		{
-			if (gameManager.Board[y, x - 2] == Player2 && EmptyCase(gameManager.Board[y, x - 1]) && gameManager.Board[y, x + 1] == Player2)
-			{
-				FillForbiddenBoard(x - 1, y, gameManager.bPlayerOneTurn);
-			}
-		}
-		if (y >= 1) // Haut
-		{
-			if (gameManager.Board[y - 1, x] == Player2 && EmptyCase(gameManager.Board[y + 1, x]) && gameManager.Board[y + 2, x] == Player2)
-			{
-				FillForbiddenBoard(x, y + 1, gameManager.bPlayerOneTurn);
-			}
-		}
-		if (y <= GameManager.iHeightBoard - 1) // Bas
-		{
-			if (gameManager.Board[y - 2, x] == Player2 && EmptyCase(gameManager.Board[y - 1, x]) && gameManager.Board[y + 1, x] == Player2)
-			{
-				FillForbiddenBoard(x, y - 1, gameManager.bPlayerOneTurn);
-			}
-		}
-		if (x >= 1 && y >= 1) // Haut Gauche
-		{
-			if (gameManager.Board[y - 1, x - 1] == Player2 && EmptyCase(gameManager.Board[y + 1, x + 1]) && gameManager.Board[y + 2, x + 2] == Player2)
-			{
-				FillForbiddenBoard(x + 1, y + 1, gameManager.bPlayerOneTurn);
-			}
-		}
-		if (x >= 1 && y <= GameManager.iHeightBoard - 1) // Bas Gauche
-		{
-			if (gameManager.Board[y + 1, x - 1] == Player2 && EmptyCase(gameManager.Board[y - 1, x + 1]) && gameManager.Board[y - 2, x + 2] == Player2)
-			{
-				FillForbiddenBoard(x + 1, y - 1, gameManager.bPlayerOneTurn);
-			}
-		}
-		if (x <= GameManager.iWidthBoard - 1 && y >= 1) // Haut Droite
-		{
-			if (gameManager.Board[y - 1, x + 1] == Player2 && EmptyCase(gameManager.Board[y + 1, x - 1]) && gameManager.Board[y + 2, x - 2] == Player2)
-			{
-				FillForbiddenBoard(x - 1, y + 1, gameManager.bPlayerOneTurn);
-			}
-		}
-		if (x <= GameManager.iWidthBoard - 1 && y <= GameManager.iHeightBoard - 1) // Bas Droite
-		{
-			if (gameManager.Board[y + 1, x + 1] == Player2 && EmptyCase(gameManager.Board[y - 1, x - 1]) && gameManager.Board[y - 2, x - 2] == Player2)
-			{
-				FillForbiddenBoard(x - 1, y - 1, gameManager.bPlayerOneTurn);
-			}
-		}
 	}
 
-	private void CheckChangedRules(int Width, int Height)
-	{
-		if (Width >= 0)
-	}
-
-	private void FillForbiddenBoard(int Width, int Height, bool bPlayer) {
+	private void FillForbiddenBoard(int Width, int Height, bool bPlayer, bool empty = false) {
 
 		int Player;
 
@@ -385,13 +244,70 @@ public class PlayStone : MonoBehaviour {
 
 		if ((gameManager.Board[Height, Width] & Player) == 0)
 		{
-			gameManager.Board[Height, Width] += Player;
+			if (!empty)
+				gameManager.Board[Height, Width] += Player;
+			else
+				gameManager.Board[Height, Width] -= Player;
 		}
 		
 	}
 
-	private void checkForbiddenCase(int y, int x) {
+	private void checkForbiddenBox(int y, int x) {
 
+		int Player1;
+		int Player2;
+
+		if (gameManager.bPlayerOneTurn)
+		{
+			Player1 = GameManager.Stone.Black;
+			Player2 = GameManager.Stone.White;
+		}
+		else
+		{
+			Player1 = GameManager.Stone.White;
+			Player2 = GameManager.Stone.Black;
+		}
+
+		if (x >= 1 && x < GameManager.iWidthBoard - 2) // Gauche
+		{
+			if (gameManager.Board[y, x - 1] == Player2 && gameManager.Board[y, x + 1] == Player1 && gameManager.Board[y, x + 2] == Player2)
+				FillForbiddenBoard(x, y, gameManager.bPlayerOneTurn);
+		}
+		if (x < GameManager.iWidthBoard - 1 && x >= 2) // Droite
+		{
+			if (gameManager.Board[y, x - 2] == Player2 && gameManager.Board[y, x - 1] == Player1 && gameManager.Board[y, x + 1] == Player2)
+				FillForbiddenBoard(x, y, gameManager.bPlayerOneTurn);
+		}
+		if (y >= 1 && y < GameManager.iHeightBoard - 2) // Haut
+		{
+			if (gameManager.Board[y - 1, x] == Player2 && gameManager.Board[y + 1, x] == Player1 && gameManager.Board[y + 2, x] == Player2)
+				FillForbiddenBoard(x, y, gameManager.bPlayerOneTurn);
+		}
+		if (y < GameManager.iHeightBoard - 1 && y >= 2) // Bas
+		{
+			if (gameManager.Board[y - 2, x] == Player2 && gameManager.Board[y - 1, x] == Player1 && gameManager.Board[y + 1, x] == Player2)
+				FillForbiddenBoard(x, y, gameManager.bPlayerOneTurn);
+		}
+		if (x >= 1 && y >= 1 && y < GameManager.iHeightBoard - 2 && x < GameManager.iWidthBoard - 2) // Haut Gauche
+		{
+			if (gameManager.Board[y - 1, x - 1] == Player2 && gameManager.Board[y + 1, x + 1] == Player1 && gameManager.Board[y + 2, x + 2] == Player2)
+				FillForbiddenBoard(x, y, gameManager.bPlayerOneTurn);
+		}
+		if (x >= 1 && y < GameManager.iHeightBoard - 1 && x < GameManager.iWidthBoard - 2 && y >= 2) // Bas Gauche
+		{
+			if (gameManager.Board[y + 1, x - 1] == Player2 && gameManager.Board[y - 1, x + 1] == Player1 && gameManager.Board[y - 2, x + 2] == Player2)
+				FillForbiddenBoard(x, y, gameManager.bPlayerOneTurn);
+		}
+		if (x < GameManager.iWidthBoard - 1 && y >= 1 && x >= 2 && y < GameManager.iHeightBoard - 2) // Haut Droite
+		{
+			if (gameManager.Board[y - 1, x + 1] == Player2 && gameManager.Board[y + 1, x - 1] == Player1 && gameManager.Board[y + 2, x - 2] == Player2)
+				FillForbiddenBoard(x, y, gameManager.bPlayerOneTurn);
+		}
+		if (x < GameManager.iWidthBoard - 1 && y < GameManager.iHeightBoard - 1 && x >= 2 && y >= 2) // Bas Droite
+		{
+			if (gameManager.Board[y + 1, x + 1] == Player2 && gameManager.Board[y - 1, x - 1] == Player1 && gameManager.Board[y - 2, x - 2] == Player2)
+				FillForbiddenBoard(x, y, gameManager.bPlayerOneTurn);
+		}
 	}
 
 	private void changeBoxState(int Width , int Height, Type type) {
