@@ -9042,6 +9042,7 @@ GameObject:
   - component: {fileID: 412721191}
   - component: {fileID: 412721190}
   - component: {fileID: 412721189}
+  - component: {fileID: 412721192}
   m_Layer: 8
   m_Name: Undo
   m_TagString: Untagged
@@ -9107,12 +9108,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: 2e0ad11835a704ea781bb0164c718e52, type: 3}
-        m_MethodName: 
+      - m_Target: {fileID: 412721192}
+        m_MethodName: OnUndo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9153,6 +9154,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 412721187}
+--- !u!114 &412721192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 412721187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b24d52d596624c06ad3dd7a8e3f7132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &414284536
 Prefab:
   m_ObjectHideFlags: 0
@@ -16196,10 +16208,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f2cc0ed8ee0a4eefb8fbbac9bcb5c7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bPlayerOneTurn: 1
-  iTurn: 0
-  BlackScore: 0
-  WhiteScore: 0
 --- !u!224 &684966891 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224402781076299946, guid: 327bf636c06094b02a234b6ef0b510ca,
