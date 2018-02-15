@@ -86,7 +86,7 @@ public class PlayStone : MonoBehaviour {
 			int[,] tmpArray = GameManager.Board.Clone() as int[,];
 			GameManager.lBoardHisto.Add(tmpArray);
 			GameManager.iTurn += 1;
-			CheckWin(GameManager.Stone.White);
+			CheckWin(GameManager.Stone.Black);
 			checkBoardState(y, x);
 			DisplayBoard();
 		}
@@ -104,7 +104,7 @@ public class PlayStone : MonoBehaviour {
 			int[,] tmpArray = GameManager.Board.Clone() as int[,];
 			GameManager.lBoardHisto.Add(tmpArray);
 			GameManager.iTurn += 1;
-			CheckWin(GameManager.Stone.Black);
+			CheckWin(GameManager.Stone.White);
 			checkBoardState(y, x);
 			DisplayBoard();
 		}
@@ -113,7 +113,7 @@ public class PlayStone : MonoBehaviour {
 
 	private void CheckWin(int Player)
 	{
-		int Align = 1;
+		int Align = -1;
 		int i = y;
 		int j = x;
 
@@ -138,7 +138,7 @@ public class PlayStone : MonoBehaviour {
 				GameManager.WhiteWin = true;
 		}
 
-		Align = 1;
+		Align = -1;
 		i = y;
 		j = x;
 		//Vertical
@@ -147,7 +147,7 @@ public class PlayStone : MonoBehaviour {
 			i++;
 			Align++;
 		}
-		j = x;
+		i = y;
 		while (GameManager.Board[i,j] == Player)
 		{
 			i--;
@@ -162,7 +162,7 @@ public class PlayStone : MonoBehaviour {
 				GameManager.WhiteWin = true;
 		}
 
-		Align = 1;
+		Align = -1;
 		i = y;
 		j = x;
 		//Diagonal Haut->Bas
@@ -172,6 +172,7 @@ public class PlayStone : MonoBehaviour {
 			j++;
 			Align++;
 		}
+		i = y;
 		j = x;
 		while (GameManager.Board[i,j] == Player)
 		{
@@ -188,7 +189,7 @@ public class PlayStone : MonoBehaviour {
 				GameManager.WhiteWin = true;
 		}
 
-		Align = 1;
+		Align = -1;
 		i = y;
 		j = x;
 		//Diagonal Bas->Haut
@@ -198,6 +199,7 @@ public class PlayStone : MonoBehaviour {
 			j--;
 			Align++;
 		}
+		i = y;
 		j = x;
 		while (GameManager.Board[i,j] == Player)
 		{

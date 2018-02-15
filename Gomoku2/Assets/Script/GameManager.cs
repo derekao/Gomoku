@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -26,16 +27,51 @@ public class GameManager : MonoBehaviour {
 	static public int WhiteScore = 0;
 	static public bool BlackWin = false;
 	static public bool WhiteWin = false;
+	static GameObject PopUpWinPanel;
 
 	// Use this for initialization
-	void Start () {
-		lBoardHisto = new List<int[,]>();
-		Board = new int[iHeightBoard, iWidthBoard];
+	void Awake () {
+		if (lBoardHisto != null)
+			lBoardHisto.Clear();
+		else
+		{
+			lBoardHisto = new List<int[,]>();
+			Board = new int[iHeightBoard, iWidthBoard];
+		}
+
+		PopUpWinPanel = GameObject.Find("PopUpWin");
+		PopUpWinPanel.SetActive(false);
+
+		iTurn = 0;
+		BlackScore = 0;
+		WhiteScore = 0;
+		BlackWin = false;
+		WhiteWin = false;
+		bPlayerOneTurn = true;
+		for (int i = 0; i < iHeightBoard; i++)
+		{
+			for (int j = 0; j < iWidthBoard; j++)
+			{
+				Board[i,j] = Stone.Empty;
+			}
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+
+		if ((BlackWin || BlackScore >= 10) && PopUpWinPanel.activeSelf == false)
+		{
+			PopUpWinPanel.SetActive(true);
+			Text WinText = GameObject.Find("WinText").GetComponent<Text>();
+			WinText.text = "Black has won";
+		}
+		if ((WhiteWin || WhiteScore >= 10) && PopUpWinPanel.activeSelf == false)
+		{
+			PopUpWinPanel.SetActive(true);
+			Text WinText = GameObject.Find("WinText").GetComponent<Text>();
+			WinText.text = "White has won";
+		}
 	}
 
 }

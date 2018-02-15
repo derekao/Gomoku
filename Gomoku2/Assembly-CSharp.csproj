@@ -54,6 +54,7 @@
      <Compile Include="Assets\Script\GameManager.cs" />
      <Compile Include="Assets\Script\PlayStone.cs" />
      <Compile Include="Assets\Script\PrintBoard.cs" />
+     <Compile Include="Assets\Script\RestartLevel.cs" />
      <Compile Include="Assets\Script\Undo.cs" />
      <Compile Include="Assets\Script\UpdateScore.cs" />
      <None Include="Assets\Font\justice.txt" />

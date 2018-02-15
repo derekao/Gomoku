@@ -17,5 +17,7 @@ public class PrintBoard : MonoBehaviour {
 			Debug.Log(szBoard);
 			szBoard = "";
 		}
+
+		Debug.Log(GameManager.BlackScore + " et " + GameManager.WhiteScore + " et " + GameManager.BlackWin + " et " + GameManager.WhiteWin);
 	}
 }
