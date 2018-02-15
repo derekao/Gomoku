@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour {
 
 	static public int BlackScore = 0;
 	static public int WhiteScore = 0;
+	static public bool BlackWin = false;
+	static public bool WhiteWin = false;
 
 	// Use this for initialization
 	void Start () {
