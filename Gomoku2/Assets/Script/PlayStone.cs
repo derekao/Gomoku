@@ -64,17 +64,8 @@ public class PlayStone : MonoBehaviour {
 		else {
 			OnWhitePlay();
 		}
-		// changeBoxState(2, 2);
 	}
 
-	public void Undo() {
-
-		GameManager.Board = GameManager.lBoardHisto[GameManager.iTurn - 1];
-		GameManager.lBoardHisto.RemoveAt(GameManager.iTurn);
-		GameManager.iTurn--;
-		GameManager.bPlayerOneTurn = !GameManager.bPlayerOneTurn;
-		DisplayBoard(true);
-	}
 	private void OnBlackPlay() {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled && !DoubleTreeImage.enabled) 
@@ -84,7 +75,7 @@ public class PlayStone : MonoBehaviour {
 			GameManager.bPlayerOneTurn = false;
 			GameManager.Board[y, x] = GameManager.Stone.Black;
 			int[,] tmpArray = GameManager.Board.Clone() as int[,];
-			GameManager.lBoardHisto.Add(tmpArray);
+			GameManager.lBoardHisto.Insert(0, tmpArray);
 			GameManager.iTurn += 1;
 			CheckWin(GameManager.Stone.Black);
 			checkBoardState(y, x);
@@ -102,13 +93,41 @@ public class PlayStone : MonoBehaviour {
 			GameManager.bPlayerOneTurn = true;
 			GameManager.Board[y, x] = GameManager.Stone.White;
 			int[,] tmpArray = GameManager.Board.Clone() as int[,];
-			GameManager.lBoardHisto.Add(tmpArray);
+			GameManager.lBoardHisto.Insert(0, tmpArray);
 			GameManager.iTurn += 1;
 			CheckWin(GameManager.Stone.White);
 			checkBoardState(y, x);
 			DisplayBoard();
 		}
 
+	}
+
+	private bool somethingToEat(int Player, int Opponent)
+	{
+		bool canEat = false;
+		for (int i = 0; i < GameManager.iHeightBoard; i++) {
+			for (int j = 0; j < GameManager.iWidthBoard; j++) {
+				if ((GameManager.Board[i, j] & Player) != 0) {
+					if (i < GameManager.iHeightBoard - 3 && (GameManager.Board[i + 1, j] & Opponent) != 0 && (GameManager.Board[i + 2, j] & Opponent) != 0 && GameManager.Board[i + 3, j] == 0) // Bas
+						canEat = true;
+					if (j < GameManager.iWidthBoard - 3 && (GameManager.Board[i, j + 1] & Opponent) != 0 && (GameManager.Board[i, j + 2] & Opponent) != 0 && GameManager.Board[i, j + 3] == 0) // Droite
+						canEat = true;
+					if (i > 3 && j < GameManager.iWidthBoard - 3 && (GameManager.Board[i - 1, j + 1] & Opponent) != 0 && (GameManager.Board[i - 2, j + 2] & Opponent) != 0 && GameManager.Board[i - 3, j + 3] == 0) // Haut droite
+						canEat = true;
+					if (i < GameManager.iHeightBoard - 3 && j < GameManager.iWidthBoard - 3 && (GameManager.Board[i + 1, j + 1] & Opponent) != 0 && (GameManager.Board[i + 2, j + 2] & Opponent) != 0 && GameManager.Board[i + 3, j + 3] == 0) // Bas Droite
+						canEat = true;
+					if (i > 3 && j > 3 && (GameManager.Board[i - 1, j - 1] & Opponent) != 0 && (GameManager.Board[i - 2, j - 2] & Opponent) != 0 && GameManager.Board[i - 3, j - 3] == 0)  // Haut Gauche
+						canEat = true;
+					if (i > 3 && (GameManager.Board[i - 1, j] & Opponent) != 0 && (GameManager.Board[i - 2, j] & Opponent) != 0 && GameManager.Board[i - 3, j] == 0) // Haut
+						canEat = true;
+					if (j > 3 && (GameManager.Board[i, j - 1] & Opponent) != 0 && (GameManager.Board[i, j - 2] & Opponent) != 0 && GameManager.Board[i, j - 3] == 0) // Gauche
+						canEat = true;
+					if (j > 3 && i < GameManager.iHeightBoard - 3 && (GameManager.Board[i - 1, j - 1] & Opponent) != 0 && (GameManager.Board[i - 2, j - 2] & Opponent) != 0 && GameManager.Board[i - 3, j - 3] == 0) // Bas Gauche
+						canEat = true;
+				}
+			}
+		}
+		return canEat;
 	}
 
 	private void CheckWin(int Player)
@@ -122,19 +141,23 @@ public class PlayStone : MonoBehaviour {
 		{
 			j++;
 			Align++;
+			if (j >= GameManager.iWidthBoard)
+				break;
 		}
 		j = x;
 		while (GameManager.Board[i,j] == Player)
 		{
 			j--;
 			Align++;
+			if (j < 0)
+				break;
 		}
 
 		if (Align >= 5)
 		{
-			if ((Player & GameManager.Stone.Black) != 0)
+			if ((Player & GameManager.Stone.Black) != 0 && !somethingToEat(GameManager.Stone.White, GameManager.Stone.Black))
 				GameManager.BlackWin = true;
-			else if ((Player & GameManager.Stone.White) != 0)
+			else if ((Player & GameManager.Stone.White) != 0 && !somethingToEat(GameManager.Stone.Black, GameManager.Stone.White))
 				GameManager.WhiteWin = true;
 		}
 
@@ -146,19 +169,24 @@ public class PlayStone : MonoBehaviour {
 		{
 			i++;
 			Align++;
+			if (i >= GameManager.iHeightBoard)
+				break;
 		}
 		i = y;
 		while (GameManager.Board[i,j] == Player)
 		{
 			i--;
 			Align++;
+			if (i < 0)
+				break;
 		}
 
 		if (Align >= 5)
 		{
-			if ((Player & GameManager.Stone.Black) != 0)
+			if ((Player & GameManager.Stone.Black) != 0 && !somethingToEat(GameManager.Stone.White, GameManager.Stone.Black))
 				GameManager.BlackWin = true;
-			else if ((Player & GameManager.Stone.White) != 0)
+			else if ((Player & GameManager.Stone.White) != 0 && !somethingToEat(GameManager.Stone.Black, GameManager.Stone.White))
+
 				GameManager.WhiteWin = true;
 		}
 
@@ -171,6 +199,8 @@ public class PlayStone : MonoBehaviour {
 			i++;
 			j++;
 			Align++;
+			if (i >= GameManager.iHeightBoard || j >= GameManager.iWidthBoard)
+				break;
 		}
 		i = y;
 		j = x;
@@ -179,13 +209,15 @@ public class PlayStone : MonoBehaviour {
 			i--;
 			j--;
 			Align++;
+			if (i < 0 || j < 0)
+				break;
 		}
 
 		if (Align >= 5)
 		{
-			if ((Player & GameManager.Stone.Black) != 0)
+			if ((Player & GameManager.Stone.Black) != 0 && !somethingToEat(GameManager.Stone.White, GameManager.Stone.Black))
 				GameManager.BlackWin = true;
-			else if ((Player & GameManager.Stone.White) != 0)
+			else if ((Player & GameManager.Stone.White) != 0 && !somethingToEat(GameManager.Stone.Black, GameManager.Stone.White))
 				GameManager.WhiteWin = true;
 		}
 
@@ -198,6 +230,8 @@ public class PlayStone : MonoBehaviour {
 			i++;
 			j--;
 			Align++;
+			if (i >= GameManager.iHeightBoard || j < 0)
+				break;
 		}
 		i = y;
 		j = x;
@@ -206,13 +240,15 @@ public class PlayStone : MonoBehaviour {
 			i--;
 			j++;
 			Align++;
+			if (j >= GameManager.iWidthBoard || i < 0)
+				break;
 		}
 
 		if (Align >= 5)
 		{
-			if ((Player & GameManager.Stone.Black) != 0)
+			if ((Player & GameManager.Stone.Black) != 0 && !somethingToEat(GameManager.Stone.White, GameManager.Stone.Black))
 				GameManager.BlackWin = true;
-			else if ((Player & GameManager.Stone.White) != 0)
+			else if ((Player & GameManager.Stone.White) != 0 && !somethingToEat(GameManager.Stone.Black, GameManager.Stone.White))
 				GameManager.WhiteWin = true;
 		}
 

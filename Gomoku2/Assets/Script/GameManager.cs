@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour {
 		{
 			lBoardHisto = new List<int[,]>();
 			Board = new int[iHeightBoard, iWidthBoard];
+			lBoardHisto.Insert(0, Board.Clone() as int[,]);
 		}
 
 		PopUpWinPanel = GameObject.Find("PopUpWin");

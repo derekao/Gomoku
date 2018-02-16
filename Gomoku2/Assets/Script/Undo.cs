@@ -10,13 +10,16 @@ public class Undo : MonoBehaviour {
 	}
 	
 	public void OnUndo() {
-
-		if (GameManager.iTurn == 1)
+		if (GameManager.iTurn <= 0)
 			return ;
-		GameManager.Board = GameManager.lBoardHisto[GameManager.iTurn - 2];
-		GameManager.lBoardHisto.RemoveAt(GameManager.iTurn - 1);
+		GameManager.lBoardHisto.RemoveAt(0);
+		GameManager.Board = GameManager.lBoardHisto[0].Clone() as int[,];
 		GameManager.iTurn--;
 		GameManager.bPlayerOneTurn = !GameManager.bPlayerOneTurn;
+		GameManager.BlackWin = false;
+		GameManager.WhiteWin = false;
+		GameManager.BlackScore = 0;
+		GameManager.WhiteScore = 0;
 		PlayStone.DisplayBoard(true);
 	}
 }
