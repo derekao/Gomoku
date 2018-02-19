@@ -3,8 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Runtime.InteropServices; // Dll
 
 public class PlayStone : MonoBehaviour {
+
+	[DllImport("Test.dll")]
+	public static extern int Add(int a, int b);
 
 	private enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 	private GameObject BlackStone;
@@ -58,6 +62,7 @@ public class PlayStone : MonoBehaviour {
 	}
 
 	public void OnClick() {
+		Debug.Log(Add(2, 1));
 		if (GameManager.bPlayerOneTurn) {
 			OnBlackPlay();
 		}
