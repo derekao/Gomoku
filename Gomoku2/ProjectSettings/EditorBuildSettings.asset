@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/MainMenu.unity
+    guid: ff430fc1c310a4ac79888fcf5fbbba31
+  - enabled: 1
+    path: Assets/Gomoku.unity
+    guid: 1310492d87f854258ab1b5f65b98cdf5

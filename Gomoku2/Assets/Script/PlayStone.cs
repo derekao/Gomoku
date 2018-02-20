@@ -107,7 +107,7 @@ public class PlayStone : MonoBehaviour {
 
 	}
 
-	private bool somethingToEat(int Player, int Opponent)
+	static private bool somethingToEat(int Player, int Opponent)
 	{
 		bool canEat = false;
 		for (int i = 0; i < GameManager.iHeightBoard; i++) {
@@ -748,20 +748,6 @@ public class PlayStone : MonoBehaviour {
 			tmpBlackStoneImage.enabled = true;
 		else if (type == Type.White && !tmpWhiteStoneImage.enabled)
 			tmpWhiteStoneImage.enabled = true;
-	}
-
-	public void OnDeleteMove() {
-
-		if (!WhiteStoneImage.enabled)
-		{
-			WhiteStoneImage.enabled = false;
-		}
-
-		if (!BlackStoneImage.enabled)
-		{
-			BlackStoneImage.enabled = false;
-		}
-		GameManager.Board[y, x] = GameManager.Stone.Empty;
 	}
 
 }
