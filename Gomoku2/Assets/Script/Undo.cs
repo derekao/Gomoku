@@ -17,7 +17,7 @@ public class Undo : MonoBehaviour {
 		GameManager.Instance.iTurn--;
 		GameManager.Instance.bPlayerOneTurn = !GameManager.Instance.bPlayerOneTurn;
 		if (GameManager.Instance.lPointHisto[0] == 1) {
-			if (GameManager.Instance.bPlayerOneTurn)
+			if (!GameManager.Instance.bPlayerOneTurn)
 				GameManager.Instance.WhiteScore -= 2;
 			else
 				GameManager.Instance.BlackScore -= 2;
@@ -25,8 +25,6 @@ public class Undo : MonoBehaviour {
 		GameManager.Instance.lPointHisto.RemoveAt(0);
 		GameManager.Instance.BlackWin = false;
 		GameManager.Instance.WhiteWin = false;
-		GameManager.Instance.BlackScore = 0;
-		GameManager.Instance.WhiteScore = 0;
 		Rules.DisplayBoard(true);
 	}
 }
