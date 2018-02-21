@@ -78,12 +78,13 @@ public class PlayStone : MonoBehaviour {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled && !DoubleTreeImage.enabled) 
 		{
-			checkStoneEaten();
+			bool eat = checkStoneEaten();
 			BlackStoneImage.enabled = true;
 			GameManager.bPlayerOneTurn = false;
 			GameManager.Board[y, x] = GameManager.Stone.Black;
 			int[,] tmpArray = GameManager.Board.Clone() as int[,];
 			GameManager.lBoardHisto.Insert(0, tmpArray);
+			GameManager.lPointHisto.Insert(0, eat ? 1 : 0);
 			GameManager.iTurn += 1;
 			if (win)
 				CheckWin(GameManager.Stone.White, win);
@@ -98,12 +99,13 @@ public class PlayStone : MonoBehaviour {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled && !DoubleTreeImage.enabled)
 		{
-			checkStoneEaten();
+			bool eat = checkStoneEaten();
 			WhiteStoneImage.enabled = true;
 			GameManager.bPlayerOneTurn = true;
 			GameManager.Board[y, x] = GameManager.Stone.White;
 			int[,] tmpArray = GameManager.Board.Clone() as int[,];
 			GameManager.lBoardHisto.Insert(0, tmpArray);
+			GameManager.lPointHisto.Insert(0, eat ? 1 : 0);
 			GameManager.iTurn += 1;
 			if (win)
 				CheckWin(GameManager.Stone.Black, win);
@@ -449,8 +451,9 @@ public class PlayStone : MonoBehaviour {
 			return false;
 	}
 
-	private void checkStoneEaten() {
+	private bool checkStoneEaten() {
 		
+		bool eat = false;
 		int Player1;
 		int Player2;
 
@@ -468,51 +471,60 @@ public class PlayStone : MonoBehaviour {
 		if (x >= 3) // Manger à gauche
 			if (GameManager.Board[y, x - 1] == Player2 && GameManager.Board[y, x - 2] == Player2 && GameManager.Board[y, x - 3] == Player1)
 			{
+				eat = true;
 				changeBoxState(x - 1, y, Type.Eat);
 				changeBoxState(x - 2, y, Type.Eat);
 			}
 		if (x <= GameManager.iWidthBoard - 3) // Manger à droite
 			if (GameManager.Board[y, x + 1] == Player2 && GameManager.Board[y, x + 2] == Player2 && GameManager.Board[y, x + 3] == Player1)
 			{
+				eat = true;
 				changeBoxState(x + 1, y, Type.Eat);
 				changeBoxState(x + 2, y, Type.Eat);
 			}
 		if (y >= 3) // Manger en haut
 			if (GameManager.Board[y - 1, x] == Player2 && GameManager.Board[y - 2, x] == Player2 && GameManager.Board[y - 3, x] == Player1)
 			{
+				eat = true;
 				changeBoxState(x, y - 1, Type.Eat);
 				changeBoxState(x, y - 2, Type.Eat);
 			}
 		if (y < GameManager.iHeightBoard - 3) // Manger en bas
 			if (GameManager.Board[y + 1, x] == Player2 && GameManager.Board[y + 2, x] == Player2 && GameManager.Board[y + 3, x] == Player1)
 			{
+				eat = true;
 				changeBoxState(x, y + 1, Type.Eat);
 				changeBoxState(x, y + 2, Type.Eat);
 			}
 		if (x >= 3 && y >= 3) // Manger en haut gauche
 			if (GameManager.Board[y - 1, x - 1] == Player2 && GameManager.Board[y - 2, x - 2] == Player2 && GameManager.Board[y - 3, x - 3] == Player1)
 			{
+				eat = true;
 				changeBoxState(x - 1, y - 1, Type.Eat);
 				changeBoxState(x - 2, y - 2, Type.Eat);
 			}
 		if (x < GameManager.iWidthBoard - 3 && y >= 3) // Manger en haut droite
 			if (GameManager.Board[y - 1, x + 1] == Player2 && GameManager.Board[y - 2, x + 2] == Player2 && GameManager.Board[y - 3, x + 3] == Player1)
 			{
+				eat = true;
 				changeBoxState(x + 1, y - 1, Type.Eat);
 				changeBoxState(x + 2, y - 2, Type.Eat);
 			}
 		if (x < GameManager.iWidthBoard - 3 && y < GameManager.iHeightBoard - 3) // Manger en bas  droite
 			if (GameManager.Board[y + 1, x + 1] == Player2 && GameManager.Board[y + 2, x + 2] == Player2 && GameManager.Board[y + 3, x + 3] == Player1)
 			{
+				eat = true;
 				changeBoxState(x + 1, y + 1, Type.Eat);
 				changeBoxState(x + 2, y + 2, Type.Eat);
 			}
 		if (x >= 3 && y < GameManager.iHeightBoard - 3) // Manger en bas gauche
 			if (GameManager.Board[y + 1, x - 1] == Player2 && GameManager.Board[y + 2, x - 2] == Player2 && GameManager.Board[y + 3, x - 3] == Player1)
 			{
+				eat = true;
 				changeBoxState(x - 1, y + 1, Type.Eat);
 				changeBoxState(x - 2, y + 2, Type.Eat);
 			}
+		return eat;
 	}
 
 	private bool FillForbiddenBoard(int Width, int Height, bool bPlayer) {

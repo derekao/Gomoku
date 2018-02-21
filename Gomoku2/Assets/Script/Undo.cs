@@ -16,6 +16,13 @@ public class Undo : MonoBehaviour {
 		GameManager.Board = GameManager.lBoardHisto[0].Clone() as int[,];
 		GameManager.iTurn--;
 		GameManager.bPlayerOneTurn = !GameManager.bPlayerOneTurn;
+		if (GameManager.lPointHisto[0] == 1) {
+			if (GameManager.bPlayerOneTurn)
+				GameManager.WhiteScore -= 2;
+			else
+				GameManager.BlackScore -= 2;
+		}
+		GameManager.lPointHisto.RemoveAt(0);
 		GameManager.BlackWin = false;
 		GameManager.WhiteWin = false;
 		GameManager.BlackScore = 0;

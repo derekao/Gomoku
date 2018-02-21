@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour {
 	static public int iWidthBoard = 19;
 	static public int iHeightBoard = 19;
 	
+	static public List<int> lPointHisto;
 	static public List<int[,]> lBoardHisto;
 	static public bool	bPlayerOneTurn = true;
 	static public int iTurn = 0;
@@ -31,12 +32,16 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		if (lBoardHisto != null)
+		if (lBoardHisto != null) {
 			lBoardHisto.Clear();
+			lPointHisto.Clear();
+		}
 		else
 		{
+			lPointHisto = new List<int>();
 			lBoardHisto = new List<int[,]>();
 			Board = new int[iHeightBoard, iWidthBoard];
+			lPointHisto.Insert(0, 0);
 			lBoardHisto.Insert(0, Board.Clone() as int[,]);
 		}
 
