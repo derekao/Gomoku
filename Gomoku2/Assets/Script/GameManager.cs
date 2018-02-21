@@ -3,8 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// There must be only one instance of this class
+///	The Instance is stocked in GameManager.Instance
+/// </summary>
 public class GameManager : MonoBehaviour {
 
+	public static GameManager Instance;
+
+	/// <summary>
+	/// The class Stone is used to have multiple data in one Cell
+	/// Use : (Cell & varriable) != 0 to check if the data is present in the Cell
+	/// Use : Cell += varriable to add the data in the Cell
+	/// Use : Cell = Stone.Empty to reset the Cell
+	/// </summary>
 	public class Stone { 
 		static public int Empty = 0;
 		static public int Black = 1;
@@ -15,23 +27,28 @@ public class GameManager : MonoBehaviour {
 		static public int BlackDoubleTree = 32;
 	}
 
-	static public int iWidthBoard = 19;
-	static public int iHeightBoard = 19;
+	// Size of the Board
+	public int iWidthBoard = 19;
+	public int iHeightBoard = 19;
 	
-	static public List<int> lPointHisto;
-	static public List<int[,]> lBoardHisto;
-	static public bool	bPlayerOneTurn = true;
-	static public int iTurn = 0;
-	static public int[,] Board;
+	// State of the Board
+	public List<int> lPointHisto;
+	public List<int[,]> lBoardHisto;
+	public bool	bPlayerOneTurn = true;
+	public int iTurn = 0;
+	public int[,] Board;
 
-	static public int BlackScore = 0;
-	static public int WhiteScore = 0;
-	static public bool BlackWin = false;
-	static public bool WhiteWin = false;
-	static GameObject PopUpWinPanel;
+	// Win Condition
+	public int BlackScore = 0;
+	public int WhiteScore = 0;
+	public bool BlackWin = false;
+	public bool WhiteWin = false;
+	private
+	GameObject PopUpWinPanel;
 
 	// Use this for initialization
 	void Awake () {
+		Instance = this;
 		if (lBoardHisto != null) {
 			lBoardHisto.Clear();
 			lPointHisto.Clear();

@@ -7,17 +7,17 @@ public class PrintBoard : MonoBehaviour {
 	public void OnClickBoard () {
 
 		string szBoard = "";
-		for (int i = 0; i < GameManager.iHeightBoard; i++)
+		for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
 		{
-			for (int j = 0; j < GameManager.iWidthBoard; j++)
+			for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)
 			{
-				szBoard += GameManager.Board[i,j].ToString();
+				szBoard += GameManager.Instance.Board[i,j].ToString();
 				szBoard += ' ';
 			}
 			Debug.Log(szBoard);
 			szBoard = "";
 		}
 
-		Debug.Log(GameManager.BlackScore + " et " + GameManager.WhiteScore + " et " + GameManager.BlackWin + " et " + GameManager.WhiteWin);
+		Debug.Log(GameManager.Instance.BlackScore + " et " + GameManager.Instance.WhiteScore + " et " + GameManager.Instance.BlackWin + " et " + GameManager.Instance.WhiteWin);
 	}
 }
