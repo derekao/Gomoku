@@ -27,55 +27,74 @@ public class GameManager : MonoBehaviour {
 		static public int BlackDoubleTree = 32;
 	}
 
+	public class BoardHistoric
+	{
+		public bool	bPlayerOneTurn = true;
+		public int iTurn = 0;
+		public int[,] Board;
+		public int BlackScore = 0;
+		public int WhiteScore = 0;
+		public bool BlackWin = false;
+		public bool WhiteWin = false;
+		public  int winX;
+		public  int winY;
+		public bool hasWon;
+
+		public BoardHistoric Clone()
+		{
+			BoardHistoric tmp = new BoardHistoric();
+			tmp.bPlayerOneTurn = bPlayerOneTurn;
+			tmp.iTurn = iTurn;
+			tmp.Board = Board.Clone() as int [,];
+			tmp.BlackScore = BlackScore;
+			tmp.WhiteScore = WhiteScore;
+			tmp.BlackWin = BlackWin;
+			tmp.WhiteWin = WhiteWin;
+			tmp.winX = winX;
+			tmp.winY = winY;
+			tmp.hasWon = hasWon;
+			return tmp;
+		}
+	}
+
+	private GameObject PopUpWinPanel;
+	public BoardHistoric currentState;
+
 	// Size of the Board
 	public int iWidthBoard = 19;
 	public int iHeightBoard = 19;
 	
 	// State of the Board
-	public List<int> lPointHisto;
-	public List<int[,]> lBoardHisto;
-	public bool	bPlayerOneTurn = true;
-	public int iTurn = 0;
-	public int[,] Board;
-
-	// Win Condition
-	public int BlackScore = 0;
-	public int WhiteScore = 0;
-	public bool BlackWin = false;
-	public bool WhiteWin = false;
-	private
-	GameObject PopUpWinPanel;
+	public List<BoardHistoric> lBoardHisto;
 
 	// Use this for initialization
 	void Awake () {
 		Instance = this;
+		currentState = new BoardHistoric();
 		if (lBoardHisto != null) {
 			lBoardHisto.Clear();
-			lPointHisto.Clear();
 		}
 		else
 		{
-			lPointHisto = new List<int>();
-			lBoardHisto = new List<int[,]>();
-			Board = new int[iHeightBoard, iWidthBoard];
-			lPointHisto.Insert(0, 0);
-			lBoardHisto.Insert(0, Board.Clone() as int[,]);
+			lBoardHisto = new List<BoardHistoric>();
+			currentState.Board = new int[iHeightBoard, iWidthBoard];
+			lBoardHisto.Insert(0, currentState.Clone());
 		}
 
 		PopUpWinPanel = GameObject.Find("PopUpWin");
 		PopUpWinPanel.SetActive(false);
 
-		iTurn = 0;
-		BlackScore = 0;
-		WhiteScore = 0;
-		BlackWin = false;
-		WhiteWin = false;
-		bPlayerOneTurn = true;
+		currentState.iTurn = 0;
+		currentState.BlackScore = 0;
+		currentState.WhiteScore = 0;
+		currentState.BlackWin = false;
+		currentState.WhiteWin = false;
+		currentState.bPlayerOneTurn = true;
 		for (int i = 0; i < iHeightBoard; i++)
 		{
 			for (int j = 0; j < iWidthBoard; j++)
 			{
-				Board[i,j] = Stone.Empty;
+				currentState.Board[i,j] = Stone.Empty;
 			}
 		}
 	}
@@ -83,13 +102,13 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if ((BlackWin || BlackScore >= 10) && PopUpWinPanel.activeSelf == false)
+		if ((currentState.BlackWin || currentState.BlackScore >= 10) && PopUpWinPanel.activeSelf == false)
 		{
 			PopUpWinPanel.SetActive(true);
 			Text WinText = GameObject.Find("WinText").GetComponent<Text>();
 			WinText.text = "Black has won";
 		}
-		if ((WhiteWin || WhiteScore >= 10) && PopUpWinPanel.activeSelf == false)
+		if ((currentState.WhiteWin || currentState.WhiteScore >= 10) && PopUpWinPanel.activeSelf == false)
 		{
 			PopUpWinPanel.SetActive(true);
 			Text WinText = GameObject.Find("WinText").GetComponent<Text>();

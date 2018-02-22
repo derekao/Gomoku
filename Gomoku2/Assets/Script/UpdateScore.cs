@@ -21,11 +21,11 @@ public class UpdateScore : MonoBehaviour {
 
 		if (Black)
 		{
-			iScore = GameManager.Instance.BlackScore;
+			iScore = GameManager.Instance.currentState.BlackScore;
 		}
 		else
 		{
-			iScore = GameManager.Instance.WhiteScore;
+			iScore = GameManager.Instance.currentState.WhiteScore;
 		}
 
 		Score = gameObject.GetComponent<Text>();
@@ -36,17 +36,17 @@ public class UpdateScore : MonoBehaviour {
 
 		if (Black)
 		{
-			if (iScore != GameManager.Instance.BlackScore)
+			if (iScore != GameManager.Instance.currentState.BlackScore)
 			{
-				iScore = GameManager.Instance.BlackScore;
+				iScore = GameManager.Instance.currentState.BlackScore;
 				Score.text = iScore.ToString();
 			}
 		}
 		else
 		{
-			if (iScore != GameManager.Instance.WhiteScore)
+			if (iScore != GameManager.Instance.currentState.WhiteScore)
 			{
-				iScore = GameManager.Instance.WhiteScore;
+				iScore = GameManager.Instance.currentState.WhiteScore;
 				Score.text = iScore.ToString();
 			}
 		}

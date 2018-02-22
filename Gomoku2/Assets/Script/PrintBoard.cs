@@ -11,13 +11,13 @@ public class PrintBoard : MonoBehaviour {
 		{
 			for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)
 			{
-				szBoard += GameManager.Instance.Board[i,j].ToString();
+				szBoard += GameManager.Instance.currentState.Board[i,j].ToString();
 				szBoard += ' ';
 			}
 			Debug.Log(szBoard);
 			szBoard = "";
 		}
 
-		Debug.Log(GameManager.Instance.BlackScore + " et " + GameManager.Instance.WhiteScore + " et " + GameManager.Instance.BlackWin + " et " + GameManager.Instance.WhiteWin);
+		Debug.Log(GameManager.Instance.currentState.BlackScore + " et " + GameManager.Instance.currentState.WhiteScore + " et " + GameManager.Instance.currentState.BlackWin + " et " + GameManager.Instance.currentState.WhiteWin + " et Turn = " + GameManager.Instance.currentState.iTurn + " et " + GameManager.Instance.lBoardHisto.Count);
 	}
 }
