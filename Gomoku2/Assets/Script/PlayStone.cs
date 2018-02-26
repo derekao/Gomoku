@@ -88,16 +88,16 @@ public class PlayStone : MonoBehaviour {
 			int win;
 			if (GameManager.Instance.currentState.hasWon)
 			{
-				win = Rules.CheckWin(GameManager.Stone.White, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX, GameManager.Instance.currentState.hasWon);
+				win = Rules.CheckWin(GameManager.Stone.White, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX);
 				if (win != 0)
 				{
-					Rules.youWin(GameManager.Stone.White, GameManager.Instance.currentState.hasWon, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX);
+					Rules.youWin(GameManager.Stone.White, GameManager.Stone.Black, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX);
 				}
 			}
 			win = Rules.CheckWin(GameManager.Stone.Black, y, x);
 			if (win != 0)
 			{
-					Rules.youWin(GameManager.Stone.Black, GameManager.Instance.currentState.hasWon, y, x);
+					Rules.youWin(GameManager.Stone.Black, GameManager.Stone.White, y, x);
 			}
 			checkBoardState(y, x);
 			Rules.DisplayBoard();
@@ -119,16 +119,16 @@ public class PlayStone : MonoBehaviour {
 			int win;
 			if (GameManager.Instance.currentState.hasWon)
 			{
-				win = Rules.CheckWin(GameManager.Stone.Black, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX, GameManager.Instance.currentState.hasWon);
+				win = Rules.CheckWin(GameManager.Stone.Black, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX);
 				if (win != 0)
 				{
-					Rules.youWin(GameManager.Stone.Black, GameManager.Instance.currentState.hasWon, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX);
+					Rules.youWin(GameManager.Stone.Black, GameManager.Stone.White, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX);
 				}
 			}
 			win = Rules.CheckWin(GameManager.Stone.White, y, x);
 			if (win != 0)
 			{
-					Rules.youWin(GameManager.Stone.White, GameManager.Instance.currentState.hasWon, y, x);
+					Rules.youWin(GameManager.Stone.White, GameManager.Stone.Black, y, x);
 			}
 			checkBoardState(y, x);
 			Rules.DisplayBoard();
