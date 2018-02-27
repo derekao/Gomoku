@@ -64,24 +64,56 @@ static public class Rules {
 		return points;
 	}
 
-	public static void canBeEat(int Opponent, int Player, int i, int j)
+	public static void canBeEat(int Player, int Opponent, int i, int j)
 	{
-		if (i < GameManager.Instance.iHeightBoard - 2 && i > 1 && (GameManager.Instance.currentState.Board[i + 1, j] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 1, j] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 2, j])) // Bottom
+		//Top
+		if (i >= 2 && i < GameManager.Instance.iHeightBoard - 1 && (GameManager.Instance.currentState.Board[i - 1, j] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 1, j] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 2, j])) 
 			registerEatCoor(i - 2, j);
-		if (j < GameManager.Instance.iWidthBoard - 2 && j > 1 && (GameManager.Instance.currentState.Board[i, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i, j - 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j - 2])) // Right
-			registerEatCoor(i, j - 2);
-		if (i > 2  && i < GameManager.Instance.iHeightBoard - 1 && j < GameManager.Instance.iWidthBoard - 2 && j > 1 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 2, j - 2])) // Top Right
-			registerEatCoor(i + 2, j - 2);
-		if (i < GameManager.Instance.iHeightBoard - 2 && i > 1 && j < GameManager.Instance.iWidthBoard - 2 && j > 1 && (GameManager.Instance.currentState.Board[i + 1, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 2, j - 2])) // Bottom Right
-			registerEatCoor(i - 2, j - 2);
-		if (i > 2 && i < GameManager.Instance.iHeightBoard - 1 && j > 2 && j < GameManager.Instance.iWidthBoard - 1 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 1, j + 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 2, j + 2]))  // Top Left
-			registerEatCoor(i + 2, j + 2);
-		if (i > 2 && i < GameManager.Instance.iHeightBoard - 1 && (GameManager.Instance.currentState.Board[i - 1, j] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 1, j] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 2, j])) // Top
+		if (i >= 1 && i < GameManager.Instance.iHeightBoard - 2 && (GameManager.Instance.currentState.Board[i + 1, j] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 2, j] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 1, j]))
+			registerEatCoor(i - 1, j);
+
+		//Bottom
+		if (i >= 2 && i < GameManager.Instance.iHeightBoard - 1 && (GameManager.Instance.currentState.Board[i - 1, j] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 2, j] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 1, j])) 
+			registerEatCoor(i + 1, j);
+		if (i >= 1 && i < GameManager.Instance.iHeightBoard - 2 && (GameManager.Instance.currentState.Board[i + 1, j] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 1, j] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 2, j]))
 			registerEatCoor(i + 2, j);
-		if (j > 2 && j < GameManager.Instance.iWidthBoard - 1 && (GameManager.Instance.currentState.Board[i, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i, j + 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j + 2])) // Left
+
+		//Right
+		if (j >= 1 && j < GameManager.Instance.iWidthBoard - 2 && (GameManager.Instance.currentState.Board[i, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i, j - 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j + 2]))
 			registerEatCoor(i, j + 2);
-		if (j > 2 && j < GameManager.Instance.iWidthBoard - 1 && i < GameManager.Instance.iHeightBoard - 2 && i > 1 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 2, j + 2])) // Bottom Left
+		if (j >= 2 && j < GameManager.Instance.iWidthBoard - 1 && (GameManager.Instance.currentState.Board[i, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j + 1]))
+			registerEatCoor(i, j + 1);
+
+		//Left
+		if (j >= 2 && j < GameManager.Instance.iWidthBoard - 1 && (GameManager.Instance.currentState.Board[i, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i, j + 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j - 2]))
+			registerEatCoor(i, j - 2);
+		if (j >= 1 && j < GameManager.Instance.iWidthBoard - 2 && (GameManager.Instance.currentState.Board[i, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i, j + 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j - 1]))
+			registerEatCoor(i, j - 1);
+
+		//Top-Right
+		if (j >= 2 && j < GameManager.Instance.iWidthBoard - 1 && i >= 1 && i < GameManager.Instance.iHeightBoard - 2 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 2, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 1, j + 1]))
+			registerEatCoor(i - 1, j + 1);
+		if (j >= 1 && j < GameManager.Instance.iWidthBoard - 2 && i >= 2 && i < GameManager.Instance.iHeightBoard - 1 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 2, j + 2]))
 			registerEatCoor(i - 2, j + 2);
+
+		//Bot-Left
+		if (j >= 2 && j < GameManager.Instance.iWidthBoard - 1 && i >= 1 && i < GameManager.Instance.iHeightBoard - 2 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 2, j - 2]))
+			registerEatCoor(i + 2, j - 2);
+		if (j >= 1 && j < GameManager.Instance.iWidthBoard - 2 && i >= 2 && i < GameManager.Instance.iHeightBoard - 1 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 2, j + 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 1, j - 1]))
+			registerEatCoor(i + 1, j - 1);
+
+		//Top-Left
+		if (j >= 1 && j < GameManager.Instance.iWidthBoard - 2 && i >= 1 && i < GameManager.Instance.iHeightBoard - 2 && (GameManager.Instance.currentState.Board[i + 1, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 2, j + 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 1, j - 1]))
+			registerEatCoor(i - 1, j - 1);
+		if (j >= 2 && j < GameManager.Instance.iWidthBoard - 1 && i >= 2 && i < GameManager.Instance.iHeightBoard - 1 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i + 1, j + 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 2, j - 2]))
+			registerEatCoor(i - 2, j - 2);
+
+		//Bot-Right
+		if (j >= 1 && j < GameManager.Instance.iWidthBoard - 2 && i >= 1 && i < GameManager.Instance.iHeightBoard - 2 && (GameManager.Instance.currentState.Board[i + 1, j + 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 2, j + 2]))
+			registerEatCoor(i + 2, j + 2);
+		if (j >= 2 && j < GameManager.Instance.iWidthBoard - 1 && i >= 2 && i < GameManager.Instance.iHeightBoard - 1 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Player) != 0 && (GameManager.Instance.currentState.Board[i - 2, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 1, j + 1]))
+			registerEatCoor(i + 1, j + 1);
+
 	}
 
 	/// <summary>
@@ -93,17 +125,17 @@ static public class Rules {
 			registerEatCoor(i + 3, j);
 		if (j < GameManager.Instance.iWidthBoard - 3 && (GameManager.Instance.currentState.Board[i, j + 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j + 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j + 3])) // Right
 			registerEatCoor(i, j + 3);
-		if (i > 3 && j < GameManager.Instance.iWidthBoard - 3 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j + 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 3, j + 3])) // Top Right
+		if (i >= 3 && j < GameManager.Instance.iWidthBoard - 3 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j + 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 3, j + 3])) // Top Right
 			registerEatCoor(i - 3, j + 3);
 		if (i < GameManager.Instance.iHeightBoard - 3 && j < GameManager.Instance.iWidthBoard - 3 && (GameManager.Instance.currentState.Board[i + 1, j + 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 2, j + 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 3, j + 3])) // Bottom Right
 			registerEatCoor(i + 3, j + 3);
-		if (i > 3 && j > 3 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 3, j - 3]))  // Top Left
+		if (i >= 3 && j >= 3 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 3, j - 3]))  // Top Left
 			registerEatCoor(i - 3, j - 3);
-		if (i > 3 && (GameManager.Instance.currentState.Board[i - 1, j] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 3, j])) // Top
+		if (i >= 3 && (GameManager.Instance.currentState.Board[i - 1, j] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i - 3, j])) // Top
 			registerEatCoor(i - 3, j);
-		if (j > 3 && (GameManager.Instance.currentState.Board[i, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j - 3])) // Left
+		if (j >= 3 && (GameManager.Instance.currentState.Board[i, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i, j - 3])) // Left
 			registerEatCoor(i, j - 3);
-		if (j > 3 && i < GameManager.Instance.iHeightBoard - 3 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 2, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 3, j - 3])) // Bottom Left
+		if (j >= 3 && i < GameManager.Instance.iHeightBoard - 3 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 2, j - 2] & Opponent) != 0 && EmptyCase(GameManager.Instance.currentState.Board[i + 3, j - 3])) // Bottom Left
 			registerEatCoor(i + 3, j - 3);
 	}
 
@@ -117,17 +149,17 @@ static public class Rules {
 			canEat = true;
 		if (j < GameManager.Instance.iWidthBoard - 3 && (GameManager.Instance.currentState.Board[i, j + 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j + 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j + 3] & Player) != 0) // Right
 			canEat = true;
-		if (i > 3 && j < GameManager.Instance.iWidthBoard - 3 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j + 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 3, j + 3] & Player) != 0) // Top Right
+		if (i >= 3 && j < GameManager.Instance.iWidthBoard - 3 && (GameManager.Instance.currentState.Board[i - 1, j + 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j + 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 3, j + 3] & Player) != 0) // Top Right
 			canEat = true;
 		if (i < GameManager.Instance.iHeightBoard - 3 && j < GameManager.Instance.iWidthBoard - 3 && (GameManager.Instance.currentState.Board[i + 1, j + 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 2, j + 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 3, j + 3] & Player) != 0) // Bottom Right
 			canEat = true;
-		if (i > 3 && j > 3 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j - 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 3, j - 3] & Player) != 0)  //  Top Left
+		if (i >= 3 && j >= 3 && (GameManager.Instance.currentState.Board[i - 1, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j - 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 3, j - 3] & Player) != 0)  //  Top Left
 			canEat = true;
-		if (i > 3 && (GameManager.Instance.currentState.Board[i - 1, j] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 3, j] & Player) != 0) // Top
+		if (i >= 3 && (GameManager.Instance.currentState.Board[i - 1, j] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 2, j] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i - 3, j] & Player) != 0) // Top
 			canEat = true;
-		if (j > 3 && (GameManager.Instance.currentState.Board[i, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j - 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j - 3] & Player) != 0) // Left
+		if (j >= 3 && (GameManager.Instance.currentState.Board[i, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j - 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i, j - 3] & Player) != 0) // Left
 			canEat = true;
-		if (j > 3 && i < GameManager.Instance.iHeightBoard - 3 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 2, j - 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 3, j - 3] & Player) != 0) // Bottom Left
+		if (j >= 3 && i < GameManager.Instance.iHeightBoard - 3 && (GameManager.Instance.currentState.Board[i + 1, j - 1] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 2, j - 2] & Opponent) != 0 && (GameManager.Instance.currentState.Board[i + 3, j - 3] & Player) != 0) // Bottom Left
 			canEat = true;
 		return canEat;
 	}
@@ -543,7 +575,7 @@ static public class Rules {
 		int y;
 		int x;
 		int doublon;
-		for (int i = 0; i < GameManager.Instance.EatCoor.Count; i++) {
+		for (int i = 0; i < GameManager.Instance.EatCoor.Count;) {
 			doublon = 0;
 			y = GameManager.Instance.EatCoor[i][0];
 			x = GameManager.Instance.EatCoor[i][1];
@@ -557,6 +589,8 @@ static public class Rules {
 			}
 			if (!first && doublon == 0)
 				GameManager.Instance.EatCoor.RemoveAt(i);
+			else
+				i++;
 		}
 	}
 
@@ -564,33 +598,32 @@ static public class Rules {
 	{
 		int Align = 1;
 		int nbAlign = 0;
-		int i;
-		int j;
+		int i = y;
+		int j = x + 1;
 		int lstSize = 0;
-		bool stillBreakable = false;
+		bool stillBreakable;
 
-		i = y;
-		j = x + 1;
-	
+		canBeEat(Player, Opponent, y, x);
+		if (GameManager.Instance.EatCoor.Count > 0) {
+			GameManager.Instance.EatCoor.Clear();
+			return true;
+		}
 		//Horizontal
 		while (j < GameManager.Instance.iWidthBoard && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
+			canBeEat(Player, Opponent, i, j);
 			j++;
 			Align++;
-			canBeEat(Player, Opponent, i, j);
 		}
 		j = x - 1;
 		while (j >= 0 && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
+			canBeEat(Player, Opponent, i, j);
 			j--;
 			Align++;
-			canBeEat(Player, Opponent, i, j);
-		}
-		for (int a = 0; a < GameManager.Instance.EatCoor.Count; a++) {
-			Debug.Log(GameManager.Instance.EatCoor[a][0] + " et " + GameManager.Instance.EatCoor[a][1]);
 		}
 		if (Align >= 5) {
-			checkBreak(lstSize, true);
+			checkBreak(lstSize, (nbAlign == 0 ? true : false));
 			lstSize = GameManager.Instance.EatCoor.Count;
 			nbAlign++;
 		}
@@ -604,22 +637,19 @@ static public class Rules {
 		//Vertical
 		while (i < GameManager.Instance.iHeightBoard && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
+			canBeEat(Player, Opponent, i, j);
 			i++;
 			Align++;
-			canBeEat(Player, Opponent, i, j);
 		}
 		i = y - 1;
 		while (i >= 0 && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
+			canBeEat(Player, Opponent, i, j);
 			i--;
 			Align++;
-			canBeEat(Player, Opponent, i, j);
-		}
-		for (int a = 0; a < GameManager.Instance.EatCoor.Count; a++) {
-			Debug.Log(GameManager.Instance.EatCoor[a][0] + " et " + GameManager.Instance.EatCoor[a][1]);
 		}
 		if (Align >= 5) {
-			checkBreak(lstSize);
+			checkBreak(lstSize, (nbAlign == 0 ? true : false));
 			lstSize = GameManager.Instance.EatCoor.Count;
 			nbAlign++;
 		}
@@ -634,25 +664,22 @@ static public class Rules {
 		//Diagonal Top->Bottom
 		while (i < GameManager.Instance.iHeightBoard && j < GameManager.Instance.iWidthBoard && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
+			canBeEat( Player, Opponent,  i, j);
 			i++;
 			j++;
 			Align++;
-			canBeEat( Player, Opponent,  i, j);
 		}
 		i = y - 1;
 		j = x - 1;
 		while (i >= 0 && j >= 0 && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
+			canBeEat(Player, Opponent, i, j);
 			i--;
 			j--;
 			Align++;
-			canBeEat(Player, Opponent, i, j);
-		}
-		for (int a = 0; a < GameManager.Instance.EatCoor.Count; a++) {
-			Debug.Log(GameManager.Instance.EatCoor[a][0] + " et " + GameManager.Instance.EatCoor[a][1]);
 		}
 		if (Align >= 5) {
-			checkBreak(lstSize);
+			checkBreak(lstSize, (nbAlign == 0 ? true : false));
 			lstSize = GameManager.Instance.EatCoor.Count;
 			nbAlign++;
 		}
@@ -666,35 +693,32 @@ static public class Rules {
 		//Diagonal Bottom->Top
 		while (i < GameManager.Instance.iHeightBoard && j >= 0 && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
+			canBeEat(Player, Opponent, i, j);
 			i++;
 			j--;
-			Align++;
-			canBeEat(Player, Opponent, i, j);
+			Align++;			
 		}
 		i = y - 1;
 		j = x + 1;
 		while (j < GameManager.Instance.iWidthBoard && i >= 0 && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
+			canBeEat(Player, Opponent, i, j);
 			i--;
 			j++;
 			Align++;
-			canBeEat(Player, Opponent, i, j);
-		}
-		for (int a = 0; a < GameManager.Instance.EatCoor.Count; a++) {
-			Debug.Log(GameManager.Instance.EatCoor[a][0] + " et " + GameManager.Instance.EatCoor[a][1]);
+			
 		}
 		if (Align >= 5) {
-			checkBreak(lstSize);
+			checkBreak(lstSize, (nbAlign == 0 ? true : false));
 			lstSize = GameManager.Instance.EatCoor.Count;
 			nbAlign++;
 		}
 		else {
 			GameManager.Instance.EatCoor.RemoveRange(0, GameManager.Instance.EatCoor.Count - lstSize );
 		}
-		for (int a = 0; a < GameManager.Instance.EatCoor.Count; a++) {
-			Debug.Log(GameManager.Instance.EatCoor[a][0] + " et " + GameManager.Instance.EatCoor[a][1]);
-		}
-		return true;
+		stillBreakable = GameManager.Instance.EatCoor.Count > 0 ? true : false;
+		GameManager.Instance.EatCoor.Clear();
+		return stillBreakable;
 	}
 
 	/// <summary>
@@ -703,19 +727,14 @@ static public class Rules {
 	static public void youWin(int Player, int Opponent, int y, int x) 
 	{
 		bool breakWin = Rules.breakWin(Player, Opponent, y, x);
-		// breakWin(Player, Opponent, y, x);
-		// if (!breakWin)
-		// {
-
-		// }
 		Rules.somethingToEatOnTheBoard(Opponent, Player);
 		if ((Player & GameManager.Stone.White) == 0 && GameManager.Instance.currentState.hasWon && GameManager.Instance.currentState.WhiteScore < 10)
 			GameManager.Instance.currentState.BlackWin = true;
 		else if ((Player & GameManager.Stone.Black) == 0 && GameManager.Instance.currentState.hasWon && GameManager.Instance.currentState.BlackScore < 10)
 			GameManager.Instance.currentState.WhiteWin = true;
-		else if ((Player & GameManager.Stone.Black) != 0 && !(Rules.winByCapture() * 2 + GameManager.Instance.currentState.WhiteScore >= 10 ? true : false))
+		else if ((Player & GameManager.Stone.Black) != 0 && !breakWin && !(Rules.winByCapture() * 2 + GameManager.Instance.currentState.WhiteScore >= 10 ? true : false))
 			GameManager.Instance.currentState.BlackWin = true;
-		else if ((Player & GameManager.Stone.White) != 0 && !(Rules.winByCapture() * 2 + GameManager.Instance.currentState.BlackScore >= 10 ? true : false))
+		else if ((Player & GameManager.Stone.White) != 0 && !breakWin && !(Rules.winByCapture() * 2 + GameManager.Instance.currentState.BlackScore >= 10 ? true : false))
 			GameManager.Instance.currentState.WhiteWin = true;
 		else {
 			GameManager.Instance.currentState.hasWon = true;
@@ -731,12 +750,11 @@ static public class Rules {
 	{
 		int Align = 1;
 		int nbAlign = 0;
-		int i;
-		int j;
-
-		i = y;
-		j = x + 1;
+		int i = y;
+		int j = x + 1;
 	
+		if ((GameManager.Instance.currentState.Board[y, x] & Player) == 0)
+			return 0;
 		//Horizontal
 		while (j < GameManager.Instance.iWidthBoard && GameManager.Instance.currentState.Board[i,j] == Player)
 		{
