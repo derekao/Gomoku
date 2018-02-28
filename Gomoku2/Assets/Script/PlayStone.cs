@@ -8,7 +8,7 @@ using System.Runtime.InteropServices; // Dll
 public class PlayStone : MonoBehaviour {
 
 	[DllImport("Test.dll")]
-	public static extern int Add(int a, int b);
+	public static extern int Add(int[] a);
 
 	public enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 	private GameObject BlackStone;
@@ -72,6 +72,8 @@ public class PlayStone : MonoBehaviour {
 		else {
 			OnWhitePlay();
 		}
+		int[] b = {47, 1, 2, 3};
+		Debug.Log(Add(b));
 	}
 
 	private void OnBlackPlay() {

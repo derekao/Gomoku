@@ -2,7 +2,7 @@
 
 
 extern "C" {
-	int Add(int a, int b) {
-		return a + b + 1;
+	int Add(int a[]) {
+		return a[3];
 	}
 }

@@ -1,40 +1,30 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   MinMax.hpp                                         :+:      :+:    :+:   //
+//   Rules.class.hpp                                    :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: semartin <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2018/02/22 14:03:10 by semartin          #+#    #+#             //
-//   Updated: 2018/02/22 14:03:11 by semartin         ###   ########.fr       //
+//   Created: 2018/02/28 11:47:01 by semartin          #+#    #+#             //
+//   Updated: 2018/02/28 11:47:02 by semartin         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 #pragma once
 
 #include <iostream>
-#include <vector>
-#include "Coord.hpp"
-
 #include "Board.class.hpp"
 
-#define INT_MAX 2147483647
-#define INT_MIN -2147483648
-
-class MinMax 
+class Rules
 {
 
 private:
-	std::vector< std::vector<char> > Board;
-	Coord Solution;
+	static void somethingToEatWithPlayer(int Opponent, int i, int j, GameManager * Instance)
+	static void somethingToEatOnTheBoard(int Player, int Opponent, GameManager * Instance);
 
-	void Compute();
-	int AlphaBeta();
-
-	MinMax();
 
 public:
-	MinMax(std::vector< std::vector<char>> & Board);
-	~MinMax() {};
+	static bool EmptyCase(int Content);
+	static void youWin(int Player, int Opponent, int y, int x, GameManager * Instance);
 
 };

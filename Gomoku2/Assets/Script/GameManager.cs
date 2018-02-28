@@ -66,8 +66,7 @@ public class GameManager : MonoBehaviour {
 	
 	// State of the Board
 	public List<BoardHistoric> lBoardHisto;
-	public List<int[]> EatCoor;
-	public int[] Coor;
+	public List<int[]> EatCoord;
 
 	// Use this for initialization
 	void Awake () {
@@ -75,15 +74,14 @@ public class GameManager : MonoBehaviour {
 		currentState = new BoardHistoric();
 		if (lBoardHisto != null) {
 			lBoardHisto.Clear();
-			EatCoor.Clear();
+			EatCoord.Clear();
 		}
 		else
 		{
 			lBoardHisto = new List<BoardHistoric>();
 			currentState.Board = new int[iHeightBoard, iWidthBoard];
 			lBoardHisto.Insert(0, currentState.Clone());
-			EatCoor = new List<int[]>();
-			Coor = new int[2];
+			EatCoord = new List<int[]>();
 		}
 
 		PopUpWinPanel = GameObject.Find("PopUpWin");
