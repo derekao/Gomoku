@@ -32,7 +32,7 @@ public:
 	static void youWin(int Player, int Opponent, int y, int x, GameManager * Instance);
 
 	static bool CheckDoubleTreeBox(int y, int x, GameManager * Instance);
-	static int CheckWin(int Player, int y, int x);
-	static bool somethingToEatWithEmpty(int Player, int Opponent, int i, int j);
+	static int CheckWin(int Player, int y, int x, GameManager * Instance);
+	static bool somethingToEatWithEmpty(int Player, int Opponent, int i, int j, GameManager * Instance);
 
 };

@@ -108,12 +108,12 @@ void Rules::checkBreak(bool first, GameManager * Instance)
     int y;
     int x;
     int doublon;
-    for (int i = 0; i < Instance->getListEatCoord().size();) {
+    for (size_t i = 0; i < Instance->getListEatCoord().size();) {
         doublon = 0;
-        y = Instance->getListEatCoord()[i][0];
-        x = Instance->getListEatCoord()[i][1];
-        for (int j = i + 1; j < Instance->getListEatCoord().size();) {
-            if ( Instance->getListEatCoord()[j][0] == y &&  Instance->getListEatCoord()[j][1] == x) {
+        y = Instance->getListEatCoord()[i].y;
+        x = Instance->getListEatCoord()[i].x;
+        for (size_t j = i + 1; j < Instance->getListEatCoord().size();) {
+            if ( Instance->getListEatCoord()[j].y == y &&  Instance->getListEatCoord()[j].x == x) {
                 Instance->getListEatCoord().erase(Instance->getListEatCoord().begin() + j);
                 doublon++;
             }
@@ -209,7 +209,7 @@ bool Rules::breakWin(int Player, int Opponent, int y, int x, GameManager * Insta
         Align++;
     }
     if (Align >= 5) {
-        checkBreak((nbAlign == 0 ? true : false));
+        checkBreak((nbAlign == 0 ? true : false), Instance);
         lstSize = Instance->getListEatCoord().size();
         nbAlign++;
     }
@@ -235,7 +235,7 @@ bool Rules::breakWin(int Player, int Opponent, int y, int x, GameManager * Insta
         Align++;
     }
     if (Align >= 5) {
-        checkBreak((nbAlign == 0 ? true : false));
+        checkBreak((nbAlign == 0 ? true : false), Instance);
         lstSize = Instance->getListEatCoord().size();
         nbAlign++;
     }
@@ -250,7 +250,7 @@ bool Rules::breakWin(int Player, int Opponent, int y, int x, GameManager * Insta
     //Diagonal Top->Bottom
     while (i < BOARD_HEIGHT && j < BOARD_WIDTH && Instance->getBoard()[i * BOARD_WIDTH + j] == Player)
     {
-        Rules::canBeEat( Player, Opponent,  i,, Instance j);
+        Rules::canBeEat( Player, Opponent,  i, j, Instance);
         i++;
         j++;
         Align++;
@@ -265,7 +265,7 @@ bool Rules::breakWin(int Player, int Opponent, int y, int x, GameManager * Insta
         Align++;
     }
     if (Align >= 5) {
-        checkBreak((nbAlign == 0 ? true : false));
+        checkBreak((nbAlign == 0 ? true : false), Instance);
         lstSize = Instance->getListEatCoord().size();
         nbAlign++;
     }
@@ -295,7 +295,7 @@ bool Rules::breakWin(int Player, int Opponent, int y, int x, GameManager * Insta
         
     }
     if (Align >= 5) {
-        checkBreak((nbAlign == 0 ? true : false));
+        checkBreak((nbAlign == 0 ? true : false), Instance);
         lstSize = Instance->getListEatCoord().size();
         nbAlign++;
     }
@@ -308,7 +308,7 @@ bool Rules::breakWin(int Player, int Opponent, int y, int x, GameManager * Insta
 }
 
 // Return True if the Cell [i,j] allow you yo eat Opponent Stones
-bool somethingToEatWithEmpty(int Player, int Opponent, int i, int j)
+bool somethingToEatWithEmpty(int Player, int Opponent, int i, int j, GameManager * Instance)
 {
 	bool canEat = false;
 	if (i < BOARD_HEIGHT - 3 && (Instance->getBoard()[(i + 1) * BOARD_WIDTH + j] & Opponent) != 0 && (Instance->getBoard()[(i + 2) * BOARD_WIDTH + j] & Opponent) != 0 && (Instance->getBoard()[(i + 3) * BOARD_WIDTH + j] & Player) != 0) // Bottom
@@ -419,18 +419,18 @@ bool Rules::CheckDoubleTreeBox(int y, int x, GameManager * Instance)
 		NumTree++;
 	if (NumTree >= 2)
 	{
-		if (!Instance->getbPlayerOneTurn() && (Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_BLACKDoubleTree) == 0)
-			Instance->getBoard()[y * BOARD_WIDTH + x] += STONE_BLACKDoubleTree;
-		else if (Instance->getbPlayerOneTurn() && (Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_WHITEDoubleTree) == 0)
-			Instance->getBoard()[y * BOARD_WIDTH + x] += STONE_WHITEDoubleTree;
+		if (!Instance->getbPlayerOneTurn() && (Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_BLACKDOUBLETREE) == 0)
+			Instance->getBoard()[y * BOARD_WIDTH + x] += STONE_BLACKDOUBLETREE;
+		else if (Instance->getbPlayerOneTurn() && (Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_WHITEDOUBLETREE) == 0)
+			Instance->getBoard()[y * BOARD_WIDTH + x] += STONE_WHITEDOUBLETREE;
 		return true;
 	}
 	else 
 	{
-		if ((Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_WHITEDoubleTree) != 0 && Instance->getbPlayerOneTurn())
-			Instance->getBoard()[y * BOARD_WIDTH + x] -= STONE_WHITEDoubleTree;
-		if ((Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_BLACKDoubleTree) != 0 && !Instance->getbPlayerOneTurn())
-			Instance->getBoard()[y * BOARD_WIDTH + x] -= STONE_BLACKDoubleTree;
+		if ((Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_WHITEDOUBLETREE) != 0 && Instance->getbPlayerOneTurn())
+			Instance->getBoard()[y * BOARD_WIDTH + x] -= STONE_WHITEDOUBLETREE;
+		if ((Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_BLACKDOUBLETREE) != 0 && !Instance->getbPlayerOneTurn())
+			Instance->getBoard()[y * BOARD_WIDTH + x] -= STONE_BLACKDOUBLETREE;
 		return false;
 	}
 }
