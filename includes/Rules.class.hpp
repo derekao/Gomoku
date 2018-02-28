@@ -27,6 +27,6 @@ public:
 	static bool EmptyCase(int Content);
 	static void youWin(int Player, int Opponent, int y, int x, GameManager * Instance);
 
-
+	static bool checkDoubleTreeBox(int y, int x, GameManager * Instance);
 
 };
