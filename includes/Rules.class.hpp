@@ -19,12 +19,14 @@ class Rules
 {
 
 private:
-	static void somethingToEatWithPlayer(int Opponent, int i, int j, GameManager * Instance)
+	static void somethingToEatWithPlayer(int Opponent, int i, int j, GameManager * Instance);
 	static void somethingToEatOnTheBoard(int Player, int Opponent, GameManager * Instance);
 
 
 public:
 	static bool EmptyCase(int Content);
 	static void youWin(int Player, int Opponent, int y, int x, GameManager * Instance);
+
+
 
 };

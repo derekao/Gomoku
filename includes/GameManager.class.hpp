@@ -30,6 +30,7 @@ private:
 	bool BlackWin;
 	bool WhiteWin;
 	bool HasWon;
+	bool bPlayerOneTurn
 
 	int WhiteScore;
 	int BlackScore;
@@ -45,6 +46,7 @@ public:
 	bool getBlackWin() { return BlackWin; };
 	bool getWhiteWin() { return WhiteWin; };
 	bool getHasWon() { return hasWon; };
+	bool getbPlayerOneTurn() { return bPlayerOneTurn; };
 
 	int getWhiteScore() { return WhiteScore; };
 	int getBlackScore() { return BlackScore; };
@@ -59,6 +61,7 @@ public:
 	void setBlackWin(bool b) { BlackWin = b; };
 	void setWhiteWin(bool b) { WhiteWin = b; };
 	void setHasWon(bool b) { HasWon = b; };
+	void setbPlayerOneTurn(bool b) { bPlayerOneTurn = b; };
 
 	void setBlackScore(int n) { BlackScore = n; };
 	void setWhiteScore(int n) { WhiteScore = n; };

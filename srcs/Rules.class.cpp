@@ -73,3 +73,104 @@ static void Rules::somethingToEatOnTheBoard(int Player, int Opponent, GameManage
 		}
 	}
 }
+
+// Return True if there is a double tree on the cell [y,x]
+static public bool checkDoubleTreeBox(int y, int x)
+{
+	int Player1;
+	if (!GameManager.Instance.currentState.bPlayerOneTurn)
+		Player1 = STONE_BLACK;
+	else
+		Player1 = STONE_WHITE;
+	int NumTree = 0;
+	//  - X 0 X -
+	if (x >= 2 && x < BOARD_WIDTH - 2 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 2]) && GameManager.Instance.currentState.Board[y, x - 1] == Player1 && GameManager.Instance.currentState.Board[y, x + 1] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y, x + 2]))
+		NumTree++;
+	if (y >= 2 && y < BOARD_HEIGHT - 2 && EmptyCase(GameManager.Instance.currentState.Board[y - 2, x]) && GameManager.Instance.currentState.Board[y - 1, x] == Player1 && GameManager.Instance.currentState.Board[y + 1, x] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 2, x]))
+		NumTree++;
+	if (x >= 2 && x < BOARD_WIDTH - 2 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 2]) && y >= 2 && y < BOARD_HEIGHT - 2
+		&& EmptyCase(GameManager.Instance.currentState.Board[y - 2, x - 2]) && GameManager.Instance.currentState.Board[y - 1, x - 1] == Player1 && GameManager.Instance.currentState.Board[y + 1, x + 1] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 2, x + 2]))
+		NumTree++;
+	if (x >= 2 && x < BOARD_WIDTH - 2 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 2]) && y >= 2 && y < BOARD_HEIGHT - 2
+		&& EmptyCase(GameManager.Instance.currentState.Board[y + 2, x - 2]) && GameManager.Instance.currentState.Board[y + 1, x - 1] == Player1 && GameManager.Instance.currentState.Board[y - 1, x + 1] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 2, x + 2]))
+		NumTree++;
+	// - X X 0 -
+	if (x >= 3 && x < BOARD_WIDTH - 1 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 3]) && GameManager.Instance.currentState.Board[y, x - 2] == Player1 && GameManager.Instance.currentState.Board[y, x - 1] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y, x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 3 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 1]) && GameManager.Instance.currentState.Board[y, x + 1] == Player1 && GameManager.Instance.currentState.Board[y, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y, x + 3]))
+		NumTree++;
+	if (y >= 3 && y < BOARD_HEIGHT - 1 && EmptyCase(GameManager.Instance.currentState.Board[y - 3, x]) && GameManager.Instance.currentState.Board[y - 2, x] == Player1 && GameManager.Instance.currentState.Board[y - 1, x] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x]))
+		NumTree++;
+	if (y >= 1 && y < BOARD_HEIGHT - 3 && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x]) && GameManager.Instance.currentState.Board[y + 1, x] == Player1 && GameManager.Instance.currentState.Board[y + 2, x] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 3, x]))
+		NumTree++;
+	if (x >= 3 && x < BOARD_WIDTH - 1 && y >= 3 && y < BOARD_HEIGHT - 1
+		&& EmptyCase(GameManager.Instance.currentState.Board[y - 3, x - 3]) && GameManager.Instance.currentState.Board[y - 2, x - 2] == Player1 && GameManager.Instance.currentState.Board[y - 1, x - 1] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 3 && y >= 1 && y < BOARD_HEIGHT - 3 
+		&& EmptyCase(GameManager.Instance.currentState.Board[y - 1, x - 1]) && GameManager.Instance.currentState.Board[y + 1, x + 1] == Player1 && GameManager.Instance.currentState.Board[y + 2, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 3, x + 3]))
+		NumTree++;
+	if (x >= 3 && x < BOARD_WIDTH - 1 && y >= 1 && y < BOARD_HEIGHT - 3 
+		&& EmptyCase(GameManager.Instance.currentState.Board[y + 3, x - 3]) && GameManager.Instance.currentState.Board[y + 2, x - 2] == Player1 && GameManager.Instance.currentState.Board[y + 1, x - 1] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 3 && y >= 3 && y < BOARD_HEIGHT - 1
+		&& EmptyCase(GameManager.Instance.currentState.Board[y + 1, x - 1]) && GameManager.Instance.currentState.Board[y - 1, x + 1] == Player1 && GameManager.Instance.currentState.Board[y - 2, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 3, x + 3]))
+		NumTree++;
+	// - X X - 0 -
+	if (x >= 4 && x < BOARD_WIDTH - 1 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 4]) && GameManager.Instance.currentState.Board[y, x - 3] == Player1 && GameManager.Instance.currentState.Board[y, x - 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 1])  && EmptyCase(GameManager.Instance.currentState.Board[y, x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 4 && EmptyCase(GameManager.Instance.currentState.Board[y, x + 4]) && GameManager.Instance.currentState.Board[y, x + 3] == Player1 && GameManager.Instance.currentState.Board[y, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y, x + 1])  && EmptyCase(GameManager.Instance.currentState.Board[y, x - 1]))
+		NumTree++;
+	if (y >= 4 && y < BOARD_HEIGHT - 1 && EmptyCase(GameManager.Instance.currentState.Board[y - 4, x]) && GameManager.Instance.currentState.Board[y - 3, x] == Player1 && GameManager.Instance.currentState.Board[y - 2, x] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x])  && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x]))
+		NumTree++;
+	if (y >= 1 && y < BOARD_HEIGHT - 4 && EmptyCase(GameManager.Instance.currentState.Board[y + 4, x]) && GameManager.Instance.currentState.Board[y + 3, x] == Player1 && GameManager.Instance.currentState.Board[y + 2, x] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x])  && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x]))
+		NumTree++;
+	if (x >= 4 && x < BOARD_WIDTH - 1 && y >= 4 && y < BOARD_HEIGHT - 1
+		&& EmptyCase(GameManager.Instance.currentState.Board[y - 4, x - 4]) && GameManager.Instance.currentState.Board[y - 3, x - 3] == Player1 && GameManager.Instance.currentState.Board[y - 2, x - 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x - 1])  && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 4 && y >= 1 && y < BOARD_HEIGHT - 4
+		&& EmptyCase(GameManager.Instance.currentState.Board[y + 4, x + 4]) && GameManager.Instance.currentState.Board[y + 3, x + 3] == Player1 && GameManager.Instance.currentState.Board[y + 2, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x + 1])  && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x - 1]))
+		NumTree++;
+	if (x >= 4 && x < BOARD_WIDTH - 1 && y >= 1 && y < BOARD_HEIGHT - 4
+		&& EmptyCase(GameManager.Instance.currentState.Board[y + 4, x - 4]) && GameManager.Instance.currentState.Board[y + 3, x - 3] == Player1 && GameManager.Instance.currentState.Board[y + 2, x - 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x - 1])  && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 4 && y >= 4 && y < BOARD_HEIGHT - 1
+		&& EmptyCase(GameManager.Instance.currentState.Board[y - 4, x + 4]) && GameManager.Instance.currentState.Board[y - 3, x + 3] == Player1 && GameManager.Instance.currentState.Board[y - 2, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x + 1])  && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x - 1]))
+		NumTree++;
+	//  - X - 0 X -
+	if (x >= 3 && x < BOARD_WIDTH - 2 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 3]) && GameManager.Instance.currentState.Board[y, x - 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 1]) && GameManager.Instance.currentState.Board[y, x + 1] == Player1  && EmptyCase(GameManager.Instance.currentState.Board[y, x + 2]))
+		NumTree++;
+	if (x >= 2 && x < BOARD_WIDTH - 3 && EmptyCase(GameManager.Instance.currentState.Board[y, x + 3]) && GameManager.Instance.currentState.Board[y, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y, x + 1]) && GameManager.Instance.currentState.Board[y, x - 1] == Player1  && EmptyCase(GameManager.Instance.currentState.Board[y, x - 2]))
+		NumTree++;
+	if (y >= 3 && y < BOARD_HEIGHT - 2 && EmptyCase(GameManager.Instance.currentState.Board[y - 3, x]) && GameManager.Instance.currentState.Board[y - 2, x] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x]) && GameManager.Instance.currentState.Board[y + 1, x] == Player1  && EmptyCase(GameManager.Instance.currentState.Board[y + 2, x]))
+		NumTree++;
+	if (y >= 2 && y < BOARD_HEIGHT - 3 && EmptyCase(GameManager.Instance.currentState.Board[y + 3, x]) && GameManager.Instance.currentState.Board[y + 2, x] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x]) && GameManager.Instance.currentState.Board[y - 1, x] == Player1  && EmptyCase(GameManager.Instance.currentState.Board[y - 2, x]))
+		NumTree++;
+	if (x >= 3 && x < BOARD_WIDTH - 2 && y >= 3 && y < BOARD_HEIGHT - 2
+		&& EmptyCase(GameManager.Instance.currentState.Board[y - 3, x - 3]) && GameManager.Instance.currentState.Board[y - 2, x - 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x - 1]) && GameManager.Instance.currentState.Board[y + 1, x + 1] == Player1  && EmptyCase(GameManager.Instance.currentState.Board[y + 2, x + 2]))
+		NumTree++;
+	if (x >= 2 && x < BOARD_WIDTH - 3 && y >= 2 && y < BOARD_HEIGHT - 3
+		&& EmptyCase(GameManager.Instance.currentState.Board[y + 3, x + 3]) && GameManager.Instance.currentState.Board[y + 2, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x + 1]) && GameManager.Instance.currentState.Board[y - 1, x - 1] == Player1  && EmptyCase(GameManager.Instance.currentState.Board[y - 2, x - 2]))
+		NumTree++;
+	if (x >= 3 && x < BOARD_WIDTH - 2 && y >= 2 && y < BOARD_HEIGHT - 3
+		&& EmptyCase(GameManager.Instance.currentState.Board[y + 3, x - 3]) && GameManager.Instance.currentState.Board[y + 2, x - 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 1, x - 1]) && GameManager.Instance.currentState.Board[y - 1, x + 1] == Player1  && EmptyCase(GameManager.Instance.currentState.Board[y - 2, x + 2]))
+		NumTree++;
+	if (x >= 2 && x < BOARD_WIDTH - 3 && y >= 3 && y < BOARD_HEIGHT - 2
+		&& EmptyCase(GameManager.Instance.currentState.Board[y - 3, x + 3]) && GameManager.Instance.currentState.Board[y - 2, x + 2] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 1, x + 1]) && GameManager.Instance.currentState.Board[y + 1, x - 1] == Player1  && EmptyCase(GameManager.Instance.currentState.Board[y + 2, x - 2]))
+		NumTree++;
+	if (NumTree >= 2)
+	{
+		if (!GameManager.Instance.currentState.bPlayerOneTurn && (GameManager.Instance.currentState.Board[y, x] & STONE_BLACKDoubleTree) == 0)
+			GameManager.Instance.currentState.Board[y, x] += STONE_BLACKDoubleTree;
+		else if (GameManager.Instance.currentState.bPlayerOneTurn && (GameManager.Instance.currentState.Board[y, x] & STONE_WHITEDoubleTree) == 0)
+			GameManager.Instance.currentState.Board[y, x] += STONE_WHITEDoubleTree;
+		return true;
+	}
+	else 
+	{
+		if ((GameManager.Instance.currentState.Board[y, x] & STONE_WHITEDoubleTree) != 0 && GameManager.Instance.currentState.bPlayerOneTurn)
+			GameManager.Instance.currentState.Board[y, x] -= STONE_WHITEDoubleTree;
+		if ((GameManager.Instance.currentState.Board[y, x] & STONE_BLACKDoubleTree) != 0 && !GameManager.Instance.currentState.bPlayerOneTurn)
+			GameManager.Instance.currentState.Board[y, x] -= STONE_BLACKDoubleTree;
+		return false;
+	}
+}
