@@ -1,18 +1,22 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Board.class.cpp                                    :+:      :+:    :+:   //
+//   Extern.cpp                                         :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: semartin <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2018/02/28 11:29:16 by semartin          #+#    #+#             //
-//   Updated: 2018/02/28 11:29:17 by semartin         ###   ########.fr       //
+//   Created: 2018/02/28 17:52:05 by semartin          #+#    #+#             //
+//   Updated: 2018/02/28 17:52:05 by semartin         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-#include "Board.class.hpp"
+#include "Extern.hpp"
 
-Board::Board()
+extern "C" 
 {
-	content = std::vector(BOARD_HEIGHT * BOARD_WIDTH);
+	bool CheckDoubleTree(int y, int x, GameStatus Game)
+	{
+		GameManager test = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
+		return Rules::CheckDoubleTreeBox(y, x, &test);
+	}
 }

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 // #ifdef TEST_EXPORT
-#define TEST __declspec(dllexport) 
+//#define TEST __declspec(dllexport) 
 //  
 
 extern "C" {

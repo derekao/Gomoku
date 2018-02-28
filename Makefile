@@ -1,6 +1,6 @@
-NAME = Gomoku2/Test.dll
+NAME = Gomoku2/Extern.dll
 
-SRC = Test.class.cpp
+SRC = Extern.cpp Rules.class.cpp GameManager.class.cpp Coord.cpp
 
 OBJ = $(addprefix $(O_DIR)/,$(SRC:.cpp=.o))
 

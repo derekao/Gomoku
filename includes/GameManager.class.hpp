@@ -12,6 +12,10 @@
 
 #pragma once
 
+#include <iostream>
+#include <vector>
+#include "Coord.hpp"
+
 #define STONE_EMPTY 0
 #define STONE_BLACK 1
 #define STONE_WHITE 2
@@ -30,7 +34,7 @@ private:
 	bool BlackWin;
 	bool WhiteWin;
 	bool HasWon;
-	bool bPlayerOneTurn
+	bool bPlayerOneTurn;
 
 	int WhiteScore;
 	int BlackScore;
@@ -39,13 +43,24 @@ private:
 
 	Coord WinPos;
 	
-	std::list<Coord> ListEatCoard;
+	std::vector<Coord> ListEatCoord;
 
 public:
+	//Constructor
+	GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _WhiteScore, int _BlackScore, int WinY, int WinX) :
+		BlackWin(false), WhiteWin(false), HasWon(_HasWon), bPlayerOneTurn(_bPlayerOneTurn),
+		WhiteScore(_WhiteScore), BlackScore(_BlackScore), Board(BOARD_HEIGHT * BOARD_WIDTH), WinPos(WinY, WinX)
+	{
+		for (int i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++)
+		{
+			Board[i] = _Board[i];
+		}
+	};
+
 	// Accessor
 	bool getBlackWin() { return BlackWin; };
 	bool getWhiteWin() { return WhiteWin; };
-	bool getHasWon() { return hasWon; };
+	bool getHasWon() { return HasWon; };
 	bool getbPlayerOneTurn() { return bPlayerOneTurn; };
 
 	int getWhiteScore() { return WhiteScore; };
@@ -55,7 +70,7 @@ public:
 
 	Coord & getWinPos() { return WinPos; };
 
-	std::list<Coord> & getListEatCoard() { return ListEatCoard; };
+	std::vector<Coord> & getListEatCoord() { return ListEatCoord; };
 
 	// Mutator
 	void setBlackWin(bool b) { BlackWin = b; };
