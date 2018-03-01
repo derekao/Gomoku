@@ -8,18 +8,18 @@ O_DIR = ./objs
 
 S_DIR = ./srcs
 
-CFLAGS = -Wall -Wextra -Werror -ferror-limit=2 -I includes
+CFLAGS = -I includes
 
-CC = g++
+CC = nvcc
 
 RM = rm -rf
 
 $(NAME): $(OBJ)
-	@$(CC) -shared -o $(NAME) $(CFLAGS) $(OBJ)
+	$(CC) -shared -o $(NAME) $(CFLAGS) $(OBJ)
 
 $(O_DIR)/%.o: $(S_DIR)/%.cpp
-	@mkdir -p $(O_DIR)
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	mkdir -p $(O_DIR)
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 all: $(NAME)
 
