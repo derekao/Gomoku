@@ -7,8 +7,23 @@ using System.Runtime.InteropServices; // Dll
 
 public class PlayStone : MonoBehaviour {
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct GameStatus
+	{
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 361)]
+		public int[] Board;
+		[MarshalAs(UnmanagedType.U1)]
+		public bool bPlayerOneTurn;
+		[MarshalAs(UnmanagedType.U1)]
+		public bool HasWon;
+		public int WhiteScore;
+		public int BlackScore;
+		public int WinY;
+		public int WinX;
+	}
+
 	[DllImport("Extern.dll")]
-	public static extern bool CheckDoubleTree(int y, int x, ??);
+	public static extern bool CheckDoubleTree(int y, int x, GameStatus Game);
 
 	public enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 	private GameObject BlackStone;
@@ -72,7 +87,22 @@ public class PlayStone : MonoBehaviour {
 		else {
 			OnWhitePlay();
 		}
-		Debug.Log(CheckDoubleTree(y, x, ??));
+		GameStatus game;
+		game.Board = new int[GameManager.Instance.iHeightBoard * GameManager.Instance.iWidthBoard];
+		game.bPlayerOneTurn = GameManager.Instance.currentState.bPlayerOneTurn;
+		game.HasWon = GameManager.Instance.currentState.hasWon;
+		game.WhiteScore = GameManager.Instance.currentState.WhiteScore;
+		game.BlackScore = GameManager.Instance.currentState.BlackScore;
+		game.WinY = GameManager.Instance.currentState.winY;
+		game.WinX = GameManager.Instance.currentState.winX;
+		for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
+		{
+			for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)
+			{
+				game.Board[i * GameManager.Instance.iWidthBoard + j] = GameManager.Instance.currentState.Board[i,j];
+			}
+		}
+		Debug.Log(CheckDoubleTree(9, 9, game));
 	}
 
 	private void OnBlackPlay() {
