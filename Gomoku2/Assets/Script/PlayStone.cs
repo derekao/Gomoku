@@ -21,6 +21,12 @@ public class PlayStone : MonoBehaviour {
 		public int WinY;
 		public int WinX;
 	}
+	[StructLayout(LayoutKind.Sequential)]
+	public struct CoordIA
+	{
+		int y;
+		int x;
+	};
 
 	[DllImport("Extern.dll")]
 	public static extern bool CheckDoubleTree(int y, int x, GameStatus Game);

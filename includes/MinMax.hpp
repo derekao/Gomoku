@@ -19,24 +19,22 @@
 #include "Coord.hpp"
 #include "GameManager.class.hpp"
 #include "Rules.class.hpp"
-
-#define INT_MAX 2147483647
-#define INT_MIN -2147483648
+#include "PossibleMove.class.hpp"
 
 class MinMax 
 {
 
 private:
-	std::vector< std::vector<char> > Board;
+	GameManager * Board;
 	Coord Solution;
 
 	void Compute();
-	int AlphaBeta();
+	int AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer);
 
 	MinMax();
 
 public:
-	MinMax(std::vector< std::vector<char>> & Board);
+	MinMax(GameManager * src);
 	~MinMax() {};
 
 };

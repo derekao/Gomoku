@@ -12,51 +12,50 @@
 
 #include "MinMax.hpp"
 
-MinMax::MinMax(std::vector <std::vector<int> > & cpyBoard) : Board(cpyBoard)
+MinMax::MinMax(GameManager * src) : Board(src), Solution(Coord(-1,-1))
 {
-	Solution = Coord(0,0);
 	Compute();
 }
 
 void MinMax::Compute()
 {
-
+	
 }
 
 int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer)
 {
 	int v;
 
-	if (depth == 0 || Node.getHasWon())
+	if (depth == 0 || Node->getHasWon())
 	{
-		return Node.getHeuristicValue();
+		return Node->getHeuristicValue();
 	}
 	if (MaximizingPlayer)
 	{
 		v = INT_MIN;
 		PossibleMove possibleMove = PossibleMove(Node);
 		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
-		for (size_t i = 0; i < Childs.size(), i++)
+		for (size_t i = 0; i < Childs.size(); i++)
 		{
-			v = max(v, AlphaBeta(Child[i], depth - 1, Alpha, Beta, false))
-			Alpha = max(Alpha, v);
+			v = std::max(v, AlphaBeta(Childs[i], depth - 1, Alpha, Beta, false));
+			Alpha = std::max(Alpha, v);
 			if (Beta <= Alpha)
 				break;
-			return v;
 		}
+		return v;
 	}
 	else
 	{
-		v = INT_MAX
+		v = INT_MAX;
 		PossibleMove possibleMove = PossibleMove(Node);
 		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
-		for (size_t i = 0; i < Childs.size(), i++)
+		for (size_t i = 0; i < Childs.size(); i++)
 		{
-			v = min(v, AlphaBeta(Child[i], depth - 1, Alpha, Beta, true))
-			Beta = min(Beta, v)
+			v = std::min(v, AlphaBeta(Childs[i], depth - 1, Alpha, Beta, true));
+			Beta = std::min(Beta, v);
 			if (Beta >= Alpha)
 				break;
-			return v;
 		}
+		return v;
 	}
 }

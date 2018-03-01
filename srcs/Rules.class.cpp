@@ -308,7 +308,7 @@ bool Rules::breakWin(int Player, int Opponent, int y, int x, GameManager * Insta
 }
 
 // Return True if the Cell [i,j] allow you yo eat Opponent Stones
-bool somethingToEatWithEmpty(int Player, int Opponent, int i, int j, GameManager * Instance)
+bool Rules::somethingToEatWithEmpty(int Player, int Opponent, int i, int j, GameManager * Instance)
 {
 	bool canEat = false;
 	if (i < BOARD_HEIGHT - 3 && (Instance->getBoard()[(i + 1) * BOARD_WIDTH + j] & Opponent) != 0 && (Instance->getBoard()[(i + 2) * BOARD_WIDTH + j] & Opponent) != 0 && (Instance->getBoard()[(i + 3) * BOARD_WIDTH + j] & Player) != 0) // Bottom

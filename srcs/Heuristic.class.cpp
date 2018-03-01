@@ -18,13 +18,13 @@ int Heuristic::BoardValueByAlignment(int Player, int Opponent, GameManager * Ins
 			// Horizontal
 			if (x < BOARD_WIDTH - 1) {
 				if (x == 0)
-					value = CountHorizontalAlignmentSize(Player, Instance->getBoard(), i);
+					value += 10 * CountHorizontalAlignmentSize(Player, Instance->getBoard(), i);
 				else if ((Instance->getBoard()[y * BOARD_HEIGHT + x - 1] & Player) == 0) {
 
 					if ((Instance->getBoard()[y * BOARD_HEIGHT + x - 1] & Opponent) != 0)
-						value = CountHorizontalAlignmentSize(Player, Instance->getBoard(), i);
+						value += 10 * CountHorizontalAlignmentSize(Player, Instance->getBoard(), i);
 					else
-						value = CountHorizontalAlignmentSize(Player, Instance->getBoard(), i);
+						value += 10 * CountHorizontalAlignmentSize(Player, Instance->getBoard(), i);
 
 				}
 
@@ -34,13 +34,13 @@ int Heuristic::BoardValueByAlignment(int Player, int Opponent, GameManager * Ins
 			// Vertical
 			if (y < BOARD_HEIGHT - 1) {
 				if (y == 0)
-					value = CountVerticalAlignmentSize(Player, Instance->getBoard(), i);
+					value += 10 * CountVerticalAlignmentSize(Player, Instance->getBoard(), i);
 				else if ((Instance->getBoard()[(y - 1) * BOARD_HEIGHT + x] & Player) == 0) {
 
 					if ((Instance->getBoard()[(y - 1) * BOARD_HEIGHT + x] & Opponent) != 0)
-						value = CountVerticalAlignmentSize(Player, Instance->getBoard(), i);
+						value += 10 * CountVerticalAlignmentSize(Player, Instance->getBoard(), i);
 					else
-						value = CountVerticalAlignmentSize(Player, Instance->getBoard(), i);
+						value += 10 * CountVerticalAlignmentSize(Player, Instance->getBoard(), i);
 
 				}
 				// file << "Vertical" << std::endl;
@@ -49,13 +49,13 @@ int Heuristic::BoardValueByAlignment(int Player, int Opponent, GameManager * Ins
 			// Diagonnal Right
 			if (y < BOARD_HEIGHT - 1 && x < BOARD_WIDTH - 1) {
 				if (y == 0 || x == 0)
-					value = CountDiagonnalRightAlignmentSize(Player, Instance->getBoard(), i);
+					value += 10 * CountDiagonnalRightAlignmentSize(Player, Instance->getBoard(), i);
 				else if ((Instance->getBoard()[(y - 1) * BOARD_HEIGHT + x - 1] & Player) == 0) {
 
 					if ((Instance->getBoard()[(y - 1) * BOARD_HEIGHT + x - 1] & Opponent) != 0)
-						value = CountDiagonnalRightAlignmentSize(Player, Instance->getBoard(), i);
+						value += 10 * CountDiagonnalRightAlignmentSize(Player, Instance->getBoard(), i);
 					else
-						value = CountDiagonnalRightAlignmentSize(Player, Instance->getBoard(), i);
+						value += 10 * CountDiagonnalRightAlignmentSize(Player, Instance->getBoard(), i);
 
 				}
 				// file << "Diagonnal Right" << std::endl;
@@ -64,13 +64,13 @@ int Heuristic::BoardValueByAlignment(int Player, int Opponent, GameManager * Ins
 			// Diagonnal Left
 			if (y < BOARD_HEIGHT - 1 && x > 0) {
 				if (y == 0 || x == BOARD_WIDTH - 1)
-					value = CountDiagonnalLeftAlignmentSize(Player, Instance->getBoard(), i);
+					value += 10 * CountDiagonnalLeftAlignmentSize(Player, Instance->getBoard(), i);
 				else if ((Instance->getBoard()[(y - 1) * BOARD_HEIGHT + x + 1] & Player) == 0) {
 
 					if ((Instance->getBoard()[(y - 1) * BOARD_HEIGHT + x + 1] & Opponent) != 0)
-						value = CountDiagonnalLeftAlignmentSize(Player, Instance->getBoard(), i);
+						value += 10 * CountDiagonnalLeftAlignmentSize(Player, Instance->getBoard(), i);
 					else
-						value = CountDiagonnalLeftAlignmentSize(Player, Instance->getBoard(), i);
+						value += 10 * CountDiagonnalLeftAlignmentSize(Player, Instance->getBoard(), i);
 				
 				}
 				// file << "Diagonnal Left" << std::endl;

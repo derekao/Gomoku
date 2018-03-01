@@ -16,6 +16,7 @@
 #include <vector>
 #include "GameManager.class.hpp"
 #include "Rules.class.hpp"
+#include "Heuristic.class.hpp"
 
 class PossibleMove
 {
@@ -32,9 +33,15 @@ private:
 	void Compute();
 	bool StoneNearby(int y, int x);
 
+	static void PlayStone(int y, int x, GameManager * Board);
+	static void CheckStoneEaten(int y, int x, GameManager * Board);
+	static void CheckBoardState(int Height, int Width, GameManager * Board);
+
 public:
 	PossibleMove(GameManager *);
-	~PossibleMove();
+	~PossibleMove() {};
+
+	enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 
 	std::vector<GameManager *> & getPossibleMove() { return tabMove; };
 

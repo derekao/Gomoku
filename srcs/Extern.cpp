@@ -15,7 +15,7 @@
 
 extern "C" 
 {
-	bool CheckDoubleTree(int y, int x, GameStatus Game)
+	/*bool CheckDoubleTree(int y, int x, GameStatus Game)
 	{
 		std::ofstream file("debug.txt", std::ios::out | std::ios::trunc);
 		GameManager test = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
@@ -26,5 +26,14 @@ extern "C"
 				file << std::endl;
 		}
 		return Rules::CheckDoubleTreeBox(y, x, &test);
+	}*/
+
+	CoordIA IAPlay(GameStatus)
+	{
+		CoordIA MoveChosed;
+		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
+		MinMax Algo = MinMax(&GameManager);
+		CoordIA = getAlgoCoord();
+		return CoordIA;
 	}
 }

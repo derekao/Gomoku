@@ -28,5 +28,13 @@ extern "C"
 
 	};
 
-	bool CheckDoubleTree(int y, int x, GameStatus Game);
+	struct CoordIA
+	{
+		int y;
+		int x;
+	};
+
+	//bool CheckDoubleTree(int y, int x, GameStatus Game);
+
+	CoordIA IAPlay(GameStatus);
 }
