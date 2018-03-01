@@ -31,6 +31,10 @@ class GameManager
 {
 
 private:
+	GameManager();
+
+	int HeuristicValue;
+
 	bool BlackWin;
 	bool WhiteWin;
 	bool HasWon;
@@ -48,7 +52,7 @@ private:
 public:
 	//Constructor
 	GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _WhiteScore, int _BlackScore, int WinY, int WinX) :
-		BlackWin(false), WhiteWin(false), HasWon(_HasWon), bPlayerOneTurn(_bPlayerOneTurn),
+		HeuristicValue(0), BlackWin(false), WhiteWin(false), HasWon(_HasWon), bPlayerOneTurn(_bPlayerOneTurn),
 		WhiteScore(_WhiteScore), BlackScore(_BlackScore), Board(BOARD_HEIGHT * BOARD_WIDTH), WinPos(WinY, WinX)
 	{
 		for (int i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++)
@@ -57,7 +61,16 @@ public:
 		}
 	};
 
+	GameManager(GameManager const & src) :
+		HeuristicValue(src.HeuristicValue), BlackWin(src.BlackWin), WhiteWin(src.WhiteWin), HasWon(src.HasWon), bPlayerOneTurn(src.bPlayerOneTurn),
+		WhiteScore(src.WhiteScore), BlackScore( src.BlackScore), Board(src.Board), WinPos(src.WinPos.y, src.WinPos.x)
+	{
+		return ;
+	}
+
 	// Accessor
+	int getHeuristicValue() { return HeuristicValue; };
+
 	bool getBlackWin() { return BlackWin; };
 	bool getWhiteWin() { return WhiteWin; };
 	bool getHasWon() { return HasWon; };
@@ -73,6 +86,8 @@ public:
 	std::vector<Coord> & getListEatCoord() { return ListEatCoord; };
 
 	// Mutator
+	void setHeuristicValue(int n) { HeuristicValue = n; };
+
 	void setBlackWin(bool b) { BlackWin = b; };
 	void setWhiteWin(bool b) { WhiteWin = b; };
 	void setHasWon(bool b) { HasWon = b; };

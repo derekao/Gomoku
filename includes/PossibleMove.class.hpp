@@ -1,42 +1,41 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   MinMax.hpp                                         :+:      :+:    :+:   //
+//   PossibleMove.class.hpp                             :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: semartin <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2018/02/22 14:03:10 by semartin          #+#    #+#             //
-//   Updated: 2018/02/22 14:03:11 by semartin         ###   ########.fr       //
+//   Created: 2018/03/01 16:35:08 by semartin          #+#    #+#             //
+//   Updated: 2018/03/01 16:35:08 by semartin         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
-
+ 
 #pragma once
 
 #include <iostream>
-#include <algorithm> 
 #include <vector>
-
-#include "Coord.hpp"
 #include "GameManager.class.hpp"
 #include "Rules.class.hpp"
 
-#define INT_MAX 2147483647
-#define INT_MIN -2147483648
-
-class MinMax 
+class PossibleMove
 {
 
 private:
-	std::vector< std::vector<char> > Board;
-	Coord Solution;
+	PossibleMove(); //Forbiden Constructor
+
+	GameManager * Board;
+	std::vector<GameManager *> tabMove;
+
+	int HighestHeuristicValue;
+	int LowestHeuristicValue;
 
 	void Compute();
-	int AlphaBeta();
-
-	MinMax();
+	bool StoneNearby(int y, int x);
 
 public:
-	MinMax(std::vector< std::vector<char>> & Board);
-	~MinMax() {};
+	PossibleMove(GameManager *);
+	~PossibleMove();
+
+	std::vector<GameManager *> & getPossibleMove() { return tabMove; };
 
 };

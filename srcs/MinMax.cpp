@@ -23,20 +23,22 @@ void MinMax::Compute()
 
 }
 
-int MinMax::AlphaBeta(NODE, int depth, int Alpha, int Beta, bool MaximizingPlayer)
+int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer)
 {
 	int v;
 
-	if (depth == 0 || NODE == TERMINAL_NODE)
+	if (depth == 0 || Node.getHasWon())
 	{
-		return HEURISTIC VALUE OF NODE;
+		return Node.getHeuristicValue();
 	}
 	if (MaximizingPlayer)
 	{
 		v = INT_MIN;
-		for each CHILD OF NODE
+		PossibleMove possibleMove = PossibleMove(Node);
+		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
+		for (size_t i = 0; i < Childs.size(), i++)
 		{
-			v = max(v, AlphaBeta(CHILD, depth - 1, Alpha, Beta, false))
+			v = max(v, AlphaBeta(Child[i], depth - 1, Alpha, Beta, false))
 			Alpha = max(Alpha, v);
 			if (Beta <= Alpha)
 				break;
@@ -46,9 +48,11 @@ int MinMax::AlphaBeta(NODE, int depth, int Alpha, int Beta, bool MaximizingPlaye
 	else
 	{
 		v = INT_MAX
-		for each CHILD OF NODE
+		PossibleMove possibleMove = PossibleMove(Node);
+		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
+		for (size_t i = 0; i < Childs.size(), i++)
 		{
-			v = min(v, AlphaBeta(CHILD, depth - 1, Alpha, Beta, true))
+			v = min(v, AlphaBeta(Child[i], depth - 1, Alpha, Beta, true))
 			Beta = min(Beta, v)
 			if (Beta >= Alpha)
 				break;

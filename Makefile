@@ -1,6 +1,6 @@
 NAME = Gomoku2/Extern.dll
 
-SRC = Extern.cpp Rules.class.cpp GameManager.class.cpp
+SRC = Extern.cpp Rules.class.cpp GameManager.class.cpp PossibleMove.class.cpp
 
 OBJ = $(addprefix $(O_DIR)/,$(SRC:.cpp=.o))
 
@@ -8,18 +8,18 @@ O_DIR = ./objs
 
 S_DIR = ./srcs
 
-CFLAGS = -I includes
+CFLAGS = -Wall -Wextra -Werror -ferror-limit=2 -I includes
 
-CC = nvcc
+CC = g++
 
 RM = rm -rf
 
 $(NAME): $(OBJ)
-	$(CC) -shared -o $(NAME) $(CFLAGS) $(OBJ)
+	@$(CC) -shared -o $(NAME) $(CFLAGS) $(OBJ)
 
 $(O_DIR)/%.o: $(S_DIR)/%.cpp
-	mkdir -p $(O_DIR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+	@mkdir -p $(O_DIR)
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
 all: $(NAME)
 
