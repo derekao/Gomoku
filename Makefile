@@ -24,6 +24,9 @@ $(O_DIR)/%.o: $(S_DIR)/%.cpp
 
 all: $(NAME)
 
+test: 
+	@g++ srcs/* $(CFLAGS) -I includes
+
 clean:
 	@$(RM) $(OBJ)
 	@$(RM) $(O_DIR)

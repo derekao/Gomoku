@@ -28,12 +28,14 @@ extern "C"
 		return Rules::CheckDoubleTreeBox(y, x, &test);
 	}*/
 
-	CoordIA IAPlay(GameStatus)
+	CoordIA IAPlay(GameStatus Game)
 	{
 		CoordIA MoveChosed;
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
-		MinMax Algo = MinMax(&GameManager);
-		CoordIA = getAlgoCoord();
-		return CoordIA;
+		MinMax Algo = MinMax(&Board);
+		Coord tmp = Algo.getSolution();
+		MoveChosed.y = tmp.y;
+		MoveChosed.x = tmp.x; 
+		return MoveChosed;
 	}
 }

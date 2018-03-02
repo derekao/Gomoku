@@ -12,6 +12,16 @@
 
 #include "PossibleMove.class.hpp"
 
+// static void printBoard(GameManager * Board)
+// {
+// 	for (int i = 0; i < 361; i ++)
+// 	{
+// 		std::cout << Board->getBoard()[i] << " ";
+// 		if (i % 19 == 18)
+// 			std::cout << std::endl;
+// 	}
+// }
+
 PossibleMove::PossibleMove(GameManager * src) : Board(src),
 	HighestHeuristicValue(src->getHeuristicValue()), LowestHeuristicValue(src->getHeuristicValue())
 {
@@ -22,18 +32,20 @@ void PossibleMove::Compute()
 {
 	GameManager * tmp;
 
-	int PlayerOne;
-	int PlayerTwo;
+	// int PlayerOne;
+	// int PlayerTwo;
 
 	for (int i = 0; i < BOARD_HEIGHT; i++)
 	{
 		for (int j = 0; j < BOARD_WIDTH; j++)
 		{
-			if (Board->getBoard()[i * BOARD_WIDTH + j] == 0 && !StoneNearby(i, j))
+			if (Board->getBoard()[i * BOARD_WIDTH + j] == 0 && StoneNearby(i, j))
 			{
 				tmp = new GameManager(*Board);
 				PlayStone(i, j, tmp);
-				if (tmp->getbPlayerOneTurn())
+				Coord PlayedMove = Coord(i, j);
+				tmp->setLastMove(PlayedMove);
+				/*if (tmp->getbPlayerOneTurn())
 				{
 					PlayerOne = STONE_BLACK;
 					PlayerTwo = STONE_WHITE;
@@ -46,9 +58,9 @@ void PossibleMove::Compute()
 				tmp->setHeuristicValue(Heuristic::BoardValueByAlignment(PlayerOne, PlayerTwo, tmp));
 				if (tmp->getHeuristicValue() > HighestHeuristicValue)
 				{
-					HighestHeuristicValue = tmp->getHeuristicValue();
+					HighestHeuristicValue = tmp->getHeuristicValue();*/
 					tabMove.push_back(tmp);
-				}
+			/*	}
 				else if (tmp->getHeuristicValue() < LowestHeuristicValue)
 				{
 					std::cerr << "WTF IS THIS VALUE?" << std::endl;
@@ -57,7 +69,7 @@ void PossibleMove::Compute()
 				else
 				{
 					delete tmp;
-				}
+				}*/
 			}
 		}
 	}
@@ -66,20 +78,22 @@ void PossibleMove::Compute()
 // Return True if there is a stone 2 cells around the stone in parameter
 bool PossibleMove::StoneNearby(int y, int x)
 {
-	for (int i = y - 2; i < y + 2; i++)
+	for (int i = y - 1; i <= y + 1; i++)
 	{
 		if (i < 0)
 			continue;
 		if (i >= BOARD_HEIGHT)
 			break;
-		for (int j = x - 2; j < x - 2; j++)
+		for (int j = x - 1; j <= x + 1; j++)
 		{
 			if (j < 0)
 				continue;
 			if (j >= BOARD_WIDTH)
 				break;
-			if (!Rules::EmptyCase(Board->getBoard()[y * BOARD_WIDTH + x]))
+			if (!Rules::EmptyCase(Board->getBoard()[i * BOARD_WIDTH + j]))
+			{
 				return true;
+			}
 		}
 	}
 	return false;

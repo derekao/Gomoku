@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <cmath>
 #include "GameManager.class.hpp"
 
 class Heuristic {

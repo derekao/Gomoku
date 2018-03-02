@@ -28,13 +28,18 @@ private:
 	GameManager * Board;
 	Coord Solution;
 
+	int Player1;
+	int Player2;
+
 	void Compute();
-	int AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer);
+	int AlphaBeta(GameManager * Node, int depth, bool MaximizingPlayer);
 
 	MinMax();
 
 public:
 	MinMax(GameManager * src);
 	~MinMax() {};
+
+	Coord & getSolution() { return Solution ;};
 
 };

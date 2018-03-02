@@ -24,12 +24,12 @@ public class PlayStone : MonoBehaviour {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct CoordIA
 	{
-		int y;
-		int x;
+		public int y;
+		public int x;
 	};
 
 	[DllImport("Extern.dll")]
-	public static extern bool CheckDoubleTree(int y, int x, GameStatus Game);
+	public static extern CoordIA IAPlay(GameStatus Game);
 
 	public enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 	private GameObject BlackStone;
@@ -89,26 +89,28 @@ public class PlayStone : MonoBehaviour {
 	public void OnClick() {
 		if (GameManager.Instance.currentState.bPlayerOneTurn) {
 			OnBlackPlay();
+			GameStatus game;
+			game.Board = new int[GameManager.Instance.iHeightBoard * GameManager.Instance.iWidthBoard];
+			game.bPlayerOneTurn = GameManager.Instance.currentState.bPlayerOneTurn;
+			game.HasWon = GameManager.Instance.currentState.hasWon;
+			game.WhiteScore = GameManager.Instance.currentState.WhiteScore;
+			game.BlackScore = GameManager.Instance.currentState.BlackScore;
+			game.WinY = GameManager.Instance.currentState.winY;
+			game.WinX = GameManager.Instance.currentState.winX;
+			for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
+			{
+				for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)
+				{
+					game.Board[i * GameManager.Instance.iWidthBoard + j] = GameManager.Instance.currentState.Board[i,j];
+				}
+			}
+			CoordIA test = IAPlay(game);
+			Debug.Log("x = " + test.x + " et y = " +  test.y);
 		}
 		else {
 			OnWhitePlay();
 		}
-		GameStatus game;
-		game.Board = new int[GameManager.Instance.iHeightBoard * GameManager.Instance.iWidthBoard];
-		game.bPlayerOneTurn = GameManager.Instance.currentState.bPlayerOneTurn;
-		game.HasWon = GameManager.Instance.currentState.hasWon;
-		game.WhiteScore = GameManager.Instance.currentState.WhiteScore;
-		game.BlackScore = GameManager.Instance.currentState.BlackScore;
-		game.WinY = GameManager.Instance.currentState.winY;
-		game.WinX = GameManager.Instance.currentState.winX;
-		for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
-		{
-			for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)
-			{
-				game.Board[i * GameManager.Instance.iWidthBoard + j] = GameManager.Instance.currentState.Board[i,j];
-			}
-		}
-		Debug.Log(CheckDoubleTree(9, 9, game));
+
 	}
 
 	private void OnBlackPlay() {

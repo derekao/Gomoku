@@ -12,6 +12,8 @@
 
 #pragma once
 #include "GameManager.class.hpp"
+#include "Coord.hpp"
+#include "MinMax.hpp"
 #include "Rules.class.hpp"
 
 extern "C" 

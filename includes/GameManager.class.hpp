@@ -34,6 +34,9 @@ private:
 	GameManager();
 
 	int HeuristicValue;
+	GameManager * Parent;
+	Coord LastMove;
+
 
 	bool BlackWin;
 	bool WhiteWin;
@@ -52,7 +55,7 @@ private:
 public:
 	//Constructor
 	GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _WhiteScore, int _BlackScore, int WinY, int WinX) :
-		HeuristicValue(0), BlackWin(false), WhiteWin(false), HasWon(_HasWon), bPlayerOneTurn(_bPlayerOneTurn),
+		HeuristicValue(0), LastMove(0,0), BlackWin(false), WhiteWin(false), HasWon(_HasWon), bPlayerOneTurn(_bPlayerOneTurn),
 		WhiteScore(_WhiteScore), BlackScore(_BlackScore), Board(BOARD_HEIGHT * BOARD_WIDTH), WinPos(WinY, WinX)
 	{
 		for (int i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++)
@@ -62,7 +65,7 @@ public:
 	};
 
 	GameManager(GameManager const & src) :
-		HeuristicValue(src.HeuristicValue), BlackWin(src.BlackWin), WhiteWin(src.WhiteWin), HasWon(src.HasWon), bPlayerOneTurn(src.bPlayerOneTurn),
+		HeuristicValue(src.HeuristicValue), LastMove(0,0), BlackWin(src.BlackWin), WhiteWin(src.WhiteWin), HasWon(src.HasWon), bPlayerOneTurn(src.bPlayerOneTurn),
 		WhiteScore(src.WhiteScore), BlackScore( src.BlackScore), Board(src.Board), WinPos(src.WinPos.y, src.WinPos.x)
 	{
 		return ;
@@ -70,6 +73,8 @@ public:
 
 	// Accessor
 	int getHeuristicValue() { return HeuristicValue; };
+	GameManager * getParent() { return Parent; };
+	Coord & getLastMove() { return LastMove; };
 
 	bool getBlackWin() { return BlackWin; };
 	bool getWhiteWin() { return WhiteWin; };
@@ -87,6 +92,8 @@ public:
 
 	// Mutator
 	void setHeuristicValue(int n) { HeuristicValue = n; };
+	void setParent(GameManager * Board) { Parent = Board; };
+	void setLastMove(Coord & move) { LastMove.y = move.y; LastMove.x = move.x; ;}
 
 	void setBlackWin(bool b) { BlackWin = b; };
 	void setWhiteWin(bool b) { WhiteWin = b; };
