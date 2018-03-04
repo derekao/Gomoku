@@ -3,16 +3,18 @@
 #include <iostream>
 #include <cmath>
 #include "GameManager.class.hpp"
+#include "Rules.class.hpp"
 
 class Heuristic {
 
 private:
-	static int CountHorizontalAlignmentSize(int, std::vector<int>, int);
-	static int CountVerticalAlignmentSize(int, std::vector<int>, int);
-	static int CountDiagonnalRightAlignmentSize(int, std::vector<int>, int);
-	static int CountDiagonnalLeftAlignmentSize(int, std::vector<int>, int);
+	static int CountHorizontalAlignmentScore(int, int, std::vector<int> & , int);
+	static int CountVerticalAlignmentScore(int, int, std::vector<int> & , int);
+	static int CountDiagonnalRightAlignmentScore(int, int, std::vector<int> & , int);
+	static int CountDiagonnalLeftAlignmentScore(int, int, std::vector<int> & , int);
+	static int CountHeuristicAlignmentScore(int, int, bool, bool, bool);
 
 public:
-	static int BoardValueByAlignment(int, int, GameManager *);
+	static int BoardValue(int, int, GameManager *);
 
 };

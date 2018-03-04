@@ -71,11 +71,11 @@ int MinMax::AlphaBeta(GameManager * Node, int depth, bool MaximizingPlayer)
 
 	if (depth == 0 || Node->getBlackWin() || Node->getWhiteWin())
 	{
-		int iValue = Heuristic::BoardValueByAlignment(Player1, Player2, Node);
-		int bValue = Heuristic::BoardValueByAlignment(Player2, Player1, Node);
+		int iValue = Heuristic::BoardValue(Player1, Player2, Node);
 		printBoard(Node);
-		std::cout << "Heuristic = " << iValue << " - " << bValue << " = " << iValue - bValue << std::endl;
-		return iValue - bValue;
+		std::cout << "Heuristic = " << iValue << std::endl;
+		std::cout << "Black = " << Node->getBlackWin() << " - " << " White " << Node->getWhiteWin() << std::endl;
+		return iValue;
 	}
 	if (MaximizingPlayer)
 	{
