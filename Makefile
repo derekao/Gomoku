@@ -9,7 +9,7 @@ O_DIR = ./objs
 
 S_DIR = ./srcs
 
-CFLAGS = -Wall -Wextra -Werror -ferror-limit=2 -I includes
+CFLAGS = -Wall -Wextra -Werror -O3 -ferror-limit=2 -I includes
 
 CC = g++
 

@@ -49,6 +49,7 @@ void MinMax::Compute()
 	{
 		std::cout << "test3 " <<  Childs.size() << std::endl;
 		Value = AlphaBeta(Childs[i], 2, false);
+		std::cout << "test4 " <<  Childs.size() << std::endl;
 		if (Value > v)
 		{
 			BestMove = Childs[i];
