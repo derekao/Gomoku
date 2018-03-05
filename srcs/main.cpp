@@ -15,7 +15,7 @@
 int main()
 {
 	GameStatus game;
-	game.bPlayerOneTurn = false;
+	game.bPlayerOneTurn = true;
 	game.HasWon = false;
 	game.WhiteScore = 0;
 	game.BlackScore = 0;
@@ -30,9 +30,15 @@ int main()
 	game.Board[181] = STONE_BLACK;
 	game.Board[182] = STONE_BLACK;
 	game.Board[183] = STONE_BLACK;
-	game.Board[179] = STONE_WHITE;
-	game.Board[160] = STONE_WHITE;
-	game.Board[141] = STONE_WHITE;
+	game.Board[200] = STONE_BLACK;
+	game.Board[219] = STONE_WHITE;
+
+
+	game.Board[1] = STONE_WHITE;
+	game.Board[2] = STONE_WHITE;
+	game.Board[3] = STONE_WHITE;
+	game.Board[4] = STONE_WHITE;
+
 	for (int i = 0; i < 361; i ++)
 	{
 		std::cout << game.Board[i] << " ";

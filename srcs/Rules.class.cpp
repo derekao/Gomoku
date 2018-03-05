@@ -31,9 +31,9 @@ void Rules::youWin(int Player, int Opponent, int y, int x, GameManager * Instanc
 		Instance->setBlackWin(true);
 	else if ((Player & STONE_BLACK) == 0 && Instance->getHasWon() && Instance->getBlackScore() < 10)
 		Instance->setWhiteWin(true);
-	else if ((Player & STONE_BLACK) != 0 && !Break && !(winByCapture(Instance) * 2 + Instance->getWhiteScore() >= 10))
+	else if ((Player & STONE_BLACK) != 0 && !Break && !(winByCapture(Instance) * 2 + Instance->getWhiteScore() >= 10) && !Instance->getHasWon())
 		Instance->setBlackWin(true);
-	else if ((Player & STONE_WHITE) != 0 && !Break && !(winByCapture(Instance) * 2 + Instance->getBlackScore() >= 10))
+	else if ((Player & STONE_WHITE) != 0 && !Break && !(winByCapture(Instance) * 2 + Instance->getBlackScore() >= 10) && !Instance->getHasWon())
 		Instance->setWhiteWin(true);
 	else {
 		Instance->setHasWon(true);

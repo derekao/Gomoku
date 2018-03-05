@@ -129,12 +129,12 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 			Rules::youWin(PlayerTwo, PlayerOne, Board->getWinPos().y, Board->getWinPos().x, Board);
 		}
 	}
-	win = Rules::CheckWin(PlayerOne, Board->getWinPos().y, Board->getWinPos().x, Board);
+	win = Rules::CheckWin(PlayerOne, y, x, Board);
 	if (win != 0)
 	{
-		Rules::youWin(PlayerOne, PlayerTwo, Board->getWinPos().y, Board->getWinPos().x, Board);
+		Rules::youWin(PlayerOne, PlayerTwo, y, x, Board);
 	}
-	CheckBoardState(Board->getWinPos().y, Board->getWinPos().x, Board);
+	CheckBoardState(y, x, Board);
 }
 
 // static function

@@ -16,6 +16,15 @@ int Heuristic::BoardValue(int Player, int Opponent, GameManager * Instance) {
 	int x;
 	int y;
 
+	if ((Player == STONE_BLACK && (Instance->getBlackWin() || Instance->getBlackScore() >= 10)) || (Player == STONE_WHITE && (Instance->getWhiteWin() || Instance->getWhiteScore() >= 10)))
+	{
+		return MAX_INFINIT;
+	}
+	else if ((Opponent == STONE_BLACK && (Instance->getBlackWin() || Instance->getBlackScore() >= 10)) || (Opponent == STONE_WHITE && (Instance->getWhiteWin() || Instance->getWhiteScore() >= 10)))
+	{
+		return MIN_INFINIT;
+	}
+
 //	printBoard(Instance);
 	for (size_t i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++) {
 		y = i / BOARD_HEIGHT;
@@ -313,7 +322,7 @@ int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bB
 	else if (bBorder) {
 		score += 0;
 	}
-	// else if () {
+	// else if ((bBlockStart && !bBlockEnd) || (!bBlockStart && bBlockEnd)) {
 
 	// }
 	// else if () {

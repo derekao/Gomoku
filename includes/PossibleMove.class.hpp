@@ -33,13 +33,13 @@ private:
 	void Compute();
 	bool StoneNearby(int y, int x);
 
-	static void PlayStone(int y, int x, GameManager * Board);
-	static void CheckStoneEaten(int y, int x, GameManager * Board);
-	static void CheckBoardState(int Height, int Width, GameManager * Board);
-
 public:
 	PossibleMove(GameManager *);
 	~PossibleMove() {};
+
+	static void PlayStone(int y, int x, GameManager * Board);
+	static void CheckStoneEaten(int y, int x, GameManager * Board);
+	static void CheckBoardState(int Height, int Width, GameManager * Board);
 
 	enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 
