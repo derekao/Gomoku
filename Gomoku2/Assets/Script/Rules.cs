@@ -36,6 +36,7 @@ static public class Rules {
 			GameManager.Instance.currentState.winY = y;
 			GameManager.Instance.currentState.winX = x;
 		}
+		Debug.Log(GameManager.Instance.currentState.hasWon + " " + GameManager.Instance.currentState.BlackWin + " " + GameManager.Instance.currentState.WhiteWin);
 	}
 
 	// Private function used in YouWIn

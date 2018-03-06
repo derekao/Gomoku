@@ -132,6 +132,7 @@ public class PlayStone : MonoBehaviour {
 				{
 					Rules.youWin(GameManager.Stone.White, GameManager.Stone.Black, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX);
 				}
+				return ;
 			}
 			win = Rules.CheckWin(GameManager.Stone.Black, y, x);
 			if (win != 0)
@@ -163,6 +164,7 @@ public class PlayStone : MonoBehaviour {
 				{
 					Rules.youWin(GameManager.Stone.Black, GameManager.Stone.White, GameManager.Instance.currentState.winY, GameManager.Instance.currentState.winX);
 				}
+				return ;
 			}
 			win = Rules.CheckWin(GameManager.Stone.White, y, x);
 			if (win != 0)
