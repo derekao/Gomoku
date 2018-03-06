@@ -39,6 +39,7 @@ void Rules::youWin(int Player, int Opponent, int y, int x, GameManager * Instanc
 		Instance->setHasWon(true);
 		Instance->setWinCoord(y, x);
 	}
+    Instance->getListEatCoord().clear();
 }
 
 // Private function used in YouWIn

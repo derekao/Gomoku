@@ -103,7 +103,10 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		if (win != 0)
 		{
 			Rules::youWin(PlayerTwo, PlayerOne, Board->getWinPos().y, Board->getWinPos().x, Board);
+			return ;
 		}
+		else
+			Board->setHasWon(false);
 	}
 	win = Rules::CheckWin(PlayerOne, y, x, Board);
 	if (win != 0)
