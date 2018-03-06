@@ -31,45 +31,21 @@ PossibleMove::PossibleMove(GameManager * src) : Board(src),
 void PossibleMove::Compute()
 {
 	GameManager * tmp;
-
-	// int PlayerOne;
-	// int PlayerTwo;
-
-	for (int i = 0; i < BOARD_HEIGHT; i++)
+	for (size_t k = 0; k < Board->getPlayArea().size(); k++)
 	{
-		for (int j = 0; j < BOARD_WIDTH; j++)
+		for (int i = Board->getPlayArea()[k].Pos.y ; i < Board->getPlayArea()[k].Pos.y + Board->getPlayArea()[k].Height ; i++)
 		{
-			if (Board->getBoard()[i * BOARD_WIDTH + j] == 0 && StoneNearby(i, j))
+			for (int j = Board->getPlayArea()[k].Pos.x ; j< Board->getPlayArea()[k].Pos.x + Board->getPlayArea()[k].Width ; j++)
 			{
-				tmp = new GameManager(*Board);
-				PlayStone(i, j, tmp);
-				Coord PlayedMove = Coord(i, j);
-				tmp->setLastMove(PlayedMove);
-				/*if (tmp->getbPlayerOneTurn())
+				if (Board->getBoard()[i * BOARD_WIDTH + j] == 0 && StoneNearby(i, j))
 				{
-					PlayerOne = STONE_BLACK;
-					PlayerTwo = STONE_WHITE;
-				}
-				else
-				{
-					PlayerOne = STONE_WHITE;
-					PlayerTwo = STONE_BLACK;
-				}
-				tmp->setHeuristicValue(Heuristic::BoardValueByAlignment(PlayerOne, PlayerTwo, tmp));
-				if (tmp->getHeuristicValue() > HighestHeuristicValue)
-				{
-					HighestHeuristicValue = tmp->getHeuristicValue();*/
+					tmp = new GameManager(*Board);
+					PlayStone(i, j, tmp);
+					Area::Update(Board->getPlayArea(), i, j);
+					Coord PlayedMove = Coord(i, j);
+					tmp->setLastMove(PlayedMove);
 					tabMove.push_back(tmp);
-			/*	}
-				else if (tmp->getHeuristicValue() < LowestHeuristicValue)
-				{
-					std::cerr << "WTF IS THIS VALUE?" << std::endl;
-					exit(0);
 				}
-				else
-				{
-					delete tmp;
-				}*/
 			}
 		}
 	}

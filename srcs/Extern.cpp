@@ -14,15 +14,15 @@
 #include "PossibleMove.class.hpp"
 #include <fstream>
 
-static void printBoard(GameManager * Board)
-{
-	for (int i = 0; i < 361; i ++)
-	{
-		std::cout << Board->getBoard()[i] << " ";
-		if (i % 19 == 18)
-			std::cout << std::endl;
-	}
-}
+// static void printBoard(GameManager * Board)
+// {
+// 	for (int i = 0; i < 361; i ++)
+// 	{
+// 		std::cout << Board->getBoard()[i] << " ";
+// 		if (i % 19 == 18)
+// 			std::cout << std::endl;
+// 	}
+// }
 
 extern "C" 
 {
@@ -43,8 +43,8 @@ extern "C"
 	{
 		CoordIA MoveChosed;
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
-		PossibleMove::PlayStone(9, 8, &Board);
-		printBoard(&Board);
+//		PossibleMove::PlayStone(9, 8, &Board);
+//		printBoard(&Board);
 		MinMax Algo = MinMax(&Board);
 		Coord tmp = Algo.getSolution();
 		MoveChosed.y = tmp.y;

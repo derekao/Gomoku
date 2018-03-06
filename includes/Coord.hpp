@@ -19,6 +19,7 @@ class Coord
 
 public:
 	Coord(int _y, int _x) : y(_y), x(_x){} ; 
+	Coord(){};
 	int y;
 	int x;
 
