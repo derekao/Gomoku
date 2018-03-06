@@ -181,6 +181,7 @@
 'Assets/Script/GameManager.cs'
 'Assets/Script/MainMenu.cs'
 'Assets/Script/PlayStone.cs'
+'Assets/Script/PopUpWin.cs'
 'Assets/Script/PrintBoard.cs'
 'Assets/Script/Quit.cs'
 'Assets/Script/RestartLevel.cs'

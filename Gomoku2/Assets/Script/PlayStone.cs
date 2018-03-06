@@ -104,8 +104,11 @@ public class PlayStone : MonoBehaviour {
 					game.Board[i * GameManager.Instance.iWidthBoard + j] = GameManager.Instance.currentState.Board[i,j];
 				}
 			}
-			CoordIA test = IAPlay(game);
-			Debug.Log("x = " + test.x + " et y = " +  test.y);
+			if (GameManager.Instance.ActivateIA)
+			{
+				CoordIA test = IAPlay(game);
+				Debug.Log("x = " + test.x + " et y = " +  test.y);
+			}
 		}
 		else {
 			OnWhitePlay();

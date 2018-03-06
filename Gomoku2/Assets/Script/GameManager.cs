@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private GameObject PopUpWinPanel;
+	public bool LockPopUp = false;
+	public bool ActivateIA = false;
 	public BoardHistoric currentState;
 
 	// Size of the Board
@@ -105,13 +107,13 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if ((currentState.BlackWin || currentState.BlackScore >= 10) && PopUpWinPanel.activeSelf == false)
+		if ((currentState.BlackWin || currentState.BlackScore >= 10) && PopUpWinPanel.activeSelf == false && !LockPopUp)
 		{
 			PopUpWinPanel.SetActive(true);
 			Text WinText = GameObject.Find("WinText").GetComponent<Text>();
 			WinText.text = "Black has won";
 		}
-		if ((currentState.WhiteWin || currentState.WhiteScore >= 10) && PopUpWinPanel.activeSelf == false)
+		if ((currentState.WhiteWin || currentState.WhiteScore >= 10) && PopUpWinPanel.activeSelf == false && !LockPopUp)
 		{
 			PopUpWinPanel.SetActive(true);
 			Text WinText = GameObject.Find("WinText").GetComponent<Text>();

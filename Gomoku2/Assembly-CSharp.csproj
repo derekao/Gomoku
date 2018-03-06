@@ -54,6 +54,7 @@
      <Compile Include="Assets\Script\GameManager.cs" />
      <Compile Include="Assets\Script\MainMenu.cs" />
      <Compile Include="Assets\Script\PlayStone.cs" />
+     <Compile Include="Assets\Script\PopUpWin.cs" />
      <Compile Include="Assets\Script\PrintBoard.cs" />
      <Compile Include="Assets\Script\Quit.cs" />
      <Compile Include="Assets\Script\RestartLevel.cs" />
