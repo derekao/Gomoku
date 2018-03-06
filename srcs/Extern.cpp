@@ -43,8 +43,8 @@ extern "C"
 	{
 		CoordIA MoveChosed;
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
-//		PossibleMove::PlayStone(9, 8, &Board);
-//		printBoard(&Board);
+	//	PossibleMove::PlayStone(9, 8, &Board);
+	//	printBoard(&Board);
 		MinMax Algo = MinMax(&Board);
 		Coord tmp = Algo.getSolution();
 		MoveChosed.y = tmp.y;

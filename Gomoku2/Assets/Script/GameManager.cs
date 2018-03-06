@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour {
 
 	private GameObject PopUpWinPanel;
 	public bool LockPopUp = false;
-	public bool ActivateIA = false;
+	public bool ActivateIA = true;
 	public BoardHistoric currentState;
 
 	// Size of the Board
