@@ -26,15 +26,15 @@ GameManager::GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _
 				int x = i % BOARD_HEIGHT;
 				for (size_t i = 0; i < PlayArea.size(); i++)
 				{
-					if (x >= PlayArea[i].Pos.x && x <= PlayArea[i].Pos.x + PlayArea[i].Width
-						&& y >= PlayArea[i].Pos.x && y <= PlayArea[i].Pos.y + PlayArea[i].Height)
+					if (x >= PlayArea[i].Pos.x && x < PlayArea[i].Pos.x + PlayArea[i].Width
+						&& y >= PlayArea[i].Pos.x && y < PlayArea[i].Pos.y + PlayArea[i].Height)
 					{
 						if (x == PlayArea[i].Pos.x && x >= 1)
 						{
 							PlayArea[i].Width++;
 							PlayArea[i].Pos.x -= 1;
 						}
-						if (x == PlayArea[i].Pos.x + PlayArea[i].Width)
+						if (x == PlayArea[i].Pos.x + PlayArea[i].Width - 1)
 						{
 							PlayArea[i].Width++;
 						}
@@ -43,7 +43,7 @@ GameManager::GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _
 							PlayArea[i].Height++;
 							PlayArea[i].Pos.y -= 1;
 						}
-						if (y == PlayArea[i].Pos.y + PlayArea[i].Height)
+						if (y == PlayArea[i].Pos.y + PlayArea[i].Height - 1)
 						{
 							PlayArea[i].Height++;
 						}
@@ -74,4 +74,9 @@ GameManager::GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _
 				}
 			}
 		}
+
+		// for (size_t i = 0; i < PlayArea.size(); i++)
+		// {
+		// 	std::cout <<  "Width = "<<PlayArea[i].Width << " et Height = " << PlayArea[i].Height << " et X = " << PlayArea[i].Pos.x << " et Y = " << PlayArea[i].Pos.y << std::endl;
+		// }
 	}

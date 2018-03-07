@@ -46,23 +46,27 @@ extern "C"
 	{
 		CoordIA MoveChosed;
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
-		PossibleMove::PlayStone(10, 10, &Board);
-		PossibleMove::PlayStone(9, 10, &Board);
-		PossibleMove::PlayStone(10, 9, &Board);
-		PossibleMove::PlayStone(9, 11, &Board);
-		PossibleMove::PlayStone(9, 8, &Board);
-		PossibleMove::PlayStone(11, 10, &Board);
-		PossibleMove::PlayStone(8, 7, &Board);
-		PossibleMove::PlayStone(10, 8, &Board);
-		PossibleMove::PlayStone(7, 6, &Board);
-		PossibleMove::PlayStone(6, 5, &Board);
-		PossibleMove::PlayStone(5, 4, &Board);
-		PossibleMove::PlayStone(10, 11, &Board);
-		PossibleMove::PlayStone(4, 3, &Board);
-		PossibleMove::PlayStone(11, 11, &Board);
-		PossibleMove::PlayStone(3, 2, &Board);
-		PossibleMove::PlayStone(8, 11, &Board);
-		printBoard(&Board);
+		//PossibleMove::PlayStone(9, 10, &Board);
+		//PossibleMove::PlayStone(7, 9, &Board);
+		// PossibleMove::PlayStone(10, 9, &Board);
+		// PossibleMove::PlayStone(9, 11, &Board);
+		// PossibleMove::PlayStone(9, 8, &Board);
+		// PossibleMove::PlayStone(11, 10, &Board);
+		// PossibleMove::PlayStone(8, 7, &Board);
+		// PossibleMove::PlayStone(10, 8, &Board);
+		// PossibleMove::PlayStone(7, 6, &Board);
+		// PossibleMove::PlayStone(6, 5, &Board);
+		// PossibleMove::PlayStone(5, 4, &Board);
+		// PossibleMove::PlayStone(10, 11, &Board);
+		// PossibleMove::PlayStone(4, 3, &Board);
+		// PossibleMove::PlayStone(11, 11, &Board);
+		// PossibleMove::PlayStone(3, 2, &Board);
+		// PossibleMove::PlayStone(8, 11, &Board);
+		 printBoard(&Board);
+		for (size_t i = 0; i < Board.getPlayArea().size(); i++)
+		{
+			std::cout <<  "Width = "<<Board.getPlayArea()[i].Width << " et Height = " << Board.getPlayArea()[i].Height << " et X = " << Board.getPlayArea()[i].Pos.x << " et Y = " << Board.getPlayArea()[i].Pos.y << std::endl;
+		}
 		MinMax Algo = MinMax(&Board);
 		Coord tmp = Algo.getSolution();
 		MoveChosed.y = tmp.y;

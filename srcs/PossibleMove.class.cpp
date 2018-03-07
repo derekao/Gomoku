@@ -41,7 +41,6 @@ void PossibleMove::Compute()
 				{
 					tmp = new GameManager(*Board);
 					PlayStone(i, j, tmp);
-					Area::Update(Board->getPlayArea(), i, j);
 					Coord PlayedMove = Coord(i, j);
 					tmp->setLastMove(PlayedMove);
 					tabMove.push_back(tmp);
@@ -81,6 +80,7 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 	int PlayerOne;
 	int PlayerTwo;
 
+	Area::Update(Board->getPlayArea(), y, x);
 	CheckStoneEaten(y, x, Board);
 	if (Board->getbPlayerOneTurn())
 	{
