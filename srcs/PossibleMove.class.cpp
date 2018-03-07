@@ -81,7 +81,7 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 	int PlayerTwo;
 
 	Area::Update(Board->getPlayArea(), y, x);
-	CheckStoneEaten(y, x, Board);
+	bool SomethingEaten = CheckStoneEaten(y, x, Board);
 	if (Board->getbPlayerOneTurn())
 	{
 		PlayerOne = STONE_BLACK;
@@ -113,15 +113,16 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 	{
 		Rules::youWin(PlayerOne, PlayerTwo, y, x, Board);
 	}
-	CheckBoardState(y, x, Board);
+	CheckBoardState(y, x, SomethingEaten, Board);
 }
 
 // static function
-void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board) 
+bool PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board) 
 {
 	int Player1;
 	int Player2;
 	int iScore = 0;
+	bool SomethingEaten = false;
 
 	if (Board->getbPlayerOneTurn())
 	{
@@ -139,6 +140,7 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 			Board->getBoard()[y * BOARD_WIDTH + x - 1] = STONE_EMPTY;
 			Board->getBoard()[y * BOARD_WIDTH + x - 2] = STONE_EMPTY;
 			iScore += 2;
+			SomethingEaten = true;
 		}
 	if (x <= BOARD_WIDTH - 3) // Eat Right
 		if (Board->getBoard()[y * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 3] == Player1)
@@ -146,6 +148,7 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 			Board->getBoard()[y * BOARD_WIDTH + x + 1] = STONE_EMPTY;
 			Board->getBoard()[y * BOARD_WIDTH + x + 2] = STONE_EMPTY;
 			iScore += 2;
+			SomethingEaten = true;
 		}
 	if (y >= 3) // Eat Top
 		if (Board->getBoard()[(y - 1) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x] == Player1)
@@ -153,6 +156,7 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 			Board->getBoard()[(y - 1) * BOARD_WIDTH + x] = STONE_EMPTY;
 			Board->getBoard()[(y - 2) * BOARD_WIDTH + x] = STONE_EMPTY;
 			iScore += 2;
+			SomethingEaten = true;
 		}
 	if (y < BOARD_HEIGHT- 3) // Eat Bottom
 		if (Board->getBoard()[(y + 1) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x] == Player1)
@@ -160,6 +164,7 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 			Board->getBoard()[(y + 1) * BOARD_WIDTH + x] = STONE_EMPTY;
 			Board->getBoard()[(y + 2) * BOARD_WIDTH + x] = STONE_EMPTY;
 			iScore += 2;
+			SomethingEaten = true;
 		}
 	if (x >= 3 && y >= 3) // Eat Top Left
 		if (Board->getBoard()[(y - 1) * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x - 3] == Player1)
@@ -167,6 +172,7 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 			Board->getBoard()[(y - 1) * BOARD_WIDTH + x - 1] = STONE_EMPTY;
 			Board->getBoard()[(y - 2) * BOARD_WIDTH + x - 2] = STONE_EMPTY;
 			iScore += 2;
+			SomethingEaten = true;
 		}
 	if (x < BOARD_WIDTH - 3 && y >= 3) // Eat Top Right
 		if (Board->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x + 3] == Player1)
@@ -174,6 +180,7 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 			Board->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] = STONE_EMPTY;
 			Board->getBoard()[(y - 2) * BOARD_WIDTH + x + 2] = STONE_EMPTY;
 			iScore += 2;
+			SomethingEaten = true;
 		}
 	if (x < BOARD_WIDTH - 3 && y < BOARD_HEIGHT- 3) // Eat Bottom Right
 		if (Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x + 3] == Player1)
@@ -181,6 +188,7 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 			Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] = STONE_EMPTY;
 			Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] = STONE_EMPTY;
 			iScore += 2;
+			SomethingEaten = true;
 		}
 	if (x >= 3 && y < BOARD_HEIGHT- 3) // Eat Bottom Left
 		if (Board->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x - 3] == Player1)
@@ -188,6 +196,7 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 			Board->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] = STONE_EMPTY;
 			Board->getBoard()[(y + 2) * BOARD_WIDTH + x - 2] = STONE_EMPTY;
 			iScore += 2;
+			SomethingEaten = true;
 		}
 	if (Board->getbPlayerOneTurn())
 	{
@@ -197,9 +206,10 @@ void PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 	{
 		Board->setWhiteScore(Board->getWhiteScore() + iScore);
 	}
+	return SomethingEaten;
 }
 
-void PossibleMove::CheckBoardState(int Height, int Width, GameManager * Board) 
+void PossibleMove::CheckBoardState(int Height, int Width, bool SomethingEaten, GameManager * Board) 
 {
 		int Player1;
 		int Player2;
@@ -224,7 +234,20 @@ void PossibleMove::CheckBoardState(int Height, int Width, GameManager * Board)
 				if (Rules::EmptyCase(Board->getBoard()[i * BOARD_WIDTH + j])) {
 //					checkForbiddenBox(i, j);
 					int win = Rules::CheckWin(Player2, i, j, Board);
-					dTree = Rules::CheckDoubleTreeBox(i, j, Board);
+					if (SomethingEaten)
+					{
+						dTree = Rules::CheckDoubleTreeBox(i, j, Player1, Board);
+						if ((dTree && Rules::somethingToEatWithEmpty(Player2, Player1, i, j, Board)) && win == 0 ) 
+						{
+							dTree = false;
+							if ((Player1 & STONE_BLACK) != 0)
+								Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_BLACKDOUBLETREE;
+							else
+								Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_WHITEDOUBLETREE;
+
+						}
+					}
+					dTree = Rules::CheckDoubleTreeBox(i, j, Player2, Board);
 					if ((dTree && Rules::somethingToEatWithEmpty(Player1, Player2, i, j, Board)) && win == 0 ) 
 					{
 						dTree = false;

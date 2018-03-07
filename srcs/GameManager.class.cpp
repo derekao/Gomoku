@@ -54,22 +54,24 @@ GameManager::GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _
 				if (!PlayAreaExist)
 				{
 					Area tmp;
+
+					tmp.Pos.x = (x - AREA_SIZE > 0) ? x - AREA_SIZE : 0;
+					tmp.Pos.y = (y - AREA_SIZE > 0) ? y - AREA_SIZE : 0;
+					
 					tmp.Width = 1;
 					tmp.Height = 1;
-					tmp.Pos.x = x - 1;
-					tmp.Pos.y = y - 1;
-					if (x >= 1)
-						tmp.Width++;
-					else
-						tmp.Pos.x = x;
-					if (x < BOARD_WIDTH - 1)
-						tmp.Width++;
-					if (y >= 1)
-						tmp.Height++;
-					else
-						tmp.Pos.y = y;
-					if (y < BOARD_HEIGHT - 1)
-						tmp.Height++;
+					for (int i = 1; i <= AREA_SIZE; i++)
+					{
+						if (x - i >= 0)
+							tmp.Width++;
+						if (x + i < BOARD_WIDTH)
+							tmp.Width++;
+						if (y - i >= 0)
+							tmp.Height++;
+						if (y + i < BOARD_HEIGHT)
+							tmp.Height++;
+					}
+					tmp.Density = 1;
 					PlayArea.push_back(tmp);
 				}
 			}

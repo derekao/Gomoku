@@ -13,6 +13,7 @@
 
 #define BOARD_HEIGHT 19
 #define BOARD_WIDTH 19
+#define AREA_SIZE 2
 
 #include <iostream>
 #include <vector>

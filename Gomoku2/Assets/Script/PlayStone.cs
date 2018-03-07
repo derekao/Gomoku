@@ -104,11 +104,11 @@ public class PlayStone : MonoBehaviour {
 					game.Board[i * GameManager.Instance.iWidthBoard + j] = GameManager.Instance.currentState.Board[i,j];
 				}
 			}
-//			if (GameManager.Instance.ActivateIA)
-//			{
+			if (GameManager.Instance.ActivateIA)
+			{
 				CoordIA test = IAPlay(game);
-				Debug.Log("x = " + test.x + " et y = " +  test.y);
-//			}
+				Debug.Log("y = " + test.y + " et x = " +  test.x);
+			}
 		}
 		else {
 			OnWhitePlay();
@@ -120,7 +120,7 @@ public class PlayStone : MonoBehaviour {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled && !DoubleTreeImage.enabled) 
 		{
-			checkStoneEaten();
+			bool SomethingEaten = checkStoneEaten();
 			BlackStoneImage.enabled = true;
 			GameManager.Instance.currentState.bPlayerOneTurn = false;
 			GameManager.Instance.currentState.Board[y, x] = GameManager.Stone.Black;
@@ -145,7 +145,7 @@ public class PlayStone : MonoBehaviour {
 			{
 					Rules.youWin(GameManager.Stone.Black, GameManager.Stone.White, y, x);
 			}
-			checkBoardState(y, x);
+			checkBoardState(y, x, SomethingEaten);
 			Rules.DisplayBoard();
 		}
 
@@ -155,7 +155,7 @@ public class PlayStone : MonoBehaviour {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled && !DoubleTreeImage.enabled)
 		{
-			checkStoneEaten();
+			bool SomethingEaten = checkStoneEaten();
 			WhiteStoneImage.enabled = true;
 			GameManager.Instance.currentState.bPlayerOneTurn = true;
 			GameManager.Instance.currentState.iTurn += 1;
@@ -179,13 +179,13 @@ public class PlayStone : MonoBehaviour {
 			{
 					Rules.youWin(GameManager.Stone.White, GameManager.Stone.Black, y, x);
 			}
-			checkBoardState(y, x);
+			checkBoardState(y, x, SomethingEaten);
 			Rules.DisplayBoard();
 		}
 
 	}
 
-	private void checkBoardState(int Height, int Width) {
+	private void checkBoardState(int Height, int Width, bool SomethingEaten) {
 		int Player1;
 		int Player2;
 		bool dTree = false;
@@ -212,11 +212,23 @@ public class PlayStone : MonoBehaviour {
 					}
 //					checkForbiddenBox(i, j);
 					int win = Rules.CheckWin(Player2, i, j);
-					dTree = Rules.checkDoubleTreeBox(i, j);
+					if (SomethingEaten)
+					{
+						dTree = Rules.checkDoubleTreeBox(i, j, Player1);
+						if ((dTree && Rules.somethingToEatWithEmpty(Player2, Player1, i, j)) && win == 0 ) 
+						{
+							dTree = false;
+							if ((Player2 & GameManager.Stone.Black) == 0)
+								GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
+							else
+								GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;	
+						}
+					}
+					dTree = Rules.checkDoubleTreeBox(i, j, Player2);
 					if ((dTree && Rules.somethingToEatWithEmpty(Player1, Player2, i, j)) && win == 0 ) 
 					{
 						dTree = false;
-						if ((Player1 & GameManager.Stone.Black) != 0)
+						if ((Player1 & GameManager.Stone.Black) == 0)
 							GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
 						else
 							GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;
@@ -228,13 +240,14 @@ public class PlayStone : MonoBehaviour {
 						GameManager.Instance.currentState.Board[i, j] = GameManager.Stone.Empty;
 						Rules.changeBoxState(j , i, Type.Empty);
 					}
+
 				}
 			}
 		}
 		
 	}
 
-	private void checkStoneEaten() {
+	private bool checkStoneEaten() {
 		
 		int Player1;
 		int Player2;
@@ -250,53 +263,64 @@ public class PlayStone : MonoBehaviour {
 			Player2 = GameManager.Stone.Black;
 		}
 
+		bool SomethingEaten = false;
+
 		if (x >= 3) // Eat Left
 			if (GameManager.Instance.currentState.Board[y, x - 1] == Player2 && GameManager.Instance.currentState.Board[y, x - 2] == Player2 && GameManager.Instance.currentState.Board[y, x - 3] == Player1)
 			{
 				Rules.changeBoxState(x - 1, y, Type.Eat);
 				Rules.changeBoxState(x - 2, y, Type.Eat);
+				SomethingEaten = true;
 			}
 		if (x <= GameManager.Instance.iWidthBoard - 3) // Eat Right
 			if (GameManager.Instance.currentState.Board[y, x + 1] == Player2 && GameManager.Instance.currentState.Board[y, x + 2] == Player2 && GameManager.Instance.currentState.Board[y, x + 3] == Player1)
 			{
 				Rules.changeBoxState(x + 1, y, Type.Eat);
 				Rules.changeBoxState(x + 2, y, Type.Eat);
+				SomethingEaten = true;
 			}
 		if (y >= 3) // Eat Top
 			if (GameManager.Instance.currentState.Board[y - 1, x] == Player2 && GameManager.Instance.currentState.Board[y - 2, x] == Player2 && GameManager.Instance.currentState.Board[y - 3, x] == Player1)
 			{
 				Rules.changeBoxState(x, y - 1, Type.Eat);
 				Rules.changeBoxState(x, y - 2, Type.Eat);
+				SomethingEaten = true;
 			}
 		if (y < GameManager.Instance.iHeightBoard - 3) // Eat Bottom
 			if (GameManager.Instance.currentState.Board[y + 1, x] == Player2 && GameManager.Instance.currentState.Board[y + 2, x] == Player2 && GameManager.Instance.currentState.Board[y + 3, x] == Player1)
 			{
 				Rules.changeBoxState(x, y + 1, Type.Eat);
 				Rules.changeBoxState(x, y + 2, Type.Eat);
+				SomethingEaten = true;
 			}
 		if (x >= 3 && y >= 3) // Eat Top Left
 			if (GameManager.Instance.currentState.Board[y - 1, x - 1] == Player2 && GameManager.Instance.currentState.Board[y - 2, x - 2] == Player2 && GameManager.Instance.currentState.Board[y - 3, x - 3] == Player1)
 			{
 				Rules.changeBoxState(x - 1, y - 1, Type.Eat);
 				Rules.changeBoxState(x - 2, y - 2, Type.Eat);
+				SomethingEaten = true;
 			}
 		if (x < GameManager.Instance.iWidthBoard - 3 && y >= 3) // Eat Top Right
 			if (GameManager.Instance.currentState.Board[y - 1, x + 1] == Player2 && GameManager.Instance.currentState.Board[y - 2, x + 2] == Player2 && GameManager.Instance.currentState.Board[y - 3, x + 3] == Player1)
 			{
 				Rules.changeBoxState(x + 1, y - 1, Type.Eat);
 				Rules.changeBoxState(x + 2, y - 2, Type.Eat);
+				SomethingEaten = true;
 			}
 		if (x < GameManager.Instance.iWidthBoard - 3 && y < GameManager.Instance.iHeightBoard - 3) // Eat Bottom Right
 			if (GameManager.Instance.currentState.Board[y + 1, x + 1] == Player2 && GameManager.Instance.currentState.Board[y + 2, x + 2] == Player2 && GameManager.Instance.currentState.Board[y + 3, x + 3] == Player1)
 			{
 				Rules.changeBoxState(x + 1, y + 1, Type.Eat);
 				Rules.changeBoxState(x + 2, y + 2, Type.Eat);
+				SomethingEaten = true;
 			}
 		if (x >= 3 && y < GameManager.Instance.iHeightBoard - 3) // Eat Bottom Left
 			if (GameManager.Instance.currentState.Board[y + 1, x - 1] == Player2 && GameManager.Instance.currentState.Board[y + 2, x - 2] == Player2 && GameManager.Instance.currentState.Board[y + 3, x - 3] == Player1)
 			{
 				Rules.changeBoxState(x - 1, y + 1, Type.Eat);
 				Rules.changeBoxState(x - 2, y + 2, Type.Eat);
+				SomethingEaten = true;
 			}
+		return SomethingEaten;
 	}
 }

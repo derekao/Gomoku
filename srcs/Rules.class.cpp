@@ -332,13 +332,8 @@ bool Rules::somethingToEatWithEmpty(int Player, int Opponent, int i, int j, Game
 }
 
 // Return True if there is a double tree on the cell [y,x]
-bool Rules::CheckDoubleTreeBox(int y, int x, GameManager * Instance)
+bool Rules::CheckDoubleTreeBox(int y, int x, int Player1, GameManager * Instance)
 {
-	int Player1;
-	if (!Instance->getbPlayerOneTurn())
-		Player1 = STONE_BLACK;
-	else
-		Player1 = STONE_WHITE;
 	int NumTree = 0;
 
 	//  - X 0 X -
@@ -396,6 +391,28 @@ bool Rules::CheckDoubleTreeBox(int y, int x, GameManager * Instance)
 	if (x >= 1 && x < BOARD_WIDTH - 4 && y >= 4 && y < BOARD_HEIGHT - 1
 		&& EmptyCase(Instance->getBoard()[(y - 4) * BOARD_WIDTH + x + 4]) && Instance->getBoard()[(y - 3) * BOARD_WIDTH + x + 3] == Player1 && Instance->getBoard()[(y - 2) * BOARD_WIDTH + x + 2] == Player1 && EmptyCase(Instance->getBoard()[(y - 1) * BOARD_WIDTH + x + 1])  && EmptyCase(Instance->getBoard()[(y + 1) * BOARD_WIDTH + x - 1]))
 		NumTree++;
+
+		// - X - X 0 -
+	if (x >= 4 && x < BOARD_WIDTH - 1 && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x - 4]) && Instance->getBoard()[y * BOARD_WIDTH + x - 3] == Player1 && Instance->getBoard()[y * BOARD_WIDTH + x - 1] == Player1 && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x - 2])  && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 4 && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x + 4]) && Instance->getBoard()[y * BOARD_WIDTH + x + 3] == Player1 && Instance->getBoard()[y * BOARD_WIDTH + x + 1] == Player1 && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x + 2])  && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x - 1]))
+		NumTree++;
+	if (y >= 4 && y < BOARD_HEIGHT - 1 && EmptyCase(Instance->getBoard()[(y - 4) * BOARD_WIDTH + x]) && Instance->getBoard()[(y - 3) * BOARD_WIDTH + x] == Player1 && Instance->getBoard()[(y - 1) * BOARD_WIDTH + x] == Player1 && EmptyCase(Instance->getBoard()[(y - 2) * BOARD_WIDTH + x])  && EmptyCase(Instance->getBoard()[(y + 1) * BOARD_WIDTH + x]))
+		NumTree++;
+	if (y >= 1 && y < BOARD_HEIGHT - 4 && EmptyCase(Instance->getBoard()[(y + 4) * BOARD_WIDTH + x]) && Instance->getBoard()[(y + 3) * BOARD_WIDTH + x] == Player1 && Instance->getBoard()[(y + 1) * BOARD_WIDTH + x] == Player1 && EmptyCase(Instance->getBoard()[(y + 2) * BOARD_WIDTH + x])  && EmptyCase(Instance->getBoard()[(y - 1) * BOARD_WIDTH + x]))
+		NumTree++;
+	if (x >= 4 && x < BOARD_WIDTH - 1 && y >= 4 && y < BOARD_HEIGHT - 1
+		&& EmptyCase(Instance->getBoard()[(y - 4) * BOARD_WIDTH + x - 4]) && Instance->getBoard()[(y - 3) * BOARD_WIDTH + x - 3] == Player1 && Instance->getBoard()[(y - 1) * BOARD_WIDTH + x - 1] == Player1 && EmptyCase(Instance->getBoard()[(y - 2) * BOARD_WIDTH + x - 2])  && EmptyCase(Instance->getBoard()[(y + 1) * BOARD_WIDTH + x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 4 && y >= 1 && y < BOARD_HEIGHT - 4
+		&& EmptyCase(Instance->getBoard()[(y + 4) * BOARD_WIDTH + x + 4]) && Instance->getBoard()[(y + 3) * BOARD_WIDTH + x + 3] == Player1 && Instance->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player1 && EmptyCase(Instance->getBoard()[(y + 2) * BOARD_WIDTH + x + 2])  && EmptyCase(Instance->getBoard()[(y - 1) * BOARD_WIDTH + x - 1]))
+		NumTree++;
+	if (x >= 4 && x < BOARD_WIDTH - 1 && y >= 1 && y < BOARD_HEIGHT - 4
+		&& EmptyCase(Instance->getBoard()[(y + 4) * BOARD_WIDTH + x - 4]) && Instance->getBoard()[(y + 3) * BOARD_WIDTH + x - 3] == Player1 && Instance->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] == Player1 && EmptyCase(Instance->getBoard()[(y + 2) * BOARD_WIDTH + x - 2])  && EmptyCase(Instance->getBoard()[(y - 1) * BOARD_WIDTH + x + 1]))
+		NumTree++;
+	if (x >= 1 && x < BOARD_WIDTH - 4 && y >= 4 && y < BOARD_HEIGHT - 1
+		&& EmptyCase(Instance->getBoard()[(y - 4) * BOARD_WIDTH + x + 4]) && Instance->getBoard()[(y - 3) * BOARD_WIDTH + x + 3] == Player1 && Instance->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] == Player1 && EmptyCase(Instance->getBoard()[(y - 2) * BOARD_WIDTH + x + 2])  && EmptyCase(Instance->getBoard()[(y + 1) * BOARD_WIDTH + x - 1]))
+		NumTree++;
 	
 		//  - X - 0 X -
 	if (x >= 3 && x < BOARD_WIDTH - 2 && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x - 3]) && Instance->getBoard()[y * BOARD_WIDTH + x - 2] == Player1 && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x - 1]) && Instance->getBoard()[y * BOARD_WIDTH + x + 1] == Player1  && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x + 2]))
@@ -428,9 +445,9 @@ bool Rules::CheckDoubleTreeBox(int y, int x, GameManager * Instance)
 	}
 	else 
 	{
-		if ((Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_WHITEDOUBLETREE) != 0 && Instance->getbPlayerOneTurn())
+		if ((Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_WHITEDOUBLETREE) != 0 && Player1 == STONE_WHITE)
 			Instance->getBoard()[y * BOARD_WIDTH + x] -= STONE_WHITEDOUBLETREE;
-		if ((Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_BLACKDOUBLETREE) != 0 && !Instance->getbPlayerOneTurn())
+		if ((Instance->getBoard()[y * BOARD_WIDTH + x] & STONE_BLACKDOUBLETREE) != 0 && Player1 == STONE_BLACK)
 			Instance->getBoard()[y * BOARD_WIDTH + x] -= STONE_BLACKDOUBLETREE;
 		return false;
 	}
