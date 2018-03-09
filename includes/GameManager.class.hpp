@@ -14,7 +14,9 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 #include "Coord.hpp"
+#include "PotentialMove.hpp"
 
 #define STONE_EMPTY 0
 #define STONE_BLACK 1
@@ -49,9 +51,12 @@ private:
 	int WhiteScore;
 	int BlackScore;
 
+	int HighestPriority;
+
 	std::vector<int> Board;
 	std::vector<Coord> BlackStones;
 	std::vector<Coord> WhiteStones;
+	std::vector<PotentialMove> lPotentialMove;
 
 	Coord WinPos;
 	
@@ -80,10 +85,12 @@ public:
 
 	int getWhiteScore() { return WhiteScore; };
 	int getBlackScore() { return BlackScore; };
+	int getHighestPriority() { return HighestPriority; };
 
 	std::vector<int> & getBoard() { return Board; };
 	std::vector<Coord> & getBlackStones() { return BlackStones; };
 	std::vector<Coord> & getWhiteStones() { return WhiteStones; };
+	std::vector<PotentialMove> & getPotentialMove() { return lPotentialMove; };
 
 	Coord & getWinPos() { return WinPos; };
 
@@ -101,6 +108,7 @@ public:
 
 	void setBlackScore(int n) { BlackScore = n; };
 	void setWhiteScore(int n) { WhiteScore = n; };
+	void setHighestPriority(int n) { HighestPriority = n; };
 
 	void setWinCoord(Coord & tmp) { WinPos.y = tmp.y; WinPos.x = tmp.x; };
 	void setWinCoord(int y, int x) { WinPos.y = y; WinPos.x = x; };

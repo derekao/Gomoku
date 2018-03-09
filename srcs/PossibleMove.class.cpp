@@ -30,16 +30,20 @@ PossibleMove::PossibleMove(GameManager * src) : Board(src),
 
 void PossibleMove::Compute()
 {
-	// GameManager * tmp;
+	GameManager * tmp;
 	
-	// for (int i = 0; i < Board->getPotentialMoves(); i++)
-	// {
-	// 	tmp = new GameManager(*Board);
-	// 	PlayStone(Board->getPotentialMoves().y, Board->getPotentialMoves().x, tmp);
-	// 	Coord PlayedMove = Coord(Board->getPotentialMoves().y, Board->getPotentialMoves().x);
-	// 	tmp->setLastMove(PlayedMove);
-	// 	tabMove.push_back(tmp);
-	// }
+
+std::cout << "test = " <<  Board->getPotentialMove().size() << std::endl;
+	for (size_t i = 0; i < Board->getPotentialMove().size(); i++)
+	{
+		if (Board->getPotentialMove()[i].priority <= Board->getHighestPriority()) {
+			tmp = new GameManager(*Board);
+			PlayStone(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x, tmp);
+			Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
+			tmp->setLastMove(PlayedMove);
+			tabMove.push_back(tmp);
+		}
+	}
 }
 
 // Return True if there is a stone 2 cells around the stone in parameter
@@ -107,6 +111,9 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		Rules::youWin(PlayerOne, PlayerTwo, y, x, Board);
 	}
 	CheckBoardState(y, x, SomethingEaten, Board);
+	Heuristic bestMoves = Heuristic(PlayerOne, PlayerTwo, Board);
+	bestMoves.searchMoves();
+	std::cout << "testR = " <<  Board->getPotentialMove().size() << std::endl;
 }
 
 // static function

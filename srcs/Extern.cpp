@@ -14,18 +14,18 @@
 #include "PossibleMove.class.hpp"
 #include <fstream>
 
-// static void printBoard(GameManager * Board)
-// {
-// 	for (int i = 0; i < 361; i ++)
-// 	{
-// 		if (Board->getBoard()[i]  > 2)
-// 			std::cout << "0 ";
-// 		else
-// 			std::cout << Board->getBoard()[i] << " ";
-// 		if (i % 19 == 18)
-// 			std::cout << std::endl;
-// 	}
-// }
+static void printBoard(GameManager * Board)
+{
+	for (int i = 0; i < 361; i ++)
+	{
+		if (Board->getBoard()[i]  > 2)
+			std::cout << "0 ";
+		else
+			std::cout << Board->getBoard()[i] << " ";
+		if (i % 19 == 18)
+			std::cout << std::endl;
+	}
+}
 
 // static void printBoard(GameManager * Board)
 // {
@@ -56,9 +56,11 @@ extern "C"
 	{
 		CoordIA MoveChosed;
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
+		PossibleMove::PlayStone(0, 0, &Board);
+		PossibleMove::PlayStone(1, 1, &Board);
 		PossibleMove::PlayStone(9, 9, &Board);
-		// PossibleMove::PlayStone(9, 11, &Board);
-		// PossibleMove::PlayStone(9, 10, &Board);
+		PossibleMove::PlayStone(1, 2, &Board);
+		// PossibleMove::PlayStone(0, 1, &Board);
 		// PossibleMove::PlayStone(10, 11, &Board);
 		// PossibleMove::PlayStone(7, 8, &Board);
 		// PossibleMove::PlayStone(8, 11, &Board);
@@ -71,7 +73,7 @@ extern "C"
 		// PossibleMove::PlayStone(11, 11, &Board);
 		// PossibleMove::PlayStone(3, 2, &Board);
 		// PossibleMove::PlayStone(8, 11, &Board);
-		// printBoard(&Board);
+		printBoard(&Board);
 		
 		MinMax Algo = MinMax(&Board);
 		Coord tmp = Algo.getSolution();

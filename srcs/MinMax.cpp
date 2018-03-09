@@ -78,7 +78,8 @@ int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool M
 
 	if (depth == 0 || Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
 	{
-		int iValue = Heuristic::BoardValue(Player1, Player2, Node);
+		Heuristic init = Heuristic(Player1, Player2, Node);
+		int iValue = init.BoardValue();
 		return iValue;
 	}
 	if (MaximizingPlayer)
