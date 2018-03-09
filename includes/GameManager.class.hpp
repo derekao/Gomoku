@@ -15,7 +15,6 @@
 #include <iostream>
 #include <vector>
 #include "Coord.hpp"
-#include "Area.hpp"
 
 #define STONE_EMPTY 0
 #define STONE_BLACK 1
@@ -24,6 +23,11 @@
 #define STONE_BLACKFORBIDDEN 8
 #define STONE_WHITEDOUBLETREE 16
 #define STONE_BLACKDOUBLETREE 32
+#define STONE_PLAYAREA 64
+
+#define BOARD_WIDTH 19
+#define BOARD_HEIGHT 19
+#define PLAY_AREA_SIZE 2
 
 #define MAX_INFINIT 1073741824
 #define MIN_INFINIT -1073741825
@@ -37,7 +41,6 @@ private:
 	int HeuristicValue;
 	GameManager * Parent;
 	Coord LastMove;
-	std::vector<Area> PlayArea;
 
 
 	bool BlackWin;
@@ -59,7 +62,7 @@ public:
 	GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _WhiteScore, int _BlackScore, int WinY, int WinX);
 
 	GameManager(GameManager const & src) :
-		HeuristicValue(src.HeuristicValue), Parent(src.Parent), LastMove(0,0), PlayArea(src.PlayArea), BlackWin(src.BlackWin), WhiteWin(src.WhiteWin), HasWon(src.HasWon), bPlayerOneTurn(src.bPlayerOneTurn),
+		HeuristicValue(src.HeuristicValue), Parent(src.Parent), LastMove(0,0), BlackWin(src.BlackWin), WhiteWin(src.WhiteWin), HasWon(src.HasWon), bPlayerOneTurn(src.bPlayerOneTurn),
 		WhiteScore(src.WhiteScore), BlackScore( src.BlackScore), Board(src.Board), WinPos(src.WinPos.y, src.WinPos.x)
 	{
 		return ;
@@ -69,7 +72,6 @@ public:
 	int getHeuristicValue() { return HeuristicValue; };
 	GameManager * getParent() { return Parent; };
 	Coord & getLastMove() { return LastMove; };
-	std::vector<Area> & getPlayArea() { return PlayArea; };
 
 	bool getBlackWin() { return BlackWin; };
 	bool getWhiteWin() { return WhiteWin; };

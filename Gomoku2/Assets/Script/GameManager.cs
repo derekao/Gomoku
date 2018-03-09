@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
 		static public int BlackForbidden = 8;
 		static public int WhiteDoubleTree = 16;
 		static public int BlackDoubleTree = 32;
+		static public int PlayArea = 64;
 	}
 
 	public class BoardHistoric
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviour {
 	// Size of the Board
 	public int iWidthBoard = 19;
 	public int iHeightBoard = 19;
+	public int PlayAreaSize = 2;
 	
 	// State of the Board
 	public List<BoardHistoric> lBoardHisto;

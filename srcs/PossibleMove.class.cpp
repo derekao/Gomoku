@@ -31,20 +31,17 @@ PossibleMove::PossibleMove(GameManager * src) : Board(src),
 void PossibleMove::Compute()
 {
 	GameManager * tmp;
-	for (size_t k = 0; k < Board->getPlayArea().size(); k++)
+	for (int i =  0; i < BOARD_HEIGHT; i++)
 	{
-		for (int i = Board->getPlayArea()[k].Pos.y ; i < Board->getPlayArea()[k].Pos.y + Board->getPlayArea()[k].Height ; i++)
+		for (int j = 0; j < BOARD_WIDTH ; j++)
 		{
-			for (int j = Board->getPlayArea()[k].Pos.x ; j< Board->getPlayArea()[k].Pos.x + Board->getPlayArea()[k].Width ; j++)
+			if (Board->getBoard()[i * BOARD_WIDTH + j] == STONE_PLAYAREA)
 			{
-				if (Board->getBoard()[i * BOARD_WIDTH + j] == 0 && StoneNearby(i, j))
-				{
-					tmp = new GameManager(*Board);
-					PlayStone(i, j, tmp);
-					Coord PlayedMove = Coord(i, j);
-					tmp->setLastMove(PlayedMove);
-					tabMove.push_back(tmp);
-				}
+				tmp = new GameManager(*Board);
+				PlayStone(i, j, tmp);
+				Coord PlayedMove = Coord(i, j);
+				tmp->setLastMove(PlayedMove);
+				tabMove.push_back(tmp);
 			}
 		}
 	}
@@ -80,7 +77,6 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 	int PlayerOne;
 	int PlayerTwo;
 
-	Area::Update(Board->getPlayArea(), y, x);
 	bool SomethingEaten = CheckStoneEaten(y, x, Board);
 	if (Board->getbPlayerOneTurn())
 	{
@@ -114,6 +110,7 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		Rules::youWin(PlayerOne, PlayerTwo, y, x, Board);
 	}
 	CheckBoardState(y, x, SomethingEaten, Board);
+	MakePlayArea(y, x, Board);
 }
 
 // static function
@@ -263,6 +260,23 @@ void PossibleMove::CheckBoardState(int Height, int Width, bool SomethingEaten, G
 					}
 				}
 			}
-		}
-		
+		}	
 	}
+
+void PossibleMove::MakePlayArea(int y, int x, GameManager * Board)
+{
+	for (int i = y - PLAY_AREA_SIZE; i <= y + PLAY_AREA_SIZE; i++)
+	{
+		if (i < 0 || i >= BOARD_HEIGHT)
+			continue;
+		for (int j = x - PLAY_AREA_SIZE; j <= x + PLAY_AREA_SIZE; j++)
+		{
+			if (j < 0 || j >= BOARD_WIDTH)
+				continue;
+			if (Board->getBoard()[i * BOARD_WIDTH + j] == STONE_EMPTY)
+			{
+				Board->getBoard()[i * BOARD_WIDTH + j] = STONE_PLAYAREA;
+			}
+		}
+	}
+}

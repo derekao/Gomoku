@@ -40,6 +40,7 @@ public:
 	static void PlayStone(int y, int x, GameManager * Board);
 	static bool CheckStoneEaten(int y, int x, GameManager * Board);
 	static void CheckBoardState(int Height, int Width, bool SomethingEaten, GameManager * Board);
+	static void MakePlayArea(int y, int x, GameManager * Board);
 
 	enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 

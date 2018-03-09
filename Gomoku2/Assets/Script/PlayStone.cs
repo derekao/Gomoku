@@ -104,11 +104,11 @@ public class PlayStone : MonoBehaviour {
 					game.Board[i * GameManager.Instance.iWidthBoard + j] = GameManager.Instance.currentState.Board[i,j];
 				}
 			}
-			if (GameManager.Instance.ActivateIA)
-			{
-				CoordIA test = IAPlay(game);
-				Debug.Log("y = " + test.y + " et x = " +  test.x);
-			}
+	//		if (GameManager.Instance.ActivateIA)
+	//		{
+			 	CoordIA test = IAPlay(game);
+			 	Debug.Log("y = " + test.y + " et x = " +  test.x);
+	//		}
 		}
 		else {
 			OnWhitePlay();
@@ -146,6 +146,7 @@ public class PlayStone : MonoBehaviour {
 					Rules.youWin(GameManager.Stone.Black, GameManager.Stone.White, y, x);
 			}
 			checkBoardState(y, x, SomethingEaten);
+			MakePlayArea();
 			Rules.DisplayBoard();
 		}
 
@@ -180,6 +181,7 @@ public class PlayStone : MonoBehaviour {
 					Rules.youWin(GameManager.Stone.White, GameManager.Stone.Black, y, x);
 			}
 			checkBoardState(y, x, SomethingEaten);
+			MakePlayArea();
 			Rules.DisplayBoard();
 		}
 
@@ -322,5 +324,19 @@ public class PlayStone : MonoBehaviour {
 				SomethingEaten = true;
 			}
 		return SomethingEaten;
+	}
+
+	private void MakePlayArea()
+	{
+		for (int i = y - GameManager.Instance.PlayAreaSize; i <= y + GameManager.Instance.PlayAreaSize; i++)
+		{
+			for (int j = x - GameManager.Instance.PlayAreaSize; j <= x + GameManager.Instance.PlayAreaSize; j++)
+			{
+				if (GameManager.Instance.currentState.Board[i, j] == GameManager.Stone.Empty)
+				{
+					GameManager.Instance.currentState.Board[i, j] += GameManager.Stone.PlayArea;
+				}
+			}
+		}
 	}
 }

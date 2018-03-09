@@ -1,8 +1,7 @@
 NAME = Gomoku2/Extern.dll
 
 SRC = Extern.cpp Rules.class.cpp GameManager.class.cpp \
-		PossibleMove.class.cpp Heuristic.class.cpp MinMax.cpp \
-		Area.cpp
+		PossibleMove.class.cpp Heuristic.class.cpp MinMax.cpp 
 
 OBJ = $(addprefix $(O_DIR)/,$(SRC:.cpp=.o))
 
@@ -10,7 +9,7 @@ O_DIR = ./objs
 
 S_DIR = ./srcs
 
-CFLAGS = -Wall -Wextra -Werror -O3 -ferror-limit=2 -I includes
+CFLAGS = -g -Wall -Wextra -Werror -O3 -ferror-limit=2 -I includes
 
 CC = g++
 
