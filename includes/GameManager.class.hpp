@@ -23,11 +23,9 @@
 #define STONE_BLACKFORBIDDEN 8
 #define STONE_WHITEDOUBLETREE 16
 #define STONE_BLACKDOUBLETREE 32
-#define STONE_PLAYAREA 64
 
 #define BOARD_WIDTH 19
 #define BOARD_HEIGHT 19
-#define PLAY_AREA_SIZE 2
 
 #define MAX_INFINIT 1073741824
 #define MIN_INFINIT -1073741825
@@ -52,6 +50,8 @@ private:
 	int BlackScore;
 
 	std::vector<int> Board;
+	std::vector<Coord> BlackStones;
+	std::vector<Coord> WhiteStones;
 
 	Coord WinPos;
 	
@@ -82,6 +82,8 @@ public:
 	int getBlackScore() { return BlackScore; };
 
 	std::vector<int> & getBoard() { return Board; };
+	std::vector<Coord> & getBlackStones() { return BlackStones; };
+	std::vector<Coord> & getWhiteStones() { return WhiteStones; };
 
 	Coord & getWinPos() { return WinPos; };
 

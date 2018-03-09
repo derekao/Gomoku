@@ -23,4 +23,6 @@ public:
 	int y;
 	int x;
 
+	void set(int _y, int _x) { y = _y; x = _x; };
+
 };

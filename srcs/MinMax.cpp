@@ -47,6 +47,11 @@ void MinMax::Compute()
 
 	PossibleMove possibleMove = PossibleMove(Board);
 	std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
+	if (Childs.empty())
+	{
+		std::cerr << "No possible move !" << std::endl;
+		exit (0);
+	}
 	for (size_t i = 0; i < Childs.size(); i++)
 	{
 		Value = AlphaBeta(Childs[i], 2, Alpha, Beta, false);
@@ -81,6 +86,11 @@ int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool M
 		v = MIN_INFINIT;
 		PossibleMove possibleMove = PossibleMove(Node);
 		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
+		if (Childs.empty())
+		{
+			std::cerr << "No possible move !" << std::endl;
+			exit (0);
+		}
 		for (size_t i = 0; i < Childs.size(); i++)
 		{
 			v = std::max(v, AlphaBeta(Childs[i], depth - 1, Alpha, Beta, false));
@@ -103,6 +113,11 @@ int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool M
 		v = MAX_INFINIT;
 		PossibleMove possibleMove = PossibleMove(Node);
 		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
+		if (Childs.empty())
+		{
+			std::cerr << "No possible move !" << std::endl;
+			exit (0);
+		}
 		for (size_t i = 0; i < Childs.size(); i++)
 		{
 			v = std::min(v, AlphaBeta(Childs[i], depth - 1, Alpha, Beta, true));

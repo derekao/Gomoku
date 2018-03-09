@@ -15,7 +15,7 @@
 int main()
 {
 	GameStatus game;
-	game.bPlayerOneTurn = false;
+	game.bPlayerOneTurn = true;
 	game.HasWon = false;
 	game.WhiteScore = 0;
 	game.BlackScore = 0;
@@ -27,10 +27,6 @@ int main()
 		game.Board[i] = 0;
 	}
 
-	game.Board[180] = STONE_BLACK;
-
-
-	
 
 	// for (int i = 0; i < 361; i ++)
 	// {

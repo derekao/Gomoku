@@ -19,5 +19,9 @@ GameManager::GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _
 		for (int i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++)
 		{
 			Board[i] = _Board[i];
+			if ((Board[i] & STONE_BLACK) != 0)
+				BlackStones.push_back(Coord(i / BOARD_WIDTH, i % BOARD_WIDTH));
+			else if ((Board[i] & STONE_WHITE) != 0)
+				WhiteStones.push_back(Coord(i / BOARD_WIDTH, i % BOARD_WIDTH));
 		}
 	}

@@ -30,21 +30,16 @@ PossibleMove::PossibleMove(GameManager * src) : Board(src),
 
 void PossibleMove::Compute()
 {
-	GameManager * tmp;
-	for (int i =  0; i < BOARD_HEIGHT; i++)
-	{
-		for (int j = 0; j < BOARD_WIDTH ; j++)
-		{
-			if (Board->getBoard()[i * BOARD_WIDTH + j] == STONE_PLAYAREA)
-			{
-				tmp = new GameManager(*Board);
-				PlayStone(i, j, tmp);
-				Coord PlayedMove = Coord(i, j);
-				tmp->setLastMove(PlayedMove);
-				tabMove.push_back(tmp);
-			}
-		}
-	}
+	// GameManager * tmp;
+	
+	// for (int i = 0; i < Board->getPotentialMoves(); i++)
+	// {
+	// 	tmp = new GameManager(*Board);
+	// 	PlayStone(Board->getPotentialMoves().y, Board->getPotentialMoves().x, tmp);
+	// 	Coord PlayedMove = Coord(Board->getPotentialMoves().y, Board->getPotentialMoves().x);
+	// 	tmp->setLastMove(PlayedMove);
+	// 	tabMove.push_back(tmp);
+	// }
 }
 
 // Return True if there is a stone 2 cells around the stone in parameter
@@ -83,12 +78,14 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		PlayerOne = STONE_BLACK;
 		PlayerTwo = STONE_WHITE;
 		Board->setbPlayerOneTurn(false);
+		Board->getBlackStones().push_back(Coord(y, x));
 	}
 	else
 	{
 		PlayerOne = STONE_WHITE;
 		PlayerTwo = STONE_BLACK;
 		Board->setbPlayerOneTurn(true);
+		Board->getWhiteStones().push_back(Coord(y, x));
 	}
 
 	Board->getBoard()[y * BOARD_WIDTH + x] = PlayerOne;
@@ -110,7 +107,6 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		Rules::youWin(PlayerOne, PlayerTwo, y, x, Board);
 	}
 	CheckBoardState(y, x, SomethingEaten, Board);
-	MakePlayArea(y, x, Board);
 }
 
 // static function
@@ -131,152 +127,113 @@ bool PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 		Player1 = STONE_WHITE;
 		Player2 = STONE_BLACK;
 	}
-	if (x >= 3) // Eat Left
-		if (Board->getBoard()[y * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x - 3] == Player1)
-		{
-			Board->getBoard()[y * BOARD_WIDTH + x - 1] = STONE_EMPTY;
-			Board->getBoard()[y * BOARD_WIDTH + x - 2] = STONE_EMPTY;
-			iScore += 2;
-			SomethingEaten = true;
-		}
-	if (x <= BOARD_WIDTH - 3) // Eat Right
-		if (Board->getBoard()[y * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 3] == Player1)
-		{
-			Board->getBoard()[y * BOARD_WIDTH + x + 1] = STONE_EMPTY;
-			Board->getBoard()[y * BOARD_WIDTH + x + 2] = STONE_EMPTY;
-			iScore += 2;
-			SomethingEaten = true;
-		}
-	if (y >= 3) // Eat Top
-		if (Board->getBoard()[(y - 1) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x] == Player1)
-		{
-			Board->getBoard()[(y - 1) * BOARD_WIDTH + x] = STONE_EMPTY;
-			Board->getBoard()[(y - 2) * BOARD_WIDTH + x] = STONE_EMPTY;
-			iScore += 2;
-			SomethingEaten = true;
-		}
-	if (y < BOARD_HEIGHT- 3) // Eat Bottom
-		if (Board->getBoard()[(y + 1) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x] == Player1)
-		{
-			Board->getBoard()[(y + 1) * BOARD_WIDTH + x] = STONE_EMPTY;
-			Board->getBoard()[(y + 2) * BOARD_WIDTH + x] = STONE_EMPTY;
-			iScore += 2;
-			SomethingEaten = true;
-		}
-	if (x >= 3 && y >= 3) // Eat Top Left
-		if (Board->getBoard()[(y - 1) * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x - 3] == Player1)
-		{
-			Board->getBoard()[(y - 1) * BOARD_WIDTH + x - 1] = STONE_EMPTY;
-			Board->getBoard()[(y - 2) * BOARD_WIDTH + x - 2] = STONE_EMPTY;
-			iScore += 2;
-			SomethingEaten = true;
-		}
-	if (x < BOARD_WIDTH - 3 && y >= 3) // Eat Top Right
-		if (Board->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x + 3] == Player1)
-		{
-			Board->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] = STONE_EMPTY;
-			Board->getBoard()[(y - 2) * BOARD_WIDTH + x + 2] = STONE_EMPTY;
-			iScore += 2;
-			SomethingEaten = true;
-		}
-	if (x < BOARD_WIDTH - 3 && y < BOARD_HEIGHT- 3) // Eat Bottom Right
-		if (Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x + 3] == Player1)
-		{
-			Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] = STONE_EMPTY;
-			Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] = STONE_EMPTY;
-			iScore += 2;
-			SomethingEaten = true;
-		}
-	if (x >= 3 && y < BOARD_HEIGHT- 3) // Eat Bottom Left
-		if (Board->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x - 3] == Player1)
-		{
-			Board->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] = STONE_EMPTY;
-			Board->getBoard()[(y + 2) * BOARD_WIDTH + x - 2] = STONE_EMPTY;
-			iScore += 2;
-			SomethingEaten = true;
-		}
+	// Eat Left
+	if (x >= 3 && Board->getBoard()[y * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x - 3] == Player1)
+		SomethingEaten = DeadStone(y, x -1, y, x - 2, &iScore, Player1, Board);
+	// Eat Right
+	if (x <= BOARD_WIDTH - 3 && Board->getBoard()[y * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 3] == Player1)
+		SomethingEaten = DeadStone(y, x + 1, y, x + 2, &iScore, Player1, Board);
+	// Eat Top
+	if (y >= 3 && Board->getBoard()[(y - 1) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x] == Player1)
+		SomethingEaten = DeadStone(y - 1, x, y - 2, x, &iScore, Player1, Board);
+	// Eat Bottom
+	if (y < BOARD_HEIGHT- 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x] == Player1)
+		SomethingEaten = DeadStone(y + 1, x, y + 2, x, &iScore, Player1, Board);
+	// Eat Top Left
+	if (x >= 3 && y >= 3 && Board->getBoard()[(y - 1) * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x - 3] == Player1)
+		SomethingEaten = DeadStone(y - 1, x - 1, y - 2, x - 2, &iScore, Player1, Board);
+	// Eat Top Right
+	if (x < BOARD_WIDTH - 3 && y >= 3 && Board->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x + 3] == Player1)
+		SomethingEaten = DeadStone(y - 1, x + 1, y - 2, x + 2, &iScore, Player1, Board);
+	// Eat Bottom Right
+	if (x < BOARD_WIDTH - 3 && y < BOARD_HEIGHT- 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x + 3] == Player1)
+		SomethingEaten = DeadStone(y + 1, x + 1, y + 2, x + 2, &iScore, Player1, Board);
+	// Eat Bottom Left
+	if (x >= 3 && y < BOARD_HEIGHT - 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x - 3] == Player1)
+		SomethingEaten = DeadStone(y + 1, x - 1, y + 2, x - 2, &iScore, Player1, Board);
 	if (Board->getbPlayerOneTurn())
-	{
 		Board->setBlackScore(Board->getBlackScore() + iScore);
-	}
 	else
-	{
 		Board->setWhiteScore(Board->getWhiteScore() + iScore);
-	}
 	return SomethingEaten;
 }
 
 void PossibleMove::CheckBoardState(int Height, int Width, bool SomethingEaten, GameManager * Board) 
 {
-		int Player1;
-		int Player2;
-		bool dTree = false;
-		Height = (Height <= 5) ? 0 : Height - 5;
-		Width = (Width <= 5) ? 0 : Width - 5; 
-		int MaxHeight = (Height + 10 >= BOARD_HEIGHT - 1) ? BOARD_HEIGHT - 1 : Height + 10;
-		int MaxWidth = (Width + 10 >= BOARD_WIDTH - 1) ? BOARD_WIDTH - 1 : Width + 10;
+	int Player1;
+	int Player2;
+	bool dTree = false;
+	Height = (Height <= 5) ? 0 : Height - 5;
+	Width = (Width <= 5) ? 0 : Width - 5; 
+	int MaxHeight = (Height + 10 >= BOARD_HEIGHT - 1) ? BOARD_HEIGHT - 1 : Height + 10;
+	int MaxWidth = (Width + 10 >= BOARD_WIDTH - 1) ? BOARD_WIDTH - 1 : Width + 10;
 
-		if (Board->getbPlayerOneTurn()) {
-			Player1 = STONE_BLACK;
-			Player2 = STONE_WHITE;
-		}
-		else {
-			Player1 = STONE_WHITE;
-			Player2 = STONE_BLACK;
-		}
+	if (Board->getbPlayerOneTurn()) {
+		Player1 = STONE_BLACK;
+		Player2 = STONE_WHITE;
+	}
+	else {
+		Player1 = STONE_WHITE;
+		Player2 = STONE_BLACK;
+	}
 
-		for (int i = Height; i <= MaxHeight; i++) {
-			for (int j = Width; j <= MaxWidth; j++) {
+	for (int i = Height; i <= MaxHeight; i++) {
+		for (int j = Width; j <= MaxWidth; j++) {
 
-				if (Rules::EmptyCase(Board->getBoard()[i * BOARD_WIDTH + j])) {
-//					checkForbiddenBox(i, j);
-					int win = Rules::CheckWin(Player2, i, j, Board);
-					if (SomethingEaten)
-					{
-						dTree = Rules::CheckDoubleTreeBox(i, j, Player1, Board);
-						if ((dTree && Rules::somethingToEatWithEmpty(Player2, Player1, i, j, Board)) && win == 0 ) 
-						{
-							dTree = false;
-							if ((Player1 & STONE_BLACK) != 0)
-								Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_BLACKDOUBLETREE;
-							else
-								Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_WHITEDOUBLETREE;
-
-						}
-					}
-					dTree = Rules::CheckDoubleTreeBox(i, j, Player2, Board);
-					if ((dTree && Rules::somethingToEatWithEmpty(Player1, Player2, i, j, Board)) && win == 0 ) 
+			if (Rules::EmptyCase(Board->getBoard()[i * BOARD_WIDTH + j])) {
+//				checkForbiddenBox(i, j);
+				int win = Rules::CheckWin(Player2, i, j, Board);
+				if (SomethingEaten)
+				{
+					dTree = Rules::CheckDoubleTreeBox(i, j, Player1, Board);
+					if ((dTree && Rules::somethingToEatWithEmpty(Player2, Player1, i, j, Board)) && win == 0 ) 
 					{
 						dTree = false;
 						if ((Player1 & STONE_BLACK) != 0)
 							Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_BLACKDOUBLETREE;
 						else
 							Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_WHITEDOUBLETREE;
-						
-					}
-					else if (win != 0)
-					{
-						Board->getBoard()[i * BOARD_WIDTH + j] = STONE_EMPTY;
+
 					}
 				}
+				dTree = Rules::CheckDoubleTreeBox(i, j, Player2, Board);
+				if ((dTree && Rules::somethingToEatWithEmpty(Player1, Player2, i, j, Board)) && win == 0 ) 
+				{
+					dTree = false;
+					if ((Player1 & STONE_BLACK) != 0)
+						Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_BLACKDOUBLETREE;
+					else
+						Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_WHITEDOUBLETREE;
+					
+				}
+				else if (win != 0)
+				{
+					Board->getBoard()[i * BOARD_WIDTH + j] = STONE_EMPTY;
+				}
 			}
-		}	
-	}
+		}
+	}	
+}
 
-void PossibleMove::MakePlayArea(int y, int x, GameManager * Board)
+bool PossibleMove::DeadStone(int y1, int x1, int y2, int x2, int * iScore, int Player, GameManager * Board)
 {
-	for (int i = y - PLAY_AREA_SIZE; i <= y + PLAY_AREA_SIZE; i++)
+	if (Player == STONE_BLACK)
 	{
-		if (i < 0 || i >= BOARD_HEIGHT)
-			continue;
-		for (int j = x - PLAY_AREA_SIZE; j <= x + PLAY_AREA_SIZE; j++)
+		int stop = 0;
+		for (size_t i = 0; i < Board->getBlackStones().size(); i++)
 		{
-			if (j < 0 || j >= BOARD_WIDTH)
-				continue;
-			if (Board->getBoard()[i * BOARD_WIDTH + j] == STONE_EMPTY)
+			if (stop == 2)
+				break;
+			if ((Board->getBlackStones()[i].x == x1 && Board->getBlackStones()[i].y == y1)
+				|| (Board->getBlackStones()[i].x == x2 && Board->getBlackStones()[i].y == y2))
 			{
-				Board->getBoard()[i * BOARD_WIDTH + j] = STONE_PLAYAREA;
+				Board->getBlackStones().erase(Board->getBlackStones().begin() + i);
+				stop++;
 			}
 		}
 	}
+	Board->getBoard()[y1 * BOARD_WIDTH + x1] = STONE_EMPTY;
+	Board->getBoard()[y2 * BOARD_WIDTH + x2] = STONE_EMPTY;
+	*iScore += 2;
+	return true;
 }

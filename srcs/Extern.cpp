@@ -56,7 +56,7 @@ extern "C"
 	{
 		CoordIA MoveChosed;
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
-		// PossibleMove::PlayStone(8, 9, &Board);
+		PossibleMove::PlayStone(9, 9, &Board);
 		// PossibleMove::PlayStone(9, 11, &Board);
 		// PossibleMove::PlayStone(9, 10, &Board);
 		// PossibleMove::PlayStone(10, 11, &Board);
