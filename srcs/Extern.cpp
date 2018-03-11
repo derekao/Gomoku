@@ -60,8 +60,8 @@ extern "C"
 		PossibleMove::PlayStone(1, 1, &Board);
 		PossibleMove::PlayStone(9, 9, &Board);
 		PossibleMove::PlayStone(1, 2, &Board);
-		// PossibleMove::PlayStone(0, 1, &Board);
-		// PossibleMove::PlayStone(10, 11, &Board);
+		PossibleMove::PlayStone(0, 1, &Board);
+		PossibleMove::PlayStone(1, 3, &Board);
 		// PossibleMove::PlayStone(7, 8, &Board);
 		// PossibleMove::PlayStone(8, 11, &Board);
 		// PossibleMove::PlayStone(6, 7, &Board);
