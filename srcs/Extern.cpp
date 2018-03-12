@@ -77,6 +77,7 @@ extern "C"
 		PossibleMove::PlayStone(9, 9, &Board);
 		PossibleMove::PlayStone(1, 2, &Board);
 		PossibleMove::PlayStone(0, 1, &Board);
+		std::cout << "MDR" << std::endl;
 		PossibleMove::PlayStone(1, 3, &Board);
 		// PossibleMove::PlayStone(7, 8, &Board);
 		// PossibleMove::PlayStone(8, 11, &Board);
@@ -89,6 +90,7 @@ extern "C"
 		// PossibleMove::PlayStone(11, 11, &Board);
 		// PossibleMove::PlayStone(3, 2, &Board);
 		// PossibleMove::PlayStone(8, 11, &Board);
+		std::cout << "MDR2" << std::endl;
 		printBoard(&Board);
 		
 		MinMax Algo = MinMax(&Board);

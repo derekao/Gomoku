@@ -168,6 +168,7 @@ int Heuristic::CountVerticalAlignmentScore(int position, bool lookFor, bool Sear
 	}
 
 	while (pos < BOARD_HEIGHT * BOARD_WIDTH && !bBlockEnd) {
+		std::cout << "Pos " << pos << " " << Instance->getBoard()[pos] << " Size " << size <<  std::endl;
 		if ((Instance->getBoard()[pos] & (lookFor ? Player : Opponent)) != 0) {
 			size++;
 			if ((pos / BOARD_HEIGHT) == BOARD_HEIGHT - 1)
@@ -410,16 +411,16 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 		if (!bBlockStart && !bBorderStart && !Unbound)
 			addMove((y - yVar), (x - xVar), score);
 		if (!bBlockEnd && !bBorderEnd && !Unbound)
-			addMove((y + yVar) * size, (x + xVar) * size, score);
+			addMove(y + yVar * size, x + xVar * size, score);
 		if (Unbound)
-			addMove((y + yVar) * Unbound, (x + xVar) * Unbound, score);
+			addMove(y + yVar * Unbound, x + xVar * Unbound, score);
 	}
 	else if (size == 3 && potentialSize > 4) {
 		if (!bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
 			score = who ? TTW_PLAYER : TTW_OPPONENT;
 			if (!Unbound) {
 				addMove((y - yVar), (x - xVar), score);
-				addMove((y + yVar) * size, (x + xVar) * size, score);
+				addMove(y + yVar * size, x + xVar * size, score);
 			}
 			if (Unbound)
 				addMove((y + yVar) * Unbound, (x + xVar) * Unbound, score);
@@ -434,38 +435,38 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 			}
 			if (!bBlockEnd && !bBorderEnd && !Unbound)
 			{
-				addMove((y + yVar) * size, (x + xVar) * size, score);
-				if ((x + xVar) * (size + 1) < BOARD_WIDTH && (y + yVar) * (size + 1) < BOARD_HEIGHT && Instance->getBoard()[pos + xVar * (size + 1) + yVar * (size + 1) * BOARD_WIDTH] && !Unbound)
-					addMove((y + yVar) * (size + 1), (x + xVar) * (size + 1), score);
+				addMove(y + yVar * size, x + xVar * size, score);
+				if (x + xVar * (size + 1) < BOARD_WIDTH && y + yVar * (size + 1) < BOARD_HEIGHT && Instance->getBoard()[pos + xVar * (size + 1) + yVar * (size + 1) * BOARD_WIDTH] && !Unbound)
+					addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
 			}
 			if (Unbound)
-				addMove((y + yVar) * Unbound, (x + xVar) * Unbound, score);
+				addMove(y + yVar * Unbound, x + xVar * Unbound, score);
 		}
 	}
 	else if (size == 2 && potentialSize > 5 && !bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
 		score = who ? STRONG_MOVE : AVERAGE_MOVE;
-		std::cout << " COUCOU " << (x - xVar) * 2 << " et " << (y - yVar) * 2 << " ou " << pos - xVar * 2 - yVar * 2 * BOARD_WIDTH << " Pos " << pos << std::endl; 
-		if ((x - xVar) * 2 >= 0 && (y - yVar) * 2 >= 0 && Instance->getBoard()[pos - xVar * 2 - yVar * 2 * BOARD_WIDTH] && !Unbound)
+
+		if (x - xVar * 2 >= 0 && y - yVar * 2 >= 0 && Instance->getBoard()[pos - xVar * 2 - yVar * 2 * BOARD_WIDTH] && !Unbound)
 		{
 			addMove((y - yVar), (x - xVar), score);
-			addMove((y - yVar) * 2, (x - xVar) * 2, score);
+			addMove(y - yVar * 2, x - xVar * 2, score);
 		}
-		else if ((x + xVar) * (size + 1) < BOARD_WIDTH && (y + yVar) * (size + 1) < BOARD_HEIGHT && Instance->getBoard()[pos + xVar * (size + 1) + yVar * (size + 1) * BOARD_WIDTH] && !Unbound)
+		else if (x + xVar * (size + 1) < BOARD_WIDTH && y + yVar * (size + 1) < BOARD_HEIGHT && Instance->getBoard()[pos + xVar * (size + 1) + yVar * (size + 1) * BOARD_WIDTH] && !Unbound)
 		{
-			addMove((y + yVar) * size, (x + xVar) * size, score);
-			addMove((y + yVar) * (size + 1), (x + xVar) * (size + 1), score);
+			addMove(y + yVar * size, x + xVar * size, score);
+			addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
 		}
 		else if (Unbound) {
-			addMove((y - yVar), (x - xVar), score);
-			addMove((y + yVar) * size, (x + xVar) * size, score);
-			addMove((y + yVar) * Unbound, (x + xVar) * Unbound, score);
+			addMove(y - yVar, x - xVar, score);
+			addMove(y + yVar * size, x + xVar * size, score);
+			addMove(y + yVar * Unbound, x + xVar * Unbound, score);
 		}
 	}
-	else if (size == 2 && potentialSize > 2 && !Unbound && (bBorderStart || bBorderEnd)) {
+	else if (size == 2 && potentialSize > 2 && !Unbound && (bBlockStart || bBlockEnd)) {
 		score = who ? STRONG_MOVE : CAPTURE;
 		if (bBorderStart)
 		{
-			addMove((y + yVar) * size, (x + xVar) * size, score);
+			addMove(y + yVar * size, x + xVar * size, score);
 		}
 		else
 		{
@@ -493,6 +494,7 @@ void Heuristic::searchMoves() {
 		vOpponent = Instance->getBlackStones();
 		vPlayer = Instance->getWhiteStones();
 	}
+	Instance->getPotentialMove().clear();
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << " Taille " << vPlayer.size() << " Taille2 " << vOpponent.size() << std::endl;

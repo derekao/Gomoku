@@ -39,7 +39,7 @@ std::cout << "test = " <<  Board->getPotentialMove().size() << std::endl;
 		if (Board->getPotentialMove()[i].priority <= Board->getHighestPriority()) {
 			tmp = new GameManager(*Board);
 			PlayStone(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x, tmp);
-			Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
+ 			Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
 			tmp->setLastMove(PlayedMove);
 			tabMove.push_back(tmp);
 		}
