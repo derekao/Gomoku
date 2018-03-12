@@ -472,7 +472,7 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 			addMove((y - yVar), (x - xVar), score);
 		}
 	}
-	else if (size == 1 && potentialSize > 5 && !bBorderStart && !bBorderEnd) {
+	else if (size == 1 && potentialSize > 5 && (!bBorderStart || !bBorderEnd)) {
 		score = BAD_MOVE;
 		if (!bBorderStart)
 			addMove((y - yVar), (x - xVar), score);

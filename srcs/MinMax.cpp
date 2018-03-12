@@ -49,12 +49,14 @@ void MinMax::Compute()
 	std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
 	if (Childs.empty())
 	{
+		Solution = Coord(8,8);
 		std::cerr << "No possible move !" << std::endl;
-		exit (0);
+		return;
+	//	exit (0);
 	}
 	for (size_t i = 0; i < Childs.size(); i++)
 	{
-		Value = AlphaBeta(Childs[i], 1, Alpha, Beta, false);
+		Value = AlphaBeta(Childs[i], 4, Alpha, Beta, false);
 		if (Value > v)
 		{
 			BestMove = Childs[i];

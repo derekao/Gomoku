@@ -26,7 +26,7 @@ int main()
 	{
 		game.Board[i] = 0;
 	}
-
+//	game.Board[180] = STONE_BLACK;
 
 	// for (int i = 0; i < 361; i ++)
 	// {

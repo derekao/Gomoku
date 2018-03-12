@@ -12,6 +12,7 @@
 
 #include "Extern.hpp"
 #include "PossibleMove.class.hpp"
+#include "Heuristic.class.hpp"
 #include <fstream>
 
 static void printBoard(GameManager * Board)
@@ -56,6 +57,21 @@ extern "C"
 	{
 		CoordIA MoveChosed;
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
+		
+		int PlayerOne, PlayerTwo;
+		if (Game.bPlayerOneTurn)
+		{
+			PlayerOne = STONE_BLACK;
+			PlayerTwo = STONE_WHITE;
+		}
+		else
+		{
+			PlayerOne = STONE_WHITE;
+			PlayerTwo = STONE_BLACK;
+		}
+
+		Heuristic bestMoves = Heuristic(PlayerOne, PlayerTwo, &Board);
+		bestMoves.searchMoves();
 		PossibleMove::PlayStone(0, 0, &Board);
 		PossibleMove::PlayStone(1, 1, &Board);
 		PossibleMove::PlayStone(9, 9, &Board);
