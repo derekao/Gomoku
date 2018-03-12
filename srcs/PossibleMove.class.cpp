@@ -111,7 +111,7 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		Rules::youWin(PlayerOne, PlayerTwo, y, x, Board);
 	}
 	CheckBoardState(y, x, SomethingEaten, Board);
-	Heuristic bestMoves = Heuristic(PlayerOne, PlayerTwo, Board);
+	Heuristic bestMoves = Heuristic(PlayerTwo, PlayerOne, Board);
 	bestMoves.searchMoves();
 	std::cout << "testR = " <<  Board->getPotentialMove().size() << std::endl;
 }
