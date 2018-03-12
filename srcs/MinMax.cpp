@@ -56,7 +56,7 @@ void MinMax::Compute()
 	}
 	for (size_t i = 0; i < Childs.size(); i++)
 	{
-		Value = AlphaBeta(Childs[i], 2, Alpha, Beta, false);
+		Value = AlphaBeta(Childs[i], 6, Alpha, Beta, false);
 		if (Value > v)
 		{
 			BestMove = Childs[i];

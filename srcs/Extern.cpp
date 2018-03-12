@@ -15,18 +15,19 @@
 #include "Heuristic.class.hpp"
 #include <fstream>
 
-static void printBoard(GameManager * Board)
-{
-	for (int i = 0; i < 361; i ++)
-	{
-		if (Board->getBoard()[i]  > 2)
-			std::cout << "0 ";
-		else
-			std::cout << Board->getBoard()[i] << " ";
-		if (i % 19 == 18)
-			std::cout << std::endl;
-	}
-}
+
+// static void printBoard(GameManager * Board)
+// {
+// 	for (int i = 0; i < 361; i ++)
+// 	{
+// 		if (Board->getBoard()[i]  > 2)
+// 			std::cout << "0 ";
+// 		else
+// 			std::cout << Board->getBoard()[i] << " ";
+// 		if (i % 19 == 18)
+// 			std::cout << std::endl;
+// 	}
+// }
 
 // static void printBoard(GameManager * Board)
 // {
@@ -57,7 +58,7 @@ extern "C"
 	{
 		CoordIA MoveChosed;
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
-		
+
 		int PlayerOne, PlayerTwo;
 		if (Game.bPlayerOneTurn)
 		{
@@ -72,26 +73,38 @@ extern "C"
 
 		Heuristic bestMoves = Heuristic(PlayerOne, PlayerTwo, &Board);
 		bestMoves.searchMoves();
-		PossibleMove::PlayStone(0, 0, &Board);
-		PossibleMove::PlayStone(1, 1, &Board);
-		PossibleMove::PlayStone(9, 9, &Board);
-		PossibleMove::PlayStone(1, 2, &Board);
-		PossibleMove::PlayStone(0, 1, &Board);
-		std::cout << "MDR" << std::endl;
-		PossibleMove::PlayStone(1, 3, &Board);
-		// PossibleMove::PlayStone(7, 8, &Board);
-		// PossibleMove::PlayStone(8, 11, &Board);
-		// PossibleMove::PlayStone(6, 7, &Board);
-		// PossibleMove::PlayStone(5, 6, &Board);
-		// PossibleMove::PlayStone(11, 11, &Board);
-		// PossibleMove::PlayStone(7, 11, &Board);
-		// PossibleMove::PlayStone(6, 11, &Board);
-		//PossibleMove::PlayStone(8, 10, &Board);
-		// PossibleMove::PlayStone(11, 11, &Board);
-		// PossibleMove::PlayStone(3, 2, &Board);
-		// PossibleMove::PlayStone(8, 11, &Board);
-		std::cout << "MDR2" << std::endl;
-		printBoard(&Board);
+		// PossibleMove::PlayStone(9, 9, &Board);
+		// std::cout <<  " 1)" << Board.getBlackStones().size() << " et " << Board.getWhiteStones().size() << std::endl;
+		// PossibleMove::PlayStone(8, 8, &Board);
+		// std::cout << " 2)" << Board.getBlackStones().size() << " et " << Board.getWhiteStones().size() << std::endl;
+		// PossibleMove::PlayStone(9, 7, &Board);
+
+		// std::cout << " 3)" << Board.getBlackStones().size() << " et " << Board.getWhiteStones().size() << std::endl;
+
+		// // PossibleMove::PlayStone(11, 9, &Board);
+		// // PossibleMove::PlayStone(8, 9, &Board);
+
+		// // PossibleMove::PlayStone(11, 11, &Board);
+		// // PossibleMove::PlayStone(11, 10, &Board);
+		// // PossibleMove::PlayStone(9, 8, &Board);
+
+		// // PossibleMove::PlayStone(12, 11, &Board);
+		// // PossibleMove::PlayStone(10, 8, &Board);
+		// // PossibleMove::PlayStone(7, 9, &Board);
+		// // PossibleMove::PlayStone(6, 9, &Board);
+
+		// // PossibleMove::PlayStone(7, 8, &Board);
+		// // PossibleMove::PlayStone(12, 10, &Board);
+
+		// // PossibleMove::PlayStone(9, 7, &Board);
+		
+		// // PossibleMove::PlayStone(14, 12, &Board);
+		// // PossibleMove::PlayStone(13, 11, &Board);
+		// // PossibleMove::PlayStone(14, 11, &Board);
+		// // PossibleMove::PlayStone(13, 11, &Board);
+
+		// // std::cout << "MDR2" << std::endl;
+		//  printBoard(&Board);
 		
 		MinMax Algo = MinMax(&Board);
 		Coord tmp = Algo.getSolution();

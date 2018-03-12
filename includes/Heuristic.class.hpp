@@ -5,6 +5,7 @@
 #include "GameManager.class.hpp"
 #include "Rules.class.hpp"
 #include "PotentialMove.hpp"
+#include <fstream>
 
 #define HORIZONTAL 1
 #define VERTICAL 2

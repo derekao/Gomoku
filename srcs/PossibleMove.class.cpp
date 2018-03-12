@@ -33,7 +33,7 @@ void PossibleMove::Compute()
 	GameManager * tmp;
 	
 
-std::cout << "test = " <<  Board->getPotentialMove().size() << std::endl;
+//std::cout << "test = " <<  Board->getPotentialMove().size() << std::endl;
 	for (size_t i = 0; i < Board->getPotentialMove().size(); i++)
 	{
 		if (Board->getPotentialMove()[i].priority <= Board->getHighestPriority()) {
@@ -111,9 +111,10 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		Rules::youWin(PlayerOne, PlayerTwo, y, x, Board);
 	}
 	CheckBoardState(y, x, SomethingEaten, Board);
+//	std::cout << " 4)" << Board->getBlackStones().size() << " et " << Board->getWhiteStones().size() << std::endl;
 	Heuristic bestMoves = Heuristic(PlayerTwo, PlayerOne, Board);
 	bestMoves.searchMoves();
-	std::cout << "testR = " <<  Board->getPotentialMove().size() << std::endl;
+//	std::cout << "testR = " <<  Board->getPotentialMove().size() << std::endl;
 }
 
 // static function
