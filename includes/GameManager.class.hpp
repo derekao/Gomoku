@@ -69,7 +69,7 @@ public:
 	GameManager(GameManager const & src) :
 		HeuristicValue(src.HeuristicValue), Parent(src.Parent), LastMove(0,0), BlackWin(src.BlackWin), WhiteWin(src.WhiteWin), HasWon(src.HasWon), bPlayerOneTurn(src.bPlayerOneTurn),
 		WhiteScore(src.WhiteScore), BlackScore( src.BlackScore), HighestPriority(src.HighestPriority), Board(src.Board),
-		BlackStones(src.BlackStones), WhiteStones(src.WhiteStones), lPotentialMove(src.lPotentialMove), WinPos(src.WinPos.y, src.WinPos.x)
+		BlackStones(src.BlackStones), WhiteStones(src.WhiteStones), WinPos(src.WinPos.y, src.WinPos.x)
 	{
 		return ;
 	}
