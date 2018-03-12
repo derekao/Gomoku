@@ -49,7 +49,10 @@ void MinMax::Compute()
 	std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
 	if (Childs.empty())
 	{
-		Solution = Coord(8,8);
+		if (Board->getBoard()[180] == 0)
+			Solution = Coord(9, 9);
+		else
+			Solution = Coord(8, 8);
 		std::cerr << "No possible move !" << std::endl;
 		return;
 	//	exit (0);

@@ -20,6 +20,14 @@
 #define AVERAGE_MOVE 6
 #define BAD_MOVE 7
 
+#define FIRST_STONE_TAKEN 80
+#define SECOND_STONE_TAKEN 320
+#define THIRD_STONE_TAKEN 1280
+#define FOURTH_STONE_TAKEN 5120
+#define FITH_STONE_TAKEN 21920
+
+#define BLOCK_REDUCTION 3
+
 #define CAPTURE 0 
 
 class Heuristic {
@@ -35,7 +43,7 @@ private:
 	int CountVerticalAlignmentScore(int, bool, bool = false);
 	int CountDiagonnalRightAlignmentScore(int, bool, bool = false);
 	int CountDiagonnalLeftAlignmentScore(int, bool, bool = false);
-	int CountHeuristicAlignmentScore(int, int, bool, bool, bool, int);
+	int CountHeuristicAlignmentScore(int, int, bool, bool, bool, int, bool);
 	void getMovePriority(int , int , bool , bool , bool , bool , int , int , int, bool);
 	void addMove(int, int, int);
 

@@ -134,7 +134,7 @@ int Heuristic::CountHorizontalAlignmentScore(int position, bool lookFor, bool Se
 		getMovePriority(size, potentialSize, bBorderStart, bBorderEnd, bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0, position, HORIZONTAL, lookFor);
 		return 0;
 	}
-	return CountHeuristicAlignmentScore(size, potentialSize, (bBorderStart || bBorderEnd), bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0);
+	return CountHeuristicAlignmentScore(size, potentialSize, (bBorderStart || bBorderEnd), bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0, lookFor);
 }
 
 int Heuristic::CountVerticalAlignmentScore(int position, bool lookFor, bool SearchMove) {
@@ -202,7 +202,7 @@ int Heuristic::CountVerticalAlignmentScore(int position, bool lookFor, bool Sear
 		getMovePriority(size, potentialSize, bBorderStart, bBorderEnd, bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0, position, VERTICAL, lookFor);
 		return 0;
 	}
-	return CountHeuristicAlignmentScore(size, potentialSize, (bBorderStart || bBorderEnd), bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0);
+	return CountHeuristicAlignmentScore(size, potentialSize, (bBorderStart || bBorderEnd), bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0, lookFor);
 }
 
 int Heuristic::CountDiagonnalRightAlignmentScore(int pos, bool lookFor, bool SearchMove) {
@@ -274,7 +274,7 @@ int Heuristic::CountDiagonnalRightAlignmentScore(int pos, bool lookFor, bool Sea
 		getMovePriority(size, potentialSize, bBorderStart, bBorderEnd, bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0, pos, DIAGORIGHT, lookFor);
 		return 0;
 	}
-	return CountHeuristicAlignmentScore(size, potentialSize, (bBorderStart || bBorderEnd), bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0);
+	return CountHeuristicAlignmentScore(size, potentialSize, (bBorderStart || bBorderEnd), bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0, lookFor);
 }
 
 int Heuristic::CountDiagonnalLeftAlignmentScore(int pos, bool lookFor, bool SearchMove) {
@@ -346,34 +346,45 @@ int Heuristic::CountDiagonnalLeftAlignmentScore(int pos, bool lookFor, bool Sear
 		getMovePriority(size, potentialSize, bBorderStart, bBorderEnd, bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0, pos, DIAGOLEFT, lookFor);
 		return 0;
 	}
-	return CountHeuristicAlignmentScore(size, potentialSize, (bBorderStart || bBorderEnd), bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0);
+	return CountHeuristicAlignmentScore(size, potentialSize, (bBorderStart || bBorderEnd), bBlockStart, bBlockEnd, (iNonFullAlign < size) ? iNonFullAlign : 0, lookFor);
 }
 
-int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bBorder, bool bBlockStart, bool bBlockEnd, int bUnbound) {
+int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bBorder, bool bBlockStart, bool bBlockEnd, int bUnbound, bool who) {
 	int score = 0;
-
+	int StoneTaken = 0;
 	 // Tmp
 	
+	if ((who && Player == STONE_BLACK) || (!who && Player == STONE_WHITE))
+		StoneTaken = Instance->getBlackScore();
+	else
+		StoneTaken = Instance->getWhiteScore();
+
 	if (size < 5 && potentialSize < 5) { // Alignement inferieur à 5 et potentiellement inferieur à 5
-		if (!bBorder && ((size == 2 && bBlockStart && !bBlockEnd) || (size == 2 && !bBlockStart && bBlockEnd))) // Peut etre mangé
-			score += 0;
-		else
-			score += 0;
+		if (!bUnbound && !bBorder && ((size == 2 && bBlockStart && !bBlockEnd) || (size == 2 && !bBlockStart && bBlockEnd))) // Peut etre mangé
+		{
+			if (StoneTaken == 2)
+				score -= FIRST_STONE_TAKEN;
+			else if (StoneTaken == 4)
+				score -= SECOND_STONE_TAKEN;
+			else if (StoneTaken == 6)
+				score -= THIRD_STONE_TAKEN;
+			else if (StoneTaken == 8)
+				score -= FOURTH_STONE_TAKEN;
+			else if (StoneTaken >= 10)
+				score -= FITH_STONE_TAKEN;
+		}
 	}
 	else
-		score += pow(10, size);
-	if (bBorder || bUnbound) {
-		score += 0;
+	{
+		if (size >= 5)
+		{
+			score += pow(10, size);
+		}
+		else if (bBlockStart || bBlockEnd || bBorder)
+			score += (pow(10, size) / BLOCK_REDUCTION);
+		else
+			score += pow(10, size);
 	}
-	// else if ((bBlockStart && !bBlockEnd) || (!bBlockStart && bBlockEnd)) {
-
-	// }
-	// else if () {
-		
-	// }
-	// else if () {
-		
-	// }
 
 	return score;
 }
@@ -485,12 +496,10 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 			addMove((y - yVar), (x - xVar), score);
 			addMove((y + yVar), (x + xVar), score);
 		}
-		if (x - xVar * 2 >= 0 && y - yVar * 2 >= 0 && Instance->getBoard()[pos - xVar * 2 - yVar * 2 * BOARD_WIDTH] == 0) {
-			if (!bBlockStart)
+		if (!bBlockStart && x - xVar * 2 >= 0 && y - yVar * 2 >= 0 && Instance->getBoard()[pos - xVar * 2 - yVar * 2 * BOARD_WIDTH] == 0)
 				addMove(y - yVar * 2, x - xVar * 2, score);
-			if (!bBlockEnd)
+		if (!bBlockEnd && x + xVar * 2 < BOARD_WIDTH && y + yVar * 2 < BOARD_HEIGHT && Instance->getBoard()[pos + xVar * 2 + yVar * 2 * BOARD_WIDTH] == 0)
 				addMove(y + yVar * 2, x + xVar * 2, score);
-		}
 	}
 }
 
