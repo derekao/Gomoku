@@ -59,7 +59,7 @@ void MinMax::Compute()
 	}
 	for (size_t i = 0; i < Childs.size(); i++)
 	{
-		Value = AlphaBeta(Childs[i], 6, Alpha, Beta, false);
+		Value = AlphaBeta(Childs[3i], 6, Alpha, Beta, false);
 		if (Value > v)
 		{
 			BestMove = Childs[i];
@@ -95,7 +95,7 @@ int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool M
 		if (Childs.empty())
 		{
 			std::cerr << "No possible move !" << std::endl;
-			exit (0);
+			return 0;
 		}
 		for (size_t i = 0; i < Childs.size(); i++)
 		{
@@ -122,7 +122,7 @@ int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool M
 		if (Childs.empty())
 		{
 			std::cerr << "No possible move !" << std::endl;
-			exit (0);
+			return 0;
 		}
 		for (size_t i = 0; i < Childs.size(); i++)
 		{

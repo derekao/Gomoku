@@ -23,22 +23,47 @@ int Heuristic::BoardValue() {
 	int pos = 0;
 	std::vector<Coord> vPlayer;
 	std::vector<Coord> vOpponent;
-	
+	int StonePlayer = 0;
+	int StoneOppenent = 0;
+		
 	if ((Player == STONE_BLACK && (Instance->getBlackWin() || Instance->getBlackScore() >= 10)) || (Player == STONE_WHITE && (Instance->getWhiteWin() || Instance->getWhiteScore() >= 10))) {
 		return MAX_INFINIT;
 	}
 	else if ((Opponent == STONE_BLACK && (Instance->getBlackWin() || Instance->getBlackScore() >= 10)) || (Opponent == STONE_WHITE && (Instance->getWhiteWin() || Instance->getWhiteScore() >= 10))) {
 		return MIN_INFINIT;
-	}
+	}	
 	
 	if ((Player & STONE_BLACK ) != 0) {
 		vPlayer = Instance->getBlackStones();
 		vOpponent = Instance->getWhiteStones();
+		StoneOppenent = Instance->getWhiteScore();
+		StonePlayer = Instance->getBlackScore();
 	}
 	else {
 		vOpponent = Instance->getBlackStones();
 		vPlayer = Instance->getWhiteStones();
+		StonePlayer = Instance->getWhiteScore();
+		StoneOppenent = Instance->getBlackScore();
 	}
+
+	if (StonePlayer == 2)
+		value += FIRST_STONE_TAKEN;
+	else if (StonePlayer == 4)
+		value += SECOND_STONE_TAKEN;
+	else if (StonePlayer == 6)
+		value += THIRD_STONE_TAKEN;
+	else if (StonePlayer == 8)
+		value += FOURTH_STONE_TAKEN;
+
+	if (StoneOppenent == 2)
+		value -= FIRST_STONE_TAKEN;
+	else if (StoneOppenent == 4)
+		value -= SECOND_STONE_TAKEN;
+	else if (StoneOppenent == 6)
+		value -= THIRD_STONE_TAKEN;
+	else if (StoneOppenent == 8)
+		value -= FOURTH_STONE_TAKEN;
+
 
 	for (size_t i = 0; i < vPlayer.size(); i++) {
 		pos = (vPlayer[i].y) * BOARD_HEIGHT + vPlayer[i].x ;
@@ -351,32 +376,31 @@ int Heuristic::CountDiagonnalLeftAlignmentScore(int pos, bool lookFor, bool Sear
 
 int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bBorder, bool bBlockStart, bool bBlockEnd, int bUnbound, bool who) {
 	int score = 0;
-	int StoneTaken = 0;
-	 // Tmp
+	// int StoneTaken = 0;
+	//  // Tmp
 	
-	if ((who && Player == STONE_BLACK) || (!who && Player == STONE_WHITE))
-		StoneTaken = Instance->getBlackScore();
-	else
-		StoneTaken = Instance->getWhiteScore();
+	// if ((who && Player == STONE_BLACK) || (!who && Player == STONE_WHITE))
+	// 	StoneTaken = Instance->getBlackScore();
+	// else
+	// 	StoneTaken = Instance->getWhiteScore();
 
-	if (size < 5 && potentialSize < 5) { // Alignement inferieur à 5 et potentiellement inferieur à 5
-		if (!bUnbound && !bBorder && ((size == 2 && bBlockStart && !bBlockEnd) || (size == 2 && !bBlockStart && bBlockEnd))) // Peut etre mangé
-		{
-			if (StoneTaken == 2)
-				score -= FIRST_STONE_TAKEN;
-			else if (StoneTaken == 4)
-				score -= SECOND_STONE_TAKEN;
-			else if (StoneTaken == 6)
-				score -= THIRD_STONE_TAKEN;
-			else if (StoneTaken == 8)
-				score -= FOURTH_STONE_TAKEN;
-			else if (StoneTaken >= 10)
-				score -= FITH_STONE_TAKEN;
-		}
-	}
-	else
-	{
-		if (size >= 5)
+	// if (size == 2 && !bUnbound && !bBorder && ((size == 2 && bBlockStart && !bBlockEnd) || (size == 2 && !bBlockStart && bBlockEnd))) { 
+	// // Alignement inferieur à 5 et potentiellement inferieur à 5
+	// 	if (StoneTaken == 2)
+	// 		score -= FIRST_STONE_TAKEN;
+	// 	else if (StoneTaken == 4)
+	// 		score -= SECOND_STONE_TAKEN;
+	// 	else if (StoneTaken == 6)
+	// 		score -= THIRD_STONE_TAKEN;
+	// 	else if (StoneTaken == 8)
+	// 		score -= FOURTH_STONE_TAKEN;
+	// 	else if (StoneTaken >= 10)
+	// 		score -= FITH_STONE_TAKEN;
+	// }
+	if (bUnbound || who)
+		;
+	if (potentialSize >= 5) {
+		if (size > 5)
 		{
 			score += pow(10, size);
 		}
@@ -390,7 +414,7 @@ int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bB
 }
 
 void Heuristic::addMove(int y, int x, int score) {
-	if (score <= HighestPriority) {
+	if (score <= HighestPriority && Instance->getBoard()[y * BOARD_WIDTH + x] == 0) {
 		// std::cout << " y " << y << " x " << x << " Score " << score << " et " << HighestPriority  << std::endl;
 		if (score != CAPTURE && score < HighestPriority)
 			HighestPriority = score;

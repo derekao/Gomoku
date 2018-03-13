@@ -31,9 +31,7 @@ PossibleMove::PossibleMove(GameManager * src) : Board(src),
 void PossibleMove::Compute()
 {
 	GameManager * tmp;
-	
 
-//std::cout << "test = " <<  Board->getPotentialMove().size() << std::endl;
 	for (size_t i = 0; i < Board->getPotentialMove().size(); i++)
 	{
 		if (Board->getPotentialMove()[i].priority <= Board->getHighestPriority()) {
