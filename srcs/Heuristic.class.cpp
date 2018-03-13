@@ -376,27 +376,27 @@ int Heuristic::CountDiagonnalLeftAlignmentScore(int pos, bool lookFor, bool Sear
 
 int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bBorder, bool bBlockStart, bool bBlockEnd, int bUnbound, bool who) {
 	int score = 0;
-	// int StoneTaken = 0;
-	//  // Tmp
+	int StoneTaken = 0;
+	 // Tmp
 	
-	// if ((who && Player == STONE_BLACK) || (!who && Player == STONE_WHITE))
-	// 	StoneTaken = Instance->getBlackScore();
-	// else
-	// 	StoneTaken = Instance->getWhiteScore();
+	if ((who && Player == STONE_BLACK) || (!who && Player == STONE_WHITE))
+		StoneTaken = Instance->getBlackScore();
+	else
+		StoneTaken = Instance->getWhiteScore();
 
-	// if (size == 2 && !bUnbound && !bBorder && ((size == 2 && bBlockStart && !bBlockEnd) || (size == 2 && !bBlockStart && bBlockEnd))) { 
-	// // Alignement inferieur à 5 et potentiellement inferieur à 5
-	// 	if (StoneTaken == 2)
-	// 		score -= FIRST_STONE_TAKEN;
-	// 	else if (StoneTaken == 4)
-	// 		score -= SECOND_STONE_TAKEN;
-	// 	else if (StoneTaken == 6)
-	// 		score -= THIRD_STONE_TAKEN;
-	// 	else if (StoneTaken == 8)
-	// 		score -= FOURTH_STONE_TAKEN;
-	// 	else if (StoneTaken >= 10)
-	// 		score -= FITH_STONE_TAKEN;
-	// }
+	if (size == 2 && !bUnbound && !bBorder && ((size == 2 && bBlockStart && !bBlockEnd) || (size == 2 && !bBlockStart && bBlockEnd))) { 
+	// Alignement inferieur à 5 et potentiellement inferieur à 5
+		if (StoneTaken == 2)
+			score -= FIRST_STONE_THREAT;
+		else if (StoneTaken == 4)
+			score -= SECOND_STONE_THREAT;
+		else if (StoneTaken == 6)
+			score -= THIRD_STONE_THREAT;
+		else if (StoneTaken == 8)
+			score -= FOURTH_STONE_THREAT;
+		else if (StoneTaken >= 10)
+			score -= FITH_STONE_THREAT;
+	}
 	if (bUnbound || who)
 		;
 	if (potentialSize >= 5) {
@@ -452,7 +452,7 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 		if (Unbound)
 			addMove(y + yVar * Unbound, x + xVar * Unbound, score);
 	}
-	else if (size == 3 && potentialSize > 4) {
+	if (size == 3 && potentialSize > 4) {
 		if (!bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
 			score = who ? TTW_PLAYER : TTW_OPPONENT;
 			if (!Unbound) {
@@ -480,7 +480,7 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 				addMove(y + yVar * Unbound, x + xVar * Unbound, score);
 		}
 	}
-	else if (size == 2 && potentialSize > 5 && !bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
+	if (size == 2 && potentialSize > 5 && !bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
 		score = who ? STRONG_MOVE : AVERAGE_MOVE;
 
 		if (!Unbound) {
@@ -503,7 +503,7 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 			addMove(y + yVar * Unbound, x + xVar * Unbound, score);
 		}
 	}
-	else if (size == 2 && potentialSize > 2 && !Unbound && (bBlockStart || bBlockEnd)) {
+	if (size == 2 && potentialSize > 2 && !Unbound && (bBlockStart || bBlockEnd)) {
 		score = who ? STRONG_MOVE : CAPTURE;
 		if (!bBlockEnd)
 		{
@@ -514,7 +514,13 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 			addMove((y - yVar), (x - xVar), score);
 		}
 	}
-	else if (size == 1 && potentialSize > 5 && who) {
+	if (size == 2 && !Unbound && !bBlockStart && !bBlockEnd && !who) {
+		score = STRONG_MOVE;
+		addMove(y + yVar * size, x + xVar * size, score);
+		addMove((y - yVar), (x - xVar), score);
+
+	}
+	if (size == 1 && potentialSize > 5 && who) {
 		score = BAD_MOVE;
 		if (!bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
 			addMove((y - yVar), (x - xVar), score);

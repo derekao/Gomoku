@@ -73,16 +73,16 @@ extern "C"
 
 		Heuristic bestMoves = Heuristic(PlayerOne, PlayerTwo, &Board);
 		bestMoves.searchMoves();
-		PossibleMove::PlayStone(9, 10, &Board);
-		PossibleMove::PlayStone(9, 12, &Board);
-		PossibleMove::PlayStone(9, 11, &Board);
+		// PossibleMove::PlayStone(9, 10, &Board);
+		// PossibleMove::PlayStone(9, 12, &Board);
+		// PossibleMove::PlayStone(9, 11, &Board);
 
-		PossibleMove::PlayStone(8, 8, &Board);
-		PossibleMove::PlayStone(8, 9, &Board);
+		// PossibleMove::PlayStone(8, 8, &Board);
+		// PossibleMove::PlayStone(8, 9, &Board);
 
-		PossibleMove::PlayStone(6, 9, &Board);
-		PossibleMove::PlayStone(7, 9, &Board);
-		PossibleMove::PlayStone(9, 9, &Board);
+		// PossibleMove::PlayStone(6, 9, &Board);
+		// PossibleMove::PlayStone(7, 9, &Board);
+		// PossibleMove::PlayStone(9, 9, &Board);
 
 		// PossibleMove::PlayStone(12, 9, &Board);
 		// PossibleMove::PlayStone(11, 9, &Board);
