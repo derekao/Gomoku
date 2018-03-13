@@ -49,13 +49,8 @@ void MinMax::Compute()
 	std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
 	if (Childs.empty())
 	{
-		if (Board->getBoard()[180] == 0)
-			Solution = Coord(9, 9);
-		else
-			Solution = Coord(8, 8);
-		std::cerr << "No possible move !" << std::endl;
-		return;
-	//	exit (0);
+		std::cout << "child empty" << std::endl;
+		PossibleMove::FindOneMove(Board, Childs);
 	}
 	for (size_t i = 0; i < Childs.size(); i++)
 	{
@@ -94,8 +89,7 @@ int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool M
 		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
 		if (Childs.empty())
 		{
-			std::cerr << "No possible move !" << std::endl;
-			return 0;
+			PossibleMove::FindOneMove(Node, Childs);
 		}
 		for (size_t i = 0; i < Childs.size(); i++)
 		{
@@ -121,8 +115,7 @@ int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool M
 		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
 		if (Childs.empty())
 		{
-			std::cerr << "No possible move !" << std::endl;
-			return 0;
+			PossibleMove::FindOneMove(Node, Childs);
 		}
 		for (size_t i = 0; i < Childs.size(); i++)
 		{

@@ -243,3 +243,36 @@ bool PossibleMove::DeadStone(int y1, int x1, int y2, int x2, int * iScore, int P
 	*iScore += 2;
 	return true;
 }
+
+void PossibleMove::FindOneMove(GameManager * Node, std::vector<GameManager *> & Childs)
+{
+	int i = 9;
+	int j = 9;
+	int cmpt = 0;
+	int size = 3;
+
+	while (Childs.empty())
+	{
+		if (Node->getBoard()[j * BOARD_WIDTH + i] == 0)
+		{
+			GameManager * tmp = new GameManager(*Node);
+			PlayStone(j, i, tmp);
+ 			Coord PlayedMove = Coord(j, i);
+			tmp->setLastMove(PlayedMove);
+			Childs.push_back(tmp);
+		}
+		else
+		{
+			if (cmpt == size * size)
+			{
+				cmpt = 0;
+				size +=2;
+			}
+			if (9 - (size / 2) + cmpt % size == 9 && 9 - (size / 2) + cmpt / size == 9)
+				cmpt++;
+			i = 9 - (size / 2) + cmpt % size;
+			j = 9 - (size / 2) + cmpt / size;
+			cmpt++;
+		}
+	}
+}
