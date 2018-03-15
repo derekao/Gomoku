@@ -21,8 +21,9 @@
 #include "GameManager.class.hpp"
 #include "Rules.class.hpp"
 #include "PossibleMove.class.hpp"
+#include "TranspositionTable.class.hpp"
 
-#define TIMER_MAX 0.0001f
+#define TIMER_MAX 0.05f
 #define MAX_DEPTH 60
 
 class MinMax 

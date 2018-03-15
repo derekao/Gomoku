@@ -23,7 +23,7 @@ static void printBoard(GameManager * Board)
 		if (Board->getBoard()[i]  > 2)
 			std::cout << "0 ";
 		else
-			std::cout << Board->getBoard()[i] << " ";
+			std::cout << (int)Board->getBoard()[i] << " ";
 		if (i % 19 == 18)
 			std::cout << std::endl;
 	}
@@ -88,7 +88,7 @@ extern "C"
 		// PossibleMove::PlayStone(9, 11, &Board);
 		
 
-		//PossibleMove::PlayStone(7, 10, &Board);
+		// PossibleMove::PlayStone(7, 10, &Board);
 		//  PossibleMove::PlayStone(8, 8, &Board);
 		// PossibleMove::PlayStone(7, 7, &Board);
 

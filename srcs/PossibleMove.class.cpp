@@ -38,7 +38,7 @@ void PossibleMove::Compute()
 			tmp = new GameManager(Board);
 			PlayStone(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x, tmp);
  			Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
-//			std::cout << "Moved " << i << " = " << PlayedMove.y << " " << PlayedMove.x << std::endl;
+			std::cout << "Moved " << i << " = " << PlayedMove.y << " " << PlayedMove.x << std::endl;
 			tmp->setLastMove(PlayedMove);
 			Board->getChilds().push_back(tmp);
 		}

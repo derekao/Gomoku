@@ -43,6 +43,9 @@ private:
 	std::vector<GameManager *> Childs;
 	Coord LastMove;
 
+	int LowerBound;
+	int UpperBound;
+
 	bool BlackWin;
 	bool WhiteWin;
 	bool HasWon;
@@ -67,7 +70,7 @@ public:
 	GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _WhiteScore, int _BlackScore, int WinY, int WinX);
 
 	GameManager(GameManager * src) :
-		HeuristicValue(src->HeuristicValue), Parent(src), LastMove(0,0), BlackWin(src->BlackWin), WhiteWin(src->WhiteWin), HasWon(src->HasWon), bPlayerOneTurn(src->bPlayerOneTurn),
+		HeuristicValue(src->HeuristicValue), Parent(src), LastMove(0,0), LowerBound(MIN_INFINIT), UpperBound(MAX_INFINIT) ,BlackWin(src->BlackWin), WhiteWin(src->WhiteWin), HasWon(src->HasWon), bPlayerOneTurn(src->bPlayerOneTurn),
 		WhiteScore(src->WhiteScore), BlackScore( src->BlackScore), HighestPriority(src->HighestPriority), Board(src->Board),
 		BlackStones(src->BlackStones), WhiteStones(src->WhiteStones), WinPos(src->WinPos.y, src->WinPos.x)
 	{
@@ -79,6 +82,9 @@ public:
 	GameManager * getParent() { return Parent; };
 	std::vector<GameManager *> & getChilds() { return Childs; };
 	Coord & getLastMove() { return LastMove; };
+
+	int getLowerBound() { return LowerBound; } ;
+	int getUpperBound() { return UpperBound; } ;
 
 	bool getBlackWin() { return BlackWin; };
 	bool getWhiteWin() { return WhiteWin; };
@@ -102,6 +108,9 @@ public:
 	void setHeuristicValue(int n) { HeuristicValue = n; };
 	void setParent(GameManager * Board) { Parent = Board; };
 	void setLastMove(Coord & move) { LastMove.y = move.y; LastMove.x = move.x; ;}
+
+	void setLowerBound(int n) { LowerBound = n; }; 
+	void setUpperBound(int n) { UpperBound = n; };
 
 	void setBlackWin(bool b) { BlackWin = b; };
 	void setWhiteWin(bool b) { WhiteWin = b; };

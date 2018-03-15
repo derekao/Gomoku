@@ -24,11 +24,12 @@
 
 MinMax::~MinMax()
 {
+	std::cout << "Destructor start timer  = " << (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
 	for (size_t i = 0; i < Board->getChilds().size(); i++)
 	{
 		DeleteTree(Board->getChilds()[i]);
 	}
-	std::cout << " timer  = " << (clock() - startTime) / CLOCKS_PER_SEC << std::endl;
+	std::cout << "Destructor end timer  = " << (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
 }
 
 void MinMax::DeleteTree(GameManager * Node)
@@ -59,14 +60,15 @@ MinMax::MinMax(GameManager * src) : Board(src), Solution(Coord(-1,-1))
 
 void MinMax::IterativeDeepning()
 {
+	double timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
 	int FirstGuess = 0;
-	for (int Depth = 1; Depth < MAX_DEPTH; Depth++)
+	for (int Depth = 1; Depth < MAX_DEPTH && timer < TIMER_MAX; Depth++)
 	{
-		std::cout << (clock() - startTime) / CLOCKS_PER_SEC  << std::endl;
+
 		FirstGuess = MTDF(FirstGuess, Depth);
-		if ((clock() - startTime) / CLOCKS_PER_SEC >= TIMER_MAX)
-			break;
-		std::cout << FirstGuess << " et " << Depth << " timer  = " << (clock() - startTime) / CLOCKS_PER_SEC << std::endl;
+		TranspositionTable::TranspoTable.clear();
+		timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
+		std::cout << "_____________________________________________________________LAST LOOP " << Depth << " timer  = " << timer << std::endl;
 	}
 
 	int BestValue = MIN_INFINIT;
@@ -115,11 +117,16 @@ int MinMax::MTDF(int FirstGuess, int Depth)
 int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, bool MaximizingPlayer)
 {
 	int Value;
-	// if retrieve(n) == OK then /* Transposition table lookup */
-	// if n.lowerbound >= beta then return n.lowerbound;
-	// if n.upperbound <= alpha then return n.upperbound;
-	// alpha := max(alpha, n.lowerbound);
-	// beta := min(beta, n.upperbound);
+	GameManager *RetrieveNode;
+	if ((RetrieveNode = TranspositionTable::Retrieve(Node)))
+	{
+		if (RetrieveNode->getLowerBound() >= Beta)
+			return RetrieveNode->getLowerBound();
+		if (RetrieveNode->getUpperBound() <= Alpha)
+			return RetrieveNode->getUpperBound();
+		Alpha = std::max(Alpha, RetrieveNode->getLowerBound());
+		Beta = std::min(Beta, RetrieveNode->getUpperBound());
+	}
 	if (Depth == 0)
 	{
 		Heuristic init = Heuristic(Player1, Player2, Node);
@@ -132,14 +139,16 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 		int SavedAlpha = Alpha;
 		if (Node->getChilds().empty())
 		{
+			std::cout << "Move From --------------" << std::endl;
 			PossibleMove possibleMove = PossibleMove(Node);
 			if (Node->getChilds().empty())
 				PossibleMove::FindOneMove(Node);
+			std::cout << "Hey1 " << Node->getChilds().size()  << " et Last Move = " << Node->getLastMove().y <<  " " << Node->getLastMove().x<< std::endl;
 		}
 		for (size_t i = 0; Value < Beta && i < Node->getChilds().size(); i++)
 		{
 			Value = std::max(Value, MemoryAlphaBeta(Node->getChilds()[i], SavedAlpha, Beta, Depth - 1, false));
-			SavedAlpha = std::max(Alpha, Value);
+			SavedAlpha = std::max(SavedAlpha, Value);
 		}
 	}
 	else
@@ -151,32 +160,36 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 			PossibleMove possibleMove = PossibleMove(Node);
 			if (Node->getChilds().empty())
 				PossibleMove::FindOneMove(Node);
+			std::cout << "Hey2 " << Node->getChilds().size()  << " et Last Move = " << Node->getLastMove().y <<  " " << Node->getLastMove().x<< std::endl;
+
 		}
 		for (size_t i = 0; Value > Alpha && i < Node->getChilds().size(); i++)
 		{
 			Value = std::min(Value, MemoryAlphaBeta(Node->getChilds()[i], Alpha, SavedBeta, Depth - 1, true));
-			SavedBeta = std::min(Beta, Value);
+			SavedBeta = std::min(SavedBeta, Value);
 		}
 	}
-	// //Fail low result implies an upper bound 
-	// if (Value <= Alpha)
-	// {
-	// 	Node->setUpperBoud(Value);
-	// 	//STORE Node->UpperBoud;
-	// }
-	// // Found an accurate minimax value - will not occur if called with zero window 
-	// if (Value > Alpha && Value < Beta)
-	// {
-	// 	Node->setLowerBound(Value);
-	// 	Node->setUpperBound(Value);
-	// 	//STORE UpperBound AND LowerBound
-	// }
-	// //Fail high result implies a lower bound
-	// if (Value >= Beta)
-	// {
-	// 	Node->setLowerBound(Value);
-	// 	//SOTRE Node->LowerBound
-	// 	}
+	//Fail low result implies an upper bound 
+	if (Value <= Alpha)
+	{
+		Node->setUpperBound(Value);
+		TranspositionTable::Store(Node);
+	}
+	// Found an accurate minimax value - will not occur if called with zero window 
+	if (Value > Alpha && Value < Beta)
+	{
+		Node->setLowerBound(Value);
+		Node->setUpperBound(Value);
+		TranspositionTable::Store(Node);
+		//STORE UpperBound AND LowerBound
+	}
+	//Fail high result implies a lower bound
+	if (Value >= Beta)
+	{
+		Node->setLowerBound(Value);
+		TranspositionTable::Store(Node);
+		//SOTRE Node->LowerBound
+		}
 	Node->setHeuristicValue(Value);
 	return Value;
 }
