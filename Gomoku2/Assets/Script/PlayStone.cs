@@ -7,40 +7,17 @@ using System.Runtime.InteropServices; // Dll
 
 public class PlayStone : MonoBehaviour {
 
-	[StructLayout(LayoutKind.Sequential)]
-	public struct GameStatus
-	{
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 361)]
-		public int[] Board;
-		[MarshalAs(UnmanagedType.U1)]
-		public bool bPlayerOneTurn;
-		[MarshalAs(UnmanagedType.U1)]
-		public bool HasWon;
-		public int WhiteScore;
-		public int BlackScore;
-		public int WinY;
-		public int WinX;
-	}
-	[StructLayout(LayoutKind.Sequential)]
-	public struct CoordIA
-	{
-		public int y;
-		public int x;
-	};
-
-	[DllImport("Extern.dll")]
-	public static extern CoordIA IAPlay(GameStatus Game);
-
 	public enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 	private GameObject BlackStone;
 	private GameObject WhiteStone;
 	private GameObject Forbidden;
 	private GameObject DoubleTree;
+	private GameObject LastMove;
 	private Image BlackStoneImage;
 	private Image WhiteStoneImage;
 	private Image ForbiddenImage;
 	private Image DoubleTreeImage;
-
+	private Image LastMoveImage;
 	private int x;
 	private int y;
 
@@ -70,6 +47,11 @@ public class PlayStone : MonoBehaviour {
 				DoubleTree = result.gameObject;
 				DoubleTreeImage = DoubleTree.GetComponent<Image>();
 			}
+			else if (result.name == "LastMove")
+			{
+				LastMove = result.gameObject;
+				LastMoveImage = LastMove.GetComponent<Image>();
+			}
 		}
 		if (!BlackStoneImage || !WhiteStoneImage || !ForbiddenImage || !DoubleTreeImage)
 		{
@@ -81,6 +63,20 @@ public class PlayStone : MonoBehaviour {
 		y = iIndex / GameManager.Instance.iHeightBoard;
 		x = iIndex % GameManager.Instance.iWidthBoard;
 
+	}
+
+	void Update () {
+
+		if (BlackStoneImage.enabled && LastMoveImage.enabled)
+		{
+			if (GameManager.Instance.currentState.bPlayerOneTurn == true)
+				LastMoveImage.enabled = false;
+		}
+		if (WhiteStoneImage.enabled && LastMoveImage.enabled)
+		{
+			if (GameManager.Instance.currentState.bPlayerOneTurn == false)
+				LastMoveImage.enabled = false;
+		}
 	}
 
 	/// <summary>
@@ -97,12 +93,14 @@ public class PlayStone : MonoBehaviour {
 
 	}
 
-	private void OnBlackPlay() {
+
+	public void OnBlackPlay() {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled && !DoubleTreeImage.enabled) 
 		{
 			bool SomethingEaten = checkStoneEaten();
 			BlackStoneImage.enabled = true;
+			LastMoveImage.enabled = true;
 			GameManager.Instance.currentState.bPlayerOneTurn = false;
 			GameManager.Instance.currentState.Board[y, x] = GameManager.Stone.Black;
 			GameManager.Instance.currentState.iTurn += 1;
@@ -132,12 +130,13 @@ public class PlayStone : MonoBehaviour {
 
 	}
 
-	private void OnWhitePlay() {
+	public void OnWhitePlay() {
 
 		if (!WhiteStoneImage.enabled && !BlackStoneImage.enabled && !ForbiddenImage.enabled && !DoubleTreeImage.enabled)
 		{
 			bool SomethingEaten = checkStoneEaten();
 			WhiteStoneImage.enabled = true;
+			LastMoveImage.enabled = true;
 			GameManager.Instance.currentState.bPlayerOneTurn = true;
 			GameManager.Instance.currentState.iTurn += 1;
 			GameManager.Instance.currentState.Board[y, x] = GameManager.Stone.White;
@@ -162,29 +161,8 @@ public class PlayStone : MonoBehaviour {
 			}
 			checkBoardState(y, x, SomethingEaten);
 			Rules.DisplayBoard();
-			GameStatus game;
-			game.Board = new int[GameManager.Instance.iHeightBoard * GameManager.Instance.iWidthBoard];
-			game.bPlayerOneTurn = GameManager.Instance.currentState.bPlayerOneTurn;
-			game.HasWon = GameManager.Instance.currentState.hasWon;
-			game.WhiteScore = GameManager.Instance.currentState.WhiteScore;
-			game.BlackScore = GameManager.Instance.currentState.BlackScore;
-			game.WinY = GameManager.Instance.currentState.winY;
-			game.WinX = GameManager.Instance.currentState.winX;
-			for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
-			{
-				for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)
-				{
-					game.Board[i * GameManager.Instance.iWidthBoard + j] = GameManager.Instance.currentState.Board[i,j];
-				}
-			}
-			CoordIA test = IAPlay(game);
-			Debug.Log("y = " + test.y + " et x = " +  test.x);
-			int id = test.x + test.y * GameManager.Instance.iWidthBoard + 1;
-			GameObject box = GameObject.Find("Stone (" + id + ")");
-			PlayStone Move = box.GetComponent<PlayStone>();
-			Move.OnBlackPlay();
+			GameManager.Instance.IATurn = true;
 		}
-
 	}
 
 	private void checkBoardState(int Height, int Width, bool SomethingEaten) {

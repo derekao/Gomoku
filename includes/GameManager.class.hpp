@@ -40,8 +40,8 @@ private:
 
 	int HeuristicValue;
 	GameManager * Parent;
+	std::vector<GameManager *> Childs;
 	Coord LastMove;
-
 
 	bool BlackWin;
 	bool WhiteWin;
@@ -53,7 +53,7 @@ private:
 
 	int HighestPriority;
 
-	std::vector<int> Board;
+	std::vector<char> Board;
 	std::vector<Coord> BlackStones;
 	std::vector<Coord> WhiteStones;
 	std::vector<PotentialMove> lPotentialMove;
@@ -66,10 +66,10 @@ public:
 	//Constructor
 	GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _WhiteScore, int _BlackScore, int WinY, int WinX);
 
-	GameManager(GameManager const & src) :
-		HeuristicValue(src.HeuristicValue), Parent(src.Parent), LastMove(0,0), BlackWin(src.BlackWin), WhiteWin(src.WhiteWin), HasWon(src.HasWon), bPlayerOneTurn(src.bPlayerOneTurn),
-		WhiteScore(src.WhiteScore), BlackScore( src.BlackScore), HighestPriority(src.HighestPriority), Board(src.Board),
-		BlackStones(src.BlackStones), WhiteStones(src.WhiteStones), WinPos(src.WinPos.y, src.WinPos.x)
+	GameManager(GameManager * src) :
+		HeuristicValue(src->HeuristicValue), Parent(src), LastMove(0,0), BlackWin(src->BlackWin), WhiteWin(src->WhiteWin), HasWon(src->HasWon), bPlayerOneTurn(src->bPlayerOneTurn),
+		WhiteScore(src->WhiteScore), BlackScore( src->BlackScore), HighestPriority(src->HighestPriority), Board(src->Board),
+		BlackStones(src->BlackStones), WhiteStones(src->WhiteStones), WinPos(src->WinPos.y, src->WinPos.x)
 	{
 		return ;
 	}
@@ -77,6 +77,7 @@ public:
 	// Accessor
 	int getHeuristicValue() { return HeuristicValue; };
 	GameManager * getParent() { return Parent; };
+	std::vector<GameManager *> & getChilds() { return Childs; };
 	Coord & getLastMove() { return LastMove; };
 
 	bool getBlackWin() { return BlackWin; };
@@ -88,7 +89,7 @@ public:
 	int getBlackScore() { return BlackScore; };
 	int getHighestPriority() { return HighestPriority; };
 
-	std::vector<int> & getBoard() { return Board; };
+	std::vector<char> & getBoard() { return Board; };
 	std::vector<Coord> & getBlackStones() { return BlackStones; };
 	std::vector<Coord> & getWhiteStones() { return WhiteStones; };
 	std::vector<PotentialMove> & getPotentialMove() { return lPotentialMove; };

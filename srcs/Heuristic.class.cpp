@@ -450,7 +450,11 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 		if (!bBlockEnd && !bBorderEnd && !Unbound)
 			addMove(y + yVar * size, x + xVar * size, score);
 		if (Unbound)
+		{
+			addMove((y - yVar), (x - xVar), score);
 			addMove(y + yVar * Unbound, x + xVar * Unbound, score);
+			addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
+		}
 	}
 	if (size == 3 && potentialSize > 4) {
 		if (!bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
@@ -459,8 +463,11 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 				addMove((y - yVar), (x - xVar), score);
 				addMove(y + yVar * size, x + xVar * size, score);
 			}
-			if (Unbound)
+			if (Unbound) {
 				addMove(y + yVar * Unbound, x + xVar * Unbound, score);
+				addMove((y - yVar), (x - xVar), score);
+				addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
+			}
 		}
 		else {
 			score = score = who ? STRONG_MOVE : BAD_MOVE;

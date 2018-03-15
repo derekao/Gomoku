@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour {
 	public int iWidthBoard = 19;
 	public int iHeightBoard = 19;
 	public int PlayAreaSize = 2;
+	public bool IATurn = false;
 	
 	// State of the Board
 	public List<BoardHistoric> lBoardHisto;
@@ -120,6 +121,11 @@ public class GameManager : MonoBehaviour {
 			PopUpWinPanel.SetActive(true);
 			Text WinText = GameObject.Find("WinText").GetComponent<Text>();
 			WinText.text = "White has won";
+		}
+		if (IATurn == true)
+		{	
+			IATurn = false;
+			IA.ComputerPlay();
 		}
 	}
 

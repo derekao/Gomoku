@@ -35,11 +35,12 @@ void PossibleMove::Compute()
 	for (size_t i = 0; i < Board->getPotentialMove().size(); i++)
 	{
 		if (Board->getPotentialMove()[i].priority <= Board->getHighestPriority()) {
-			tmp = new GameManager(*Board);
+			tmp = new GameManager(Board);
 			PlayStone(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x, tmp);
  			Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
+//			std::cout << "Moved " << i << " = " << PlayedMove.y << " " << PlayedMove.x << std::endl;
 			tmp->setLastMove(PlayedMove);
-			tabMove.push_back(tmp);
+			Board->getChilds().push_back(tmp);
 		}
 	}
 }
@@ -244,22 +245,22 @@ bool PossibleMove::DeadStone(int y1, int x1, int y2, int x2, int * iScore, int P
 	return true;
 }
 
-void PossibleMove::FindOneMove(GameManager * Node, std::vector<GameManager *> & Childs)
+void PossibleMove::FindOneMove(GameManager * Node)
 {
 	int i = 9;
 	int j = 9;
 	int cmpt = 0;
 	int size = 3;
 
-	while (Childs.empty())
+	while (Node->getChilds().empty())
 	{
 		if (Node->getBoard()[j * BOARD_WIDTH + i] == 0)
 		{
-			GameManager * tmp = new GameManager(*Node);
+			GameManager * tmp = new GameManager(Node);
 			PlayStone(j, i, tmp);
  			Coord PlayedMove = Coord(j, i);
 			tmp->setLastMove(PlayedMove);
-			Childs.push_back(tmp);
+			Node->getChilds().push_back(tmp);
 		}
 		else
 		{

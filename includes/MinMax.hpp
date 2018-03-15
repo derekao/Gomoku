@@ -15,30 +15,43 @@
 #include <iostream>
 #include <algorithm> 
 #include <vector>
+#include <ctime>
 
 #include "Coord.hpp"
 #include "GameManager.class.hpp"
 #include "Rules.class.hpp"
 #include "PossibleMove.class.hpp"
 
+#define TIMER_MAX 0.0001f
+#define MAX_DEPTH 60
+
 class MinMax 
 {
 
 private:
+	std::list<GameManager *> MovePlayer;
+	std::list<GameManager *> MoveOpponent;
 	GameManager * Board;
 	Coord Solution;
+
+	clock_t startTime;
 
 	int Player1;
 	int Player2;
 
 	void Compute();
-	int AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer);
+	void IterativeDeepning();
+	int MTDF(int FirstGuess, int Depth);
+	int MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, bool MaximizingPlayer);
+	void DeleteTree(GameManager * Node);
+
+//	int AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer);
 
 	MinMax();
 
 public:
 	MinMax(GameManager * src);
-	~MinMax() {};
+	~MinMax();
 
 	Coord & getSolution() { return Solution ;};
 

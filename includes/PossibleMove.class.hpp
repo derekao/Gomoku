@@ -25,7 +25,6 @@ private:
 	PossibleMove(); //Forbiden Constructor
 
 	GameManager * Board;
-	std::vector<GameManager *> tabMove;
 
 	int HighestHeuristicValue;
 	int LowestHeuristicValue;
@@ -41,10 +40,9 @@ public:
 	static bool CheckStoneEaten(int y, int x, GameManager * Board);
 	static void CheckBoardState(int Height, int Width, bool SomethingEaten, GameManager * Board);
 	static bool DeadStone(int y1, int x1, int y2, int x2, int * iScire, int Player, GameManager * Board);
-	static void FindOneMove(GameManager * Node, std::vector<GameManager *> & Childs);
+	static void FindOneMove(GameManager * Node);
 
 	enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
 
-	std::vector<GameManager *> & getPossibleMove() { return tabMove; };
 
 };
