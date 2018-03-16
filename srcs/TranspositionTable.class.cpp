@@ -24,7 +24,7 @@ std::string TranspositionTable::HashBoard(std::vector<char> & board) {
 		cnt = 0;
 		boardValue = board[i];
 		j = i;
-		for (;board[j] == boardValue && j < board.size(); j++) {
+		for (;j < board.size() && board[j] == boardValue ; j++) {
 			cnt++;
 		}
 		hash = hash + std::to_string(cnt) + std::to_string(boardValue);
@@ -37,7 +37,7 @@ void TranspositionTable::Store(GameManager *Node) {
 	std::string hash = HashBoard(Node->getBoard());
 	if (!TranspoTable[hash])
 		TranspoTable[hash] = Node;
-	std::cout << TranspoTable.size() << std::endl;
+	// std::cout << TranspoTable.size() << std::endl;
 }
 
 GameManager * TranspositionTable::Retrieve(GameManager *Node) {

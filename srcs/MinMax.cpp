@@ -24,12 +24,12 @@
 
 MinMax::~MinMax()
 {
-	std::cout << "Destructor start timer  = " << (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
+	// std::cout << "Destructor start timer  = " << (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
 	for (size_t i = 0; i < Board->getChilds().size(); i++)
 	{
 		DeleteTree(Board->getChilds()[i]);
 	}
-	std::cout << "Destructor end timer  = " << (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
+	// std::cout << "Destructor end timer  = " << (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
 }
 
 void MinMax::DeleteTree(GameManager * Node)
@@ -62,16 +62,17 @@ void MinMax::IterativeDeepning()
 {
 	double timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
 	int FirstGuess = 0;
-	for (int Depth = 1; Depth < MAX_DEPTH && timer < TIMER_MAX; Depth++)
+	for (int d = 1; d < MAX_DEPTH && timer < TIMER_MAX; d++)
 	{
 
-		FirstGuess = MTDF(FirstGuess, Depth);
-		TranspositionTable::TranspoTable.clear();
+		FirstGuess = MTDF(FirstGuess, d);
 		timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
-		std::cout << "_____________________________________________________________LAST LOOP " << Depth << " timer  = " << timer << std::endl;
+		std::cout << "_____________________________________________________________LAST LOOP " << d << " timer  = " << timer << " and Size = " << TranspositionTable::TranspoTable.size() << std::endl;
+		TranspositionTable::TranspoTable.clear();
+		Depth = d;
 	}
 
-	int BestValue = MIN_INFINIT;
+	int BestValue = MIN_INFINIT - 1;
 	GameManager *BestMove = NULL;;
 	for (size_t i = 0; i < Board->getChilds().size(); i++)
 	{
@@ -81,6 +82,7 @@ void MinMax::IterativeDeepning()
 			BestMove = Board->getChilds()[i];
 		}
 	}
+	Time = timer;
 	Solution = BestMove->getLastMove();
 }
 
@@ -127,7 +129,7 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 		Alpha = std::max(Alpha, RetrieveNode->getLowerBound());
 		Beta = std::min(Beta, RetrieveNode->getUpperBound());
 	}
-	if (Depth == 0)
+	if (Depth == 0 || Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
 	{
 		Heuristic init = Heuristic(Player1, Player2, Node);
  		Node->setHeuristicValue(init.BoardValue());
@@ -139,11 +141,11 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 		int SavedAlpha = Alpha;
 		if (Node->getChilds().empty())
 		{
-			std::cout << "Move From --------------" << std::endl;
+			// std::cout << "Move From --------------" << std::endl;
 			PossibleMove possibleMove = PossibleMove(Node);
 			if (Node->getChilds().empty())
 				PossibleMove::FindOneMove(Node);
-			std::cout << "Hey1 " << Node->getChilds().size()  << " et Last Move = " << Node->getLastMove().y <<  " " << Node->getLastMove().x<< std::endl;
+			// std::cout << "Hey1 " << Node->getChilds().size()  << " et Last Move = " << Node->getLastMove().y <<  " " << Node->getLastMove().x<< std::endl;
 		}
 		for (size_t i = 0; Value < Beta && i < Node->getChilds().size(); i++)
 		{
@@ -160,7 +162,7 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 			PossibleMove possibleMove = PossibleMove(Node);
 			if (Node->getChilds().empty())
 				PossibleMove::FindOneMove(Node);
-			std::cout << "Hey2 " << Node->getChilds().size()  << " et Last Move = " << Node->getLastMove().y <<  " " << Node->getLastMove().x<< std::endl;
+			// std::cout << "Hey2 " << Node->getChilds().size()  << " et Last Move = " << Node->getLastMove().y <<  " " << Node->getLastMove().x<< std::endl;
 
 		}
 		for (size_t i = 0; Value > Alpha && i < Node->getChilds().size(); i++)

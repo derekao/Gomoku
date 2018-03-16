@@ -24,6 +24,8 @@ public class IA : MonoBehaviour {
 	{
 		public int y;
 		public int x;
+		public int Depth;
+		public double Timer;
 	};
 
 	[DllImport("Extern.dll")]
@@ -47,7 +49,7 @@ public class IA : MonoBehaviour {
 			}
 		}
 		CoordIA test = IAPlay(game);
-		Debug.Log("y = " + test.y + " et x = " +  test.x);
+		Debug.Log("y = " + test.y + " et x = " +  test.x + " et Depth = " + test.Depth + " et Time = " + test.Timer);
 		int id = test.x + test.y * GameManager.Instance.iWidthBoard + 1;
 		GameObject box = GameObject.Find("Stone (" + id + ")");
 		PlayStone Move = box.GetComponent<PlayStone>();

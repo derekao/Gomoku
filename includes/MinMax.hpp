@@ -23,7 +23,7 @@
 #include "PossibleMove.class.hpp"
 #include "TranspositionTable.class.hpp"
 
-#define TIMER_MAX 0.05f
+#define TIMER_MAX 0.5f
 #define MAX_DEPTH 60
 
 class MinMax 
@@ -36,6 +36,8 @@ private:
 	Coord Solution;
 
 	clock_t startTime;
+	double Time;
+	int Depth;
 
 	int Player1;
 	int Player2;
@@ -54,6 +56,8 @@ public:
 	MinMax(GameManager * src);
 	~MinMax();
 
+	int getDepth() { return Depth; };
 	Coord & getSolution() { return Solution ;};
+	double getTime() { return Time; };
 
 };

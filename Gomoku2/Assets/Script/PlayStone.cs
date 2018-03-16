@@ -166,66 +166,72 @@ public class PlayStone : MonoBehaviour {
 	}
 
 	private void checkBoardState(int Height, int Width, bool SomethingEaten) {
-		int Player1;
-		int Player2;
-		bool dTree = false;
-		Height = (Height <= 5) ? 0 : Height - 5;
-		Width = (Width <= 5) ? 0 : Width - 5; 
-		int MaxHeight = (Height + 10 >= GameManager.Instance.iHeightBoard - 1) ? GameManager.Instance.iHeightBoard - 1 : Height + 10;
-		int MaxWidth = (Width + 10 >= GameManager.Instance.iWidthBoard - 1) ? GameManager.Instance.iWidthBoard - 1 : Width + 10;
+        int Player1;
+        int Player2;
+        bool dTree = false;
+        Height = (Height <= 5) ? 0 : Height - 5;
+        Width = (Width <= 5) ? 0 : Width - 5; 
+        int MaxHeight = (Height + 10 >= GameManager.Instance.iHeightBoard - 1) ? GameManager.Instance.iHeightBoard - 1 : Height + 10;
+        int MaxWidth = (Width + 10 >= GameManager.Instance.iWidthBoard - 1) ? GameManager.Instance.iWidthBoard - 1 : Width + 10;
 
-		if (GameManager.Instance.currentState.bPlayerOneTurn) {
-			Player1 = GameManager.Stone.Black;
-			Player2 = GameManager.Stone.White;
-		}
-		else {
-			Player1 = GameManager.Stone.White;
-			Player2 = GameManager.Stone.Black;
-		}
+        if (GameManager.Instance.currentState.bPlayerOneTurn) {
+            Player1 = GameManager.Stone.Black;
+            Player2 = GameManager.Stone.White;
+        }
+        else {
+            Player1 = GameManager.Stone.White;
+            Player2 = GameManager.Stone.Black;
+        }
 
-		for (int i = Height; i <= MaxHeight; i++) {
-			for (int j = Width; j <= MaxWidth; j++) {
+        for (int i = Height; i <= MaxHeight; i++) {
+            for (int j = Width; j <= MaxWidth; j++) {
 
-				if (Rules.EmptyCase(GameManager.Instance.currentState.Board[i, j])) {
-					if (GameManager.Instance.currentState.Board[i, j] != 0) {
-						Rules.changeBoxState(j , i, Type.Empty);
-					}
-//					checkForbiddenBox(i, j);
-					int win = Rules.CheckWin(Player2, i, j);
-					if (SomethingEaten)
-					{
-						dTree = Rules.checkDoubleTreeBox(i, j, Player1);
-						if ((dTree && Rules.somethingToEatWithEmpty(Player2, Player1, i, j)) && win == 0 ) 
-						{
-							dTree = false;
-							if ((Player2 & GameManager.Stone.Black) == 0)
-								GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
-							else
-								GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;	
-						}
-					}
-					dTree = Rules.checkDoubleTreeBox(i, j, Player2);
-					if ((dTree && Rules.somethingToEatWithEmpty(Player1, Player2, i, j)) && win == 0 ) 
-					{
-						dTree = false;
-						if ((Player1 & GameManager.Stone.Black) == 0)
-							GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
-						else
-							GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;
-						Rules.changeBoxState(j , i, Type.Empty);
-						
-					}
-					else if (win != 0)
-					{
-						GameManager.Instance.currentState.Board[i, j] = GameManager.Stone.Empty;
-						Rules.changeBoxState(j , i, Type.Empty);
-					}
-
-				}
-			}
-		}
-		
-	}
+                if (Rules.EmptyCase(GameManager.Instance.currentState.Board[i, j])) {
+                    if (GameManager.Instance.currentState.Board[i, j] != 0) {
+                        Rules.changeBoxState(j , i, Type.Empty);
+                    }
+//                    checkForbiddenBox(i, j);
+                    int win = Rules.CheckWin(Player2, i, j);
+                    if (SomethingEaten)
+                    {
+                        dTree = Rules.checkDoubleTreeBox(i, j, Player1);
+                        if ((dTree && Rules.somethingToEatWithEmpty(Player2, Player1, i, j)) && win == 0 ) 
+                        {
+                            dTree = false;
+                            if ((Player2 & GameManager.Stone.Black) == 0)
+                                GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
+                            else
+                                GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;    
+                        }
+                    }
+                    dTree = Rules.checkDoubleTreeBox(i, j, Player2);
+                    if ((dTree && Rules.somethingToEatWithEmpty(Player2, Player1, i, j)) && win == 0 ) 
+                    {
+                        if ((Player2 & GameManager.Stone.Black) == 0)
+                            GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;
+                        else
+                            GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
+                    }
+                    if ((dTree && Rules.somethingToEatWithEmpty(Player1, Player2, i, j)) && win == 0 ) 
+                    {
+                        dTree = false;
+                        if ((Player1 & GameManager.Stone.Black) == 0)
+                            GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
+                        else
+                            GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;
+                        Rules.changeBoxState(j , i, Type.Empty);
+                        
+                    }
+                    else if (win != 0)
+                    {
+                        GameManager.Instance.currentState.Board[i, j] = GameManager.Stone.Empty;
+                        Rules.changeBoxState(j , i, Type.Empty);
+                    }
+                }
+            }
+        }
+        
+    }
 
 	private bool checkStoneEaten() {
 		
