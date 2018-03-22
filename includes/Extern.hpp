@@ -36,6 +36,7 @@ extern "C"
 		int x;
 		int Depth;
 		double Time;
+		int Value;
 	};
 
 	//bool CheckDoubleTree(int y, int x, GameStatus Game);

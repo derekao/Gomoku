@@ -16,7 +16,7 @@
 // {
 // 	for (int i = 0; i < 361; i ++)
 // 	{
-// 		std::cout << Board->getBoard()[i] << " ";
+// 		std::cout << (int)Board->getBoard()[i] << " ";
 // 		if (i % 19 == 18)
 // 			std::cout << std::endl;
 // 	}
@@ -24,12 +24,12 @@
 
 MinMax::~MinMax()
 {
-	// std::cout << "Destructor start timer  = " << (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
+	// std::cout << "Destructor start timer  = " << (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC) << std::endl;
 	for (size_t i = 0; i < Board->getChilds().size(); i++)
 	{
 		DeleteTree(Board->getChilds()[i]);
 	}
-	// std::cout << "Destructor end timer  = " << (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC) << std::endl;
+	// std::cout << "Destructor end timer  = " << (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC) << std::endl;
 }
 
 void MinMax::DeleteTree(GameManager * Node)
@@ -44,6 +44,7 @@ void MinMax::DeleteTree(GameManager * Node)
 MinMax::MinMax(GameManager * src) : Board(src), Solution(Coord(-1,-1))
 {
 	startTime = clock(); 
+	TimeOut = false;
 
 	if (Board->getbPlayerOneTurn())
 	{
@@ -60,30 +61,42 @@ MinMax::MinMax(GameManager * src) : Board(src), Solution(Coord(-1,-1))
 
 void MinMax::IterativeDeepning()
 {
-	double timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
+	if (Board->getBlackWin() || Board->getWhiteWin() || Board->getBlackScore() >= 10 || Board->getWhiteScore() >= 10)
+	{
+		return;
+	}
 	int FirstGuess = 0;
-	for (int d = 1; d < MAX_DEPTH && timer < TIMER_MAX; d++)
+	for (int d = 1; d < MAX_DEPTH; d++)
 	{
-
 		FirstGuess = MTDF(FirstGuess, d);
-		timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
-		std::cout << "_____________________________________________________________LAST LOOP " << d << " timer  = " << timer << " and Size = " << TranspositionTable::TranspoTable.size() << std::endl;
+		if (TimeOut)
+			break;
+		// for (std::map<std::string, BoardMemory *>::iterator it = TranspositionTable::TranspoTable.begin(); it != TranspositionTable::TranspoTable.end(); ++it)
+ 		//  	delete it->second;
 		TranspositionTable::TranspoTable.clear();
-		Depth = d;
-	}
-
-	int BestValue = MIN_INFINIT - 1;
-	GameManager *BestMove = NULL;;
-	for (size_t i = 0; i < Board->getChilds().size(); i++)
-	{
-		if (Board->getChilds()[i]->getHeuristicValue() > BestValue)
+		ReturnDepth = d;
+		int BestValue = MIN_INFINIT - 1;
+		GameManager *BestMove = NULL;;
+		for (size_t i = 0; i < Board->getChilds().size(); i++)
 		{
-			BestValue = Board->getChilds()[i]->getHeuristicValue();
-			BestMove = Board->getChilds()[i];
+			if (Board->getChilds()[i]->getHeuristicValue() > BestValue)
+			{
+				BestValue = Board->getChilds()[i]->getHeuristicValue();
+				BestMove = Board->getChilds()[i];
+			}
 		}
+		if (BestValue != FirstGuess)
+		{
+			std::cout << "FirstGuess = " <<  FirstGuess << " et BestValue =" << BestValue << std::endl;
+		}
+		Solution = BestMove->getLastMove();
+		ReturnValue = BestValue;
 	}
-	Time = timer;
-	Solution = BestMove->getLastMove();
+	// for (std::map<std::string, BoardMemory *>::iterator it = TranspositionTable::TranspoTable.begin(); it != TranspositionTable::TranspoTable.end(); ++it)
+ 	// 	delete it->second;
+	TranspositionTable::TranspoTable.clear();
+	std::cout << "_____________________________________________________________LAST LOOP " << ReturnDepth << " timer  = " << Time << " and Value = " << ReturnValue << std::endl;
+
 }
 
 int MinMax::MTDF(int FirstGuess, int Depth)
@@ -92,9 +105,11 @@ int MinMax::MTDF(int FirstGuess, int Depth)
 	int UpperBound = MAX_INFINIT;
 	int LowerBound = MIN_INFINIT;
 	int Beta;
+	int i = 0;
 
 	while (LowerBound < UpperBound)
 	{
+		i++;
 		if (Value == LowerBound)
 		{
 			Beta = Value + 1;
@@ -104,6 +119,8 @@ int MinMax::MTDF(int FirstGuess, int Depth)
 			Beta = Value;
 		}
 		Value = MemoryAlphaBeta(Board, Beta - 1, Beta, Depth, true);
+		if (TimeOut)
+			return 0;
 		if (Value < Beta)
 		{
 			UpperBound = Value;
@@ -118,16 +135,25 @@ int MinMax::MTDF(int FirstGuess, int Depth)
 
 int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, bool MaximizingPlayer)
 {
+	if (TimeOut)
+		return 0;
+	int timer = (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC);
+	if (timer > TIMER_MAX)
+	{
+		Time = timer;
+		TimeOut = true;
+		return 0;
+	}
 	int Value;
-	GameManager *RetrieveNode;
+	BoardMemory RetrieveNode;
 	if ((RetrieveNode = TranspositionTable::Retrieve(Node)))
 	{
-		if (RetrieveNode->getLowerBound() >= Beta)
-			return RetrieveNode->getLowerBound();
-		if (RetrieveNode->getUpperBound() <= Alpha)
-			return RetrieveNode->getUpperBound();
-		Alpha = std::max(Alpha, RetrieveNode->getLowerBound());
-		Beta = std::min(Beta, RetrieveNode->getUpperBound());
+		if (RetrieveNode.LowerBound >= Beta)
+			return RetrieveNode.LowerBound;
+		if (RetrieveNode.UpperBound <= Alpha)
+			return RetrieveNode.UpperBound;
+		Alpha = std::max(Alpha, RetrieveNode.LowerBound);
+		Beta = std::min(Beta, RetrieveNode.UpperBound);
 	}
 	if (Depth == 0 || Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
 	{
@@ -141,13 +167,11 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 		int SavedAlpha = Alpha;
 		if (Node->getChilds().empty())
 		{
-			// std::cout << "Move From --------------" << std::endl;
 			PossibleMove possibleMove = PossibleMove(Node);
 			if (Node->getChilds().empty())
 				PossibleMove::FindOneMove(Node);
-			// std::cout << "Hey1 " << Node->getChilds().size()  << " et Last Move = " << Node->getLastMove().y <<  " " << Node->getLastMove().x<< std::endl;
 		}
-		for (size_t i = 0; Value < Beta && i < Node->getChilds().size(); i++)
+		for (size_t i = 0; Value < Beta &&  i < Node->getChilds().size(); i++)
 		{
 			Value = std::max(Value, MemoryAlphaBeta(Node->getChilds()[i], SavedAlpha, Beta, Depth - 1, false));
 			SavedAlpha = std::max(SavedAlpha, Value);
@@ -162,36 +186,37 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 			PossibleMove possibleMove = PossibleMove(Node);
 			if (Node->getChilds().empty())
 				PossibleMove::FindOneMove(Node);
-			// std::cout << "Hey2 " << Node->getChilds().size()  << " et Last Move = " << Node->getLastMove().y <<  " " << Node->getLastMove().x<< std::endl;
-
 		}
 		for (size_t i = 0; Value > Alpha && i < Node->getChilds().size(); i++)
 		{
-			Value = std::min(Value, MemoryAlphaBeta(Node->getChilds()[i], Alpha, SavedBeta, Depth - 1, true));
+			int tmp = MemoryAlphaBeta(Node->getChilds()[i], Alpha, SavedBeta, Depth - 1, true);
+			Value = std::min(Value, tmp);
 			SavedBeta = std::min(SavedBeta, Value);
 		}
 	}
 	//Fail low result implies an upper bound 
+	BoardMemory tmp;
+	tmp.Board = Node;
 	if (Value <= Alpha)
 	{
-		Node->setUpperBound(Value);
-		TranspositionTable::Store(Node);
+		tmp.UpperBound = Value;
+		TranspositionTable::Store(tmp);
 	}
 	// Found an accurate minimax value - will not occur if called with zero window 
 	if (Value > Alpha && Value < Beta)
 	{
-		Node->setLowerBound(Value);
-		Node->setUpperBound(Value);
-		TranspositionTable::Store(Node);
+		tmp.LowerBound = Value;
+		tmp.UpperBound = Value;
+		TranspositionTable::Store(tmp);
 		//STORE UpperBound AND LowerBound
 	}
 	//Fail high result implies a lower bound
 	if (Value >= Beta)
 	{
-		Node->setLowerBound(Value);
-		TranspositionTable::Store(Node);
+		tmp.LowerBound = Value;
+		TranspositionTable::Store(tmp);
 		//SOTRE Node->LowerBound
-		}
+	}
 	Node->setHeuristicValue(Value);
 	return Value;
 }

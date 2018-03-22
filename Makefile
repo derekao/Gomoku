@@ -10,7 +10,7 @@ O_DIR = ./objs
 
 S_DIR = ./srcs
 
-CFLAGS = -g -Wall -Wextra -Werror -O3 -ferror-limit=2 -I includes
+CFLAGS = -std=c++11 -stdlib=libc++ -g -Wall -Wextra -Werror -O3 -ferror-limit=2 -I includes
 
 CC = g++
 

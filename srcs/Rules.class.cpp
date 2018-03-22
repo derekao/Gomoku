@@ -341,10 +341,10 @@ bool Rules::CheckDoubleTreeBox(int y, int x, int Player1, GameManager * Instance
 		NumTree++;
 	if (y >= 2 && y < BOARD_HEIGHT - 2 && EmptyCase(Instance->getBoard()[(y - 2) * BOARD_WIDTH + x]) && Instance->getBoard()[(y - 1) * BOARD_WIDTH + x] == Player1 && Instance->getBoard()[(y + 1) * BOARD_WIDTH + x] == Player1 && EmptyCase(Instance->getBoard()[(y + 2) * BOARD_WIDTH + x]))
 		NumTree++;
-	if (x >= 2 && x < BOARD_WIDTH - 2 && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x - 2]) && y >= 2 && y < BOARD_HEIGHT - 2
+	if (x >= 2 && x < BOARD_WIDTH - 2 && y >= 2 && y < BOARD_HEIGHT - 2
 		&& EmptyCase(Instance->getBoard()[(y - 2) * BOARD_WIDTH + x - 2]) && Instance->getBoard()[(y - 1) * BOARD_WIDTH + x - 1] == Player1 && Instance->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player1 && EmptyCase(Instance->getBoard()[(y + 2) * BOARD_WIDTH + x + 2]))
 		NumTree++;
-	if (x >= 2 && x < BOARD_WIDTH - 2 && EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x - 2]) && y >= 2 && y < BOARD_HEIGHT - 2
+	if (x >= 2 && x < BOARD_WIDTH - 2 && y >= 2 && y < BOARD_HEIGHT - 2
 		&& EmptyCase(Instance->getBoard()[(y + 2) * BOARD_WIDTH + x - 2]) && Instance->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] == Player1 && Instance->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] == Player1 && EmptyCase(Instance->getBoard()[(y - 2) * BOARD_WIDTH + x + 2]))
 		NumTree++;
 

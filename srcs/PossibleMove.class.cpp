@@ -32,17 +32,23 @@ void PossibleMove::Compute()
 {
 	GameManager * tmp;
 
+//	std::cout << "---------------------- y = " << Board->getLastMove().y << " et x = " << Board->getLastMove().x << std::endl;
 	for (size_t i = 0; i < Board->getPotentialMove().size(); i++)
 	{
 		if (Board->getPotentialMove()[i].priority <= Board->getHighestPriority()) {
 			tmp = new GameManager(Board);
 			PlayStone(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x, tmp);
  			Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
-			// std::cout << "Moved " << i << " = " << PlayedMove.y << " " << PlayedMove.x << std::endl;
+//			std::cout << "Moved " << i << " = " << PlayedMove.y << " " << PlayedMove.x << " et priority = " << Board->getPotentialMove()[i].priority << std::endl;
 			tmp->setLastMove(PlayedMove);
 			Board->getChilds().push_back(tmp);
 		}
+		else
+		{
+//			std::cout << "Moved Cancel " << i << " = " << Board->getPotentialMove()[i].y << " " << Board->getPotentialMove()[i].x << " et priority = " << Board->getPotentialMove()[i].priority  << std::endl;
+		}
 	}
+
 }
 
 // Return True if there is a stone 2 cells around the stone in parameter
@@ -174,6 +180,8 @@ void PossibleMove::CheckBoardState(int Height, int Width, bool SomethingEaten, G
     Width = (Width <= 5) ? 0 : Width - 5; 
     int MaxHeight = (Height + 10 >= BOARD_HEIGHT - 1) ? BOARD_HEIGHT - 1 : Height + 10;
     int MaxWidth = (Width + 10 >= BOARD_WIDTH - 1) ? BOARD_WIDTH - 1 : Width + 10;
+	if (SomethingEaten)
+		; //Might be remove at one point
 
     if (Board->getbPlayerOneTurn()) {
         Player1 = STONE_BLACK;
@@ -190,18 +198,15 @@ void PossibleMove::CheckBoardState(int Height, int Width, bool SomethingEaten, G
             if (Rules::EmptyCase(Board->getBoard()[i * BOARD_WIDTH + j])) {
 //                checkForbiddenBox(i, j);
                 int win = Rules::CheckWin(Player2, i, j, Board);
-                if (SomethingEaten)
+                dTree = Rules::CheckDoubleTreeBox(i, j, Player1, Board);
+                if ((dTree && Rules::somethingToEatWithEmpty(Player2, Player1, i, j, Board)) && win == 0 ) 
                 {
-                    dTree = Rules::CheckDoubleTreeBox(i, j, Player1, Board);
-                    if ((dTree && Rules::somethingToEatWithEmpty(Player2, Player1, i, j, Board)) && win == 0 ) 
-                    {
-                        dTree = false;
-                        if ((Player1 & STONE_BLACK) != 0)
-                            Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_BLACKDOUBLETREE;
-                        else
-                            Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_WHITEDOUBLETREE;
+                    dTree = false;
+                    if ((Player1 & STONE_BLACK) != 0)
+                        Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_BLACKDOUBLETREE;
+                    else
+                        Board->getBoard()[i * BOARD_WIDTH + j] -= STONE_WHITEDOUBLETREE;
 
-                    }
                 }
                 dTree = Rules::CheckDoubleTreeBox(i, j, Player2, Board);
                 if ((dTree && Rules::somethingToEatWithEmpty(Player2, Player1, i, j, Board)) && win == 0 ) 

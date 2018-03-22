@@ -73,39 +73,45 @@ extern "C"
 
 		Heuristic bestMoves = Heuristic(PlayerOne, PlayerTwo, &Board);
 		bestMoves.searchMoves();
-		// PossibleMove::PlayStone(9, 9, &Board);
-		// PossibleMove::PlayStone(8, 18, &Board);
+		
+		//  PossibleMove::PlayStone(9, 9, &Board);
+		//  PossibleMove::PlayStone(8, 8, &Board);
 
-		// PossibleMove::PlayStone(9, 7, &Board);
-		// PossibleMove::PlayStone(9, 8, &Board);
+		//  PossibleMove::PlayStone(9, 7, &Board);
+		//  PossibleMove::PlayStone(9, 8, &Board);
 
-		// PossibleMove::PlayStone(10, 8, &Board);
+		//  PossibleMove::PlayStone(10, 8, &Board);
+		//  PossibleMove::PlayStone(8, 10, &Board);
+
+		// PossibleMove::PlayStone(8, 6, &Board);
 		// PossibleMove::PlayStone(11, 9, &Board);
-
-		// PossibleMove::PlayStone(8, 10, &Board);
-		// PossibleMove::PlayStone(11, 7, &Board);
 		
 
+		// PossibleMove::PlayStone(11,7, &Board);
 		// PossibleMove::PlayStone(7, 8, &Board);
-		// PossibleMove::PlayStone(8, 6, &Board);
 
-		// PossibleMove::PlayStone(7, 11, &Board);
-		// PossibleMove::PlayStone(6, 12, &Board);
+		
 
-		// PossibleMove::PlayStone(11, 8, &Board);
-		// PossibleMove::PlayStone(4, 12, &Board);
+		// PossibleMove::PlayStone(2,2, &Board);
+		// PossibleMove::PlayStone(7, 8, &Board);
 
-		// PossibleMove::PlayStone(5, 12, &Board);
-		// PossibleMove::PlayStone(6, 4, &Board);
+		//PossibleMove::PlayStone(9, 9, &Board);
+		//  PossibleMove::PlayStone(8, 8, &Board);
 
-		// PossibleMove::PlayStone(5, 3, &Board);
-		// PossibleMove::PlayStone(8, 4, &Board);
+		//  PossibleMove::PlayStone(9, 8, &Board);
+		// PossibleMove::PlayStone(9, 10, &Board);
 
-		// PossibleMove::PlayStone(8, 5, &Board);
-		// PossibleMove::PlayStone(7, 4, &Board);
+		// PossibleMove::PlayStone(9, 7, &Board);
+		//  PossibleMove::PlayStone(11, 10, &Board);
 
-		// PossibleMove::PlayStone(9, 4, &Board);
-		// PossibleMove::PlayStone(7, 6, &Board);
+		// PossibleMove::PlayStone(9, 5, &Board);
+		// PossibleMove::PlayStone(9, 6, &Board);
+
+		//  PossibleMove::PlayStone(12, 10, &Board);
+		// PossibleMove::PlayStone(8, 9, &Board);
+
+		// PossibleMove::PlayStone(8, 7, &Board);
+		// PossibleMove::PlayStone(10, 11, &Board);
 
 
 		// PossibleMove::PlayStone(9, 6, &Board);
@@ -130,6 +136,23 @@ extern "C"
 		// PossibleMove::PlayStone(3, 7, &Board);
 		// PossibleMove::PlayStone(10, 6, &Board);
 
+		/* YO*/
+		//  PossibleMove::PlayStone(9, 9, &Board);
+		//  PossibleMove::PlayStone(8, 8, &Board);
+
+		//  PossibleMove::PlayStone(9, 7, &Board);
+		//  PossibleMove::PlayStone(9, 8, &Board);
+
+		//  PossibleMove::PlayStone(10, 8, &Board);
+		//  PossibleMove::PlayStone(8, 10, &Board);
+
+		// PossibleMove::PlayStone(8, 6, &Board);
+		// PossibleMove::PlayStone(11, 9, &Board);
+		
+
+		// PossibleMove::PlayStone(11,7, &Board);
+		// PossibleMove::PlayStone(7, 8, &Board);
+
 		std::cout << "MDR2" << std::endl;
 		printBoard(&Board);
 		
@@ -139,6 +162,7 @@ extern "C"
 		MoveChosed.Time = Algo.getTime();
 		MoveChosed.y = tmp.y;
 		MoveChosed.x = tmp.x;
+		MoveChosed.Value = Algo.getValue();
 		return MoveChosed;
 	}
 }

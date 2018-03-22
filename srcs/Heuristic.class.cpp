@@ -400,14 +400,14 @@ int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bB
 	if (bUnbound || who)
 		;
 	if (potentialSize >= 5) {
-		if (size > 5)
+		if (size >= 5)
 		{
-			score += pow(10, size);
+			size = 4;
 		}
-		else if (bBlockStart || bBlockEnd || bBorder)
-			score += (pow(10, size) / BLOCK_REDUCTION);
+		if (bBlockStart || bBlockEnd || bBorder)
+			score += (pow(10, size) / BLOCK_REDUCTION) / 10;
 		else
-			score += pow(10, size);
+			score += pow(10, size) / 10;
 	}
 
 	return score;
@@ -451,9 +451,9 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 			addMove(y + yVar * size, x + xVar * size, score);
 		if (Unbound)
 		{
-			addMove((y - yVar), (x - xVar), score);
+//			addMove((y - yVar), (x - xVar), score);
 			addMove(y + yVar * Unbound, x + xVar * Unbound, score);
-			addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
+//			addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
 		}
 	}
 	if (size == 3 && potentialSize > 4) {
@@ -484,7 +484,13 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 					addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
 			}
 			if (Unbound)
+			{
 				addMove(y + yVar * Unbound, x + xVar * Unbound, score);
+				if (!bBlockStart && !bBorderStart)
+					addMove((y - yVar), (x - xVar), score);
+				if (!bBlockEnd && bBorderEnd)
+					addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
+			}
 		}
 	}
 	if (size == 2 && potentialSize > 5 && !bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {

@@ -26,6 +26,7 @@ public class IA : MonoBehaviour {
 		public int x;
 		public int Depth;
 		public double Timer;
+		public int Value;
 	};
 
 	[DllImport("Extern.dll")]
@@ -33,6 +34,8 @@ public class IA : MonoBehaviour {
 
 	static public void ComputerPlay()
 	{
+		if (GameManager.Instance.currentState.BlackWin || GameManager.Instance.currentState.BlackScore >= 10 || GameManager.Instance.currentState.WhiteWin || GameManager.Instance.currentState.WhiteScore >= 10)
+			return ;
 		GameStatus game;
 		game.Board = new int[GameManager.Instance.iHeightBoard * GameManager.Instance.iWidthBoard];
 		game.bPlayerOneTurn = GameManager.Instance.currentState.bPlayerOneTurn;
@@ -49,7 +52,7 @@ public class IA : MonoBehaviour {
 			}
 		}
 		CoordIA test = IAPlay(game);
-		Debug.Log("y = " + test.y + " et x = " +  test.x + " et Depth = " + test.Depth + " et Time = " + test.Timer);
+		Debug.Log("y = " + test.y + " et x = " +  test.x + " et Depth = " + test.Depth + " et Time = " + test.Timer + " et Value = " + test.Value);
 		int id = test.x + test.y * GameManager.Instance.iWidthBoard + 1;
 		GameObject box = GameObject.Find("Stone (" + id + ")");
 		PlayStone Move = box.GetComponent<PlayStone>();
@@ -57,6 +60,11 @@ public class IA : MonoBehaviour {
 			Move.OnWhitePlay();
 		else
 			Move.OnBlackPlay();
+	}
+
+	public void ForcePlay()
+	{
+		GameManager.Instance.IATurn = true;
 	}
 
 

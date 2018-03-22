@@ -36,8 +36,10 @@ private:
 	Coord Solution;
 
 	clock_t startTime;
-	double Time;
-	int Depth;
+	bool Time;
+	int ReturnDepth;
+	bool TimeOut;
+	int ReturnValue;
 
 	int Player1;
 	int Player2;
@@ -56,8 +58,9 @@ public:
 	MinMax(GameManager * src);
 	~MinMax();
 
-	int getDepth() { return Depth; };
-	Coord & getSolution() { return Solution ;};
-	double getTime() { return Time; };
+	int getDepth() { return ReturnDepth; }
+	Coord & getSolution() { return Solution ;}
+	double getTime() { return Time; }
+	int getValue() { return ReturnValue; }
 
 };

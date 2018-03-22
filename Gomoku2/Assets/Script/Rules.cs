@@ -284,10 +284,10 @@ static public class Rules {
 			NumTree++;
 		if (y >= 2 && y < GameManager.Instance.iHeightBoard - 2 && EmptyCase(GameManager.Instance.currentState.Board[y - 2, x]) && GameManager.Instance.currentState.Board[y - 1, x] == Player1 && GameManager.Instance.currentState.Board[y + 1, x] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 2, x]))
 			NumTree++;
-		if (x >= 2 && x < GameManager.Instance.iWidthBoard - 2 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 2]) && y >= 2 && y < GameManager.Instance.iHeightBoard - 2
+		if (x >= 2 && x < GameManager.Instance.iWidthBoard - 2  && y >= 2 && y < GameManager.Instance.iHeightBoard - 2
 			&& EmptyCase(GameManager.Instance.currentState.Board[y - 2, x - 2]) && GameManager.Instance.currentState.Board[y - 1, x - 1] == Player1 && GameManager.Instance.currentState.Board[y + 1, x + 1] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y + 2, x + 2]))
 			NumTree++;
-		if (x >= 2 && x < GameManager.Instance.iWidthBoard - 2 && EmptyCase(GameManager.Instance.currentState.Board[y, x - 2]) && y >= 2 && y < GameManager.Instance.iHeightBoard - 2
+		if (x >= 2 && x < GameManager.Instance.iWidthBoard - 2 && y >= 2 && y < GameManager.Instance.iHeightBoard - 2
 			&& EmptyCase(GameManager.Instance.currentState.Board[y + 2, x - 2]) && GameManager.Instance.currentState.Board[y + 1, x - 1] == Player1 && GameManager.Instance.currentState.Board[y - 1, x + 1] == Player1 && EmptyCase(GameManager.Instance.currentState.Board[y - 2, x + 2]))
 			NumTree++;
 

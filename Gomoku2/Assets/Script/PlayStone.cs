@@ -126,6 +126,7 @@ public class PlayStone : MonoBehaviour {
 			}
 			checkBoardState(y, x, SomethingEaten);
 			Rules.DisplayBoard();
+			// GameManager.Instance.IATurn = true;
 		}
 
 	}
@@ -192,17 +193,15 @@ public class PlayStone : MonoBehaviour {
                     }
 //                    checkForbiddenBox(i, j);
                     int win = Rules.CheckWin(Player2, i, j);
-                    if (SomethingEaten)
+
+                    dTree = Rules.checkDoubleTreeBox(i, j, Player1);
+                    if ((dTree && Rules.somethingToEatWithEmpty(Player2, Player1, i, j)) && win == 0 ) 
                     {
-                        dTree = Rules.checkDoubleTreeBox(i, j, Player1);
-                        if ((dTree && Rules.somethingToEatWithEmpty(Player2, Player1, i, j)) && win == 0 ) 
-                        {
-                            dTree = false;
-                            if ((Player2 & GameManager.Stone.Black) == 0)
-                                GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
-                            else
-                                GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;    
-                        }
+                        dTree = false;
+                        if ((Player2 & GameManager.Stone.Black) == 0)
+                            GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.BlackDoubleTree;
+                        else
+                            GameManager.Instance.currentState.Board[i, j] -= GameManager.Stone.WhiteDoubleTree;    
                     }
                     dTree = Rules.checkDoubleTreeBox(i, j, Player2);
                     if ((dTree && Rules.somethingToEatWithEmpty(Player2, Player1, i, j)) && win == 0 ) 
