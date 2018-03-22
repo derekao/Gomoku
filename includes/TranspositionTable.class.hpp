@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <map>
@@ -6,24 +7,14 @@
 
 #include "GameManager.class.hpp"
 
-class BoardMemory
-{
-public:
-	BoardMemory() : UpperBound(MAX_INFINIT), LowerBound(MIN_INFINIT) {}
-
-	GameManager * Board;
-	int UpperBound;
-	int LowerBound;
-};
-
 class TranspositionTable {
 
 public:
 
 	static std::string HashBoard(std::vector<char> & board);
-	static std::map<std::string, BoardMemory> TranspoTable;
+	static std::map<std::string, GameManager *> TranspoTable;
 
-	static void Store(BoardMemory & Node);
-	static BoardMemory & Retrieve(GameManager * Node);
+	static void Store(GameManager *Node);
+	static GameManager * Retrieve(GameManager *Node);
 	
 };

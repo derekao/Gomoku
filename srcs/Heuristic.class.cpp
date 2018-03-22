@@ -414,7 +414,8 @@ int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bB
 }
 
 void Heuristic::addMove(int y, int x, int score) {
-	if (score <= HighestPriority && Instance->getBoard()[y * BOARD_WIDTH + x] == 0) {
+
+	if (score <= HighestPriority &&  Rules::EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x]) && !(Instance->getBoard()[y * BOARD_WIDTH + x] == ((Player == STONE_BLACK) ? STONE_BLACKDOUBLETREE : STONE_WHITEDOUBLETREE))) {
 		// std::cout << " y " << y << " x " << x << " Score " << score << " et " << HighestPriority  << std::endl;
 		if (score != CAPTURE && score < HighestPriority)
 			HighestPriority = score;
@@ -517,7 +518,7 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 		}
 	}
 	if (size == 2 && potentialSize > 2 && !Unbound && (bBlockStart || bBlockEnd)) {
-		score = who ? STRONG_MOVE : CAPTURE;
+		score = who ? CAPTURE : CAPTURE;
 		if (!bBlockEnd)
 		{
 			addMove(y + yVar * size, x + xVar * size, score);

@@ -65,14 +65,13 @@ void MinMax::IterativeDeepning()
 	{
 		return;
 	}
+	ReturnDepth = 0;
 	int FirstGuess = 0;
 	for (int d = 1; d < MAX_DEPTH; d++)
 	{
 		FirstGuess = MTDF(FirstGuess, d);
 		if (TimeOut)
 			break;
-		// for (std::map<std::string, BoardMemory *>::iterator it = TranspositionTable::TranspoTable.begin(); it != TranspositionTable::TranspoTable.end(); ++it)
- 		//  	delete it->second;
 		TranspositionTable::TranspoTable.clear();
 		ReturnDepth = d;
 		int BestValue = MIN_INFINIT - 1;
@@ -91,9 +90,9 @@ void MinMax::IterativeDeepning()
 		}
 		Solution = BestMove->getLastMove();
 		ReturnValue = BestValue;
+		if (FirstGuess == MAX_INFINIT || FirstGuess == MIN_INFINIT)
+					break;
 	}
-	// for (std::map<std::string, BoardMemory *>::iterator it = TranspositionTable::TranspoTable.begin(); it != TranspositionTable::TranspoTable.end(); ++it)
- 	// 	delete it->second;
 	TranspositionTable::TranspoTable.clear();
 	std::cout << "_____________________________________________________________LAST LOOP " << ReturnDepth << " timer  = " << Time << " and Value = " << ReturnValue << std::endl;
 
@@ -137,7 +136,7 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 {
 	if (TimeOut)
 		return 0;
-	int timer = (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC);
+	double timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
 	if (timer > TIMER_MAX)
 	{
 		Time = timer;
@@ -145,15 +144,15 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 		return 0;
 	}
 	int Value;
-	BoardMemory RetrieveNode;
+	GameManager *RetrieveNode;
 	if ((RetrieveNode = TranspositionTable::Retrieve(Node)))
 	{
-		if (RetrieveNode.LowerBound >= Beta)
-			return RetrieveNode.LowerBound;
-		if (RetrieveNode.UpperBound <= Alpha)
-			return RetrieveNode.UpperBound;
-		Alpha = std::max(Alpha, RetrieveNode.LowerBound);
-		Beta = std::min(Beta, RetrieveNode.UpperBound);
+		if (RetrieveNode->getLowerBound() >= Beta)
+			return RetrieveNode->getLowerBound();
+		if (RetrieveNode->getUpperBound() <= Alpha)
+			return RetrieveNode->getUpperBound();
+		Alpha = std::max(Alpha, RetrieveNode->getLowerBound());
+		Beta = std::min(Beta, RetrieveNode->getUpperBound());
 	}
 	if (Depth == 0 || Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
 	{
@@ -193,30 +192,34 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 			Value = std::min(Value, tmp);
 			SavedBeta = std::min(SavedBeta, Value);
 		}
+	} 
+	if (Node->getBoundDepth() != ReturnDepth + 1)
+	{
+		Node->setBoundDepth(ReturnDepth + 1);
+		Node->setUpperBound(MAX_INFINIT);
+		Node->setLowerBound(MIN_INFINIT);
 	}
 	//Fail low result implies an upper bound 
-	BoardMemory tmp;
-	tmp.Board = Node;
 	if (Value <= Alpha)
 	{
-		tmp.UpperBound = Value;
-		TranspositionTable::Store(tmp);
+		Node->setUpperBound(Value);
+		TranspositionTable::Store(Node);
 	}
 	// Found an accurate minimax value - will not occur if called with zero window 
 	if (Value > Alpha && Value < Beta)
 	{
-		tmp.LowerBound = Value;
-		tmp.UpperBound = Value;
-		TranspositionTable::Store(tmp);
+		Node->setLowerBound(Value);
+		Node->setUpperBound(Value);
+		TranspositionTable::Store(Node);
 		//STORE UpperBound AND LowerBound
 	}
 	//Fail high result implies a lower bound
 	if (Value >= Beta)
 	{
-		tmp.LowerBound = Value;
-		TranspositionTable::Store(tmp);
+		Node->setLowerBound(Value);
+		TranspositionTable::Store(Node);
 		//SOTRE Node->LowerBound
-	}
+		}
 	Node->setHeuristicValue(Value);
 	return Value;
 }

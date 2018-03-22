@@ -36,7 +36,7 @@ private:
 	Coord Solution;
 
 	clock_t startTime;
-	bool Time;
+	double Time;
 	int ReturnDepth;
 	bool TimeOut;
 	int ReturnValue;

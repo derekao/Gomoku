@@ -13,7 +13,7 @@
 // 	}
 // }
 
-std::map<std::string, BoardMemory>  TranspositionTable::TranspoTable;
+std::map<std::string, GameManager *>  TranspositionTable::TranspoTable;
 
 std::string TranspositionTable::HashBoard(std::vector<char> & board) {
 	std::string hash = "";
@@ -33,25 +33,19 @@ std::string TranspositionTable::HashBoard(std::vector<char> & board) {
 	return hash;
 }
 
-void TranspositionTable::Store(BoardMemory & Node) {
-	std::string hash = HashBoard(Node.Board->getBoard());
+void TranspositionTable::Store(GameManager *Node) {
+	std::string hash = HashBoard(Node->getBoard());
 	if (!TranspoTable[hash])
 		TranspoTable[hash] = Node;
-	else 
-	 	std::cout << "wierd stuff" << std::endl;
 	// std::cout << TranspoTable.size() << std::endl;
 }
 
-BoardMemory & TranspositionTable::Retrieve(GameManager *Node) {
+GameManager * TranspositionTable::Retrieve(GameManager *Node) {
 	std::string hash = HashBoard(Node->getBoard());
 //	std::cout << hash << std::endl;
 //	printBoard(Node);
 	if (!TranspoTable[hash])
 		return NULL;
 	else
-	{
-		BoardMemory tmp = TranspoTable[hash];
-		TranspoTable.erase(hash);
-		return tmp;
-	}
+		return TranspoTable[hash];
 }
