@@ -60,6 +60,8 @@
      <Compile Include="Assets\Script\Quit.cs" />
      <Compile Include="Assets\Script\RestartLevel.cs" />
      <Compile Include="Assets\Script\Rules.cs" />
+     <Compile Include="Assets\Script\Settings.cs" />
+     <Compile Include="Assets\Script\SettingsMenu.cs" />
      <Compile Include="Assets\Script\Undo.cs" />
      <Compile Include="Assets\Script\UpdateScore.cs" />
      <None Include="Assets\Font\justice.txt" />

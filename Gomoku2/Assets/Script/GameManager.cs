@@ -63,6 +63,10 @@ public class GameManager : MonoBehaviour {
 	public bool ActivateIA = true;
 	public BoardHistoric currentState;
 
+	public Text DepthText;
+	public Text ValueText;
+	public Text TimeText;
+
 	// Size of the Board
 	public int iWidthBoard = 19;
 	public int iHeightBoard = 19;
@@ -91,6 +95,13 @@ public class GameManager : MonoBehaviour {
 
 		PopUpWinPanel = GameObject.Find("PopUpWin");
 		PopUpWinPanel.SetActive(false);
+
+		GameObject tmp = GameObject.Find("DepthScore");
+		DepthText = tmp.GetComponent<Text>();
+		tmp = GameObject.Find("ValueScore");
+		ValueText = tmp.GetComponent<Text>();
+		tmp = GameObject.Find("TimeScore");
+		TimeText = tmp.GetComponent<Text>();
 
 		currentState.iTurn = 0;
 		currentState.BlackScore = 0;

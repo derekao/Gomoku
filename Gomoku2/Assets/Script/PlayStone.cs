@@ -20,6 +20,7 @@ public class PlayStone : MonoBehaviour {
 	private Image LastMoveImage;
 	private int x;
 	private int y;
+	private int MoveSet;
 
 	// Inititalization
 	void Start() {
@@ -69,12 +70,12 @@ public class PlayStone : MonoBehaviour {
 
 		if (BlackStoneImage.enabled && LastMoveImage.enabled)
 		{
-			if (GameManager.Instance.currentState.bPlayerOneTurn == true)
+			if (GameManager.Instance.currentState.bPlayerOneTurn == true || MoveSet < GameManager.Instance.currentState.iTurn + 1)
 				LastMoveImage.enabled = false;
 		}
 		if (WhiteStoneImage.enabled && LastMoveImage.enabled)
 		{
-			if (GameManager.Instance.currentState.bPlayerOneTurn == false)
+			if (GameManager.Instance.currentState.bPlayerOneTurn == false || MoveSet < GameManager.Instance.currentState.iTurn + 1)
 				LastMoveImage.enabled = false;
 		}
 	}
@@ -101,6 +102,7 @@ public class PlayStone : MonoBehaviour {
 			bool SomethingEaten = checkStoneEaten();
 			BlackStoneImage.enabled = true;
 			LastMoveImage.enabled = true;
+			MoveSet = GameManager.Instance.currentState.iTurn;
 			GameManager.Instance.currentState.bPlayerOneTurn = false;
 			GameManager.Instance.currentState.Board[y, x] = GameManager.Stone.Black;
 			GameManager.Instance.currentState.iTurn += 1;
@@ -126,7 +128,8 @@ public class PlayStone : MonoBehaviour {
 			}
 			checkBoardState(y, x, SomethingEaten);
 			Rules.DisplayBoard();
-			// GameManager.Instance.IATurn = true;
+			if (PlayerPrefs.GetInt("IAWhite") != 0)
+				GameManager.Instance.IATurn = true;
 		}
 
 	}
@@ -162,7 +165,8 @@ public class PlayStone : MonoBehaviour {
 			}
 			checkBoardState(y, x, SomethingEaten);
 			Rules.DisplayBoard();
-			GameManager.Instance.IATurn = true;
+			if (PlayerPrefs.GetInt("IABlack") != 0)
+				GameManager.Instance.IATurn = true;
 		}
 	}
 

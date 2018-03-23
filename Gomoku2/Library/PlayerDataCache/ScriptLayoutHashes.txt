@@ -2,6 +2,7 @@ OSXStandalone
 SceneListBegin?
 Assets/Scene/MainMenu.unity
 Assets/Scene/Gomoku.unity
+Assets/Scene/Setting.unity
 SceneListEnd?
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 970a95104359198fe1a98ef48655de8c UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
@@ -148,5 +149,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Undo
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.PopUpWin
-76e3a5682474ae7bc293a05cdfe92656 Assembly-CSharp.dll:.GameManager
+568ea8a8397247889246ff22f0d70c80 Assembly-CSharp.dll:.GameManager
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.UpdateScore
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Settings
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.SettingsMenu

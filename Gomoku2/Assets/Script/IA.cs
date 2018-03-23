@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Runtime.InteropServices; // Dll
 
 public class IA : MonoBehaviour {
@@ -53,6 +54,9 @@ public class IA : MonoBehaviour {
 		}
 		CoordIA test = IAPlay(game);
 		Debug.Log("y = " + test.y + " et x = " +  test.x + " et Depth = " + test.Depth + " et Time = " + test.Timer + " et Value = " + test.Value);
+		GameManager.Instance.DepthText.text = test.Depth.ToString();
+		GameManager.Instance.ValueText.text = test.Value.ToString();
+		GameManager.Instance.TimeText.text = test.Timer.ToString();
 		int id = test.x + test.y * GameManager.Instance.iWidthBoard + 1;
 		GameObject box = GameObject.Find("Stone (" + id + ")");
 		PlayStone Move = box.GetComponent<PlayStone>();
