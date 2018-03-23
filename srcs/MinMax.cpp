@@ -12,24 +12,17 @@
 
 #include "MinMax.hpp"
 
-// static void printBoard(GameManager * Board)
-// {
-// 	for (int i = 0; i < 361; i ++)
-// 	{
-// 		std::cout << (int)Board->getBoard()[i] << " ";
-// 		if (i % 19 == 18)
-// 			std::cout << std::endl;
-// 	}
-// }
-
 MinMax::~MinMax()
 {
-	// std::cout << "Destructor start timer  = " << (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC) << std::endl;
-	for (size_t i = 0; i < Board->getChilds().size(); i++)
+	if (AlgoType == ALGO_MTDF || AlgoType == ALGO_ITERATIVE_ALPHABETA)
 	{
-		DeleteTree(Board->getChilds()[i]);
+		// std::cout << "Destructor start timer  = " << (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC) << std::endl;
+		for (size_t i = 0; i < Board->getChilds().size(); i++)
+		{
+			DeleteTree(Board->getChilds()[i]);
+		}
+		// std::cout << "Destructor end timer  = " << (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC) << std::endl;
 	}
-	// std::cout << "Destructor end timer  = " << (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC) << std::endl;
 }
 
 void MinMax::DeleteTree(GameManager * Node)
@@ -41,8 +34,9 @@ void MinMax::DeleteTree(GameManager * Node)
 	delete Node;
 }
 
-MinMax::MinMax(GameManager * src) : Board(src), Solution(Coord(-1,-1))
+MinMax::MinMax(GameManager * src, int _AlgoType) : AlgoType(_AlgoType), Board(src), Solution(Coord(-1,-1))
 {
+	
 	startTime = clock(); 
 	TimeOut = false;
 
@@ -56,9 +50,19 @@ MinMax::MinMax(GameManager * src) : Board(src), Solution(Coord(-1,-1))
 		Player1 = STONE_WHITE;
 		Player2 = STONE_BLACK;
 	}
-	IterativeDeepning();
+	if (AlgoType == ALGO_MTDF)
+		IterativeDeepning();
+	else if (AlgoType == ALGO_MINIMAX)
+		MiniMaxStart();
+	else if (AlgoType == ALGO_ALPHABETA)
+		AlphaBetaStart();
+	else if (AlgoType == ALGO_ITERATIVE_ALPHABETA)
+		IterativeAlphaBetaStart();
 }
 
+///////////////////////////////
+/////////ALGO_MTDF//////////
+///////////////////////////////
 void MinMax::IterativeDeepning()
 {
 	if (Board->getBlackWin() || Board->getWhiteWin() || Board->getBlackScore() >= 10 || Board->getWhiteScore() >= 10)
@@ -84,17 +88,11 @@ void MinMax::IterativeDeepning()
 				BestMove = Board->getChilds()[i];
 			}
 		}
-		if (BestValue != FirstGuess)
-		{
-			std::cout << "FirstGuess = " <<  FirstGuess << " et BestValue =" << BestValue << std::endl;
-		}
 		Solution = BestMove->getLastMove();
 		ReturnValue = BestValue;
-		// if (FirstGuess == MAX_INFINIT || FirstGuess == MIN_INFINIT)
-		// 			break;
 	}
 	TranspositionTable::TranspoTable.clear();
-	std::cout << "_____________________________________________________________LAST LOOP " << ReturnDepth << " timer  = " << Time << " and Value = " << ReturnValue << std::endl;
+//	std::cout << "_____________________________________________________________LAST LOOP " << ReturnDepth << " timer  = " << Time << " and Value = " << ReturnValue << std::endl;
 
 }
 
@@ -145,6 +143,7 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 	}
 	int Value;
 	GameManager *RetrieveNode;
+	//Retrive in the Transpo Table
 	if ((RetrieveNode = TranspositionTable::Retrieve(Node)))
 	{
 		if (RetrieveNode->getLowerBound() >= Beta)
@@ -205,125 +204,286 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 		Node->setUpperBound(MAX_INFINIT);
 		Node->setLowerBound(MIN_INFINIT);
 	}
-	//Fail low result implies an upper bound 
+	// Store in the transpo Table
 	if (Value <= Alpha)
 	{
 		Node->setUpperBound(Value);
 		TranspositionTable::Store(Node);
 	}
-	// Found an accurate minimax value - will not occur if called with zero window 
 	if (Value > Alpha && Value < Beta)
 	{
 		Node->setLowerBound(Value);
 		Node->setUpperBound(Value);
 		TranspositionTable::Store(Node);
-		//STORE UpperBound AND LowerBound
 	}
-	//Fail high result implies a lower bound
 	if (Value >= Beta)
 	{
 		Node->setLowerBound(Value);
 		TranspositionTable::Store(Node);
-		//SOTRE Node->LowerBound
-		}
+	}
 	Node->setHeuristicValue(Value);
 	return Value;
 }
 
-// void MinMax::Compute()
-// {
-// 	GameManager *BestMove;
-// 	int Value;
-// 	int v = MIN_INFINIT - 1;
-// 	int Alpha = MIN_INFINIT;
-// 	int Beta = MAX_INFINIT;
+///////////////////////////////
+/////////ALGO_MINIMAX//////////
+///////////////////////////////
+void MinMax::MiniMaxStart()
+{
+	GameManager *BestMove;
+	int Value;
+	int v = MIN_INFINIT - 1;
 
-// 	PossibleMove possibleMove = PossibleMove(Board);
-// 	std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
-// 	if (Childs.empty())
-// 	{
-// 		std::cout << "child empty" << std::endl;
-// 		PossibleMove::FindOneMove(Board, Childs);
-// 	}
-// 	for (size_t i = 0; i < Childs.size(); i++)
-// 	{
-// 		Value = AlphaBeta(Childs[i], 6, Alpha, Beta, false);
-// 		if (Value > v)
-// 		{
-// 			BestMove = Childs[i];
-// 			v = Value;
-// 		}
-// 		Alpha = std::max(Alpha, v);
-// 		if (Beta <= Alpha)
-// 			break;
-// 		Childs[i]->setHeuristicValue(v);
-// 		Childs[i]->setParent(Board);
-// 	}
-// 	Solution = BestMove->getLastMove();
-// 	std::cout << BestMove->getWhiteWin() << " et " << BestMove->getBlackWin() << " et has won " <<  BestMove->getHasWon() << std::endl;
-// 	for (size_t i = 0; i < Childs.size(); i++)
-// 		delete Childs[i];
-// }
+	PossibleMove possibleMove = PossibleMove(Board);
+	if (Board->getChilds().empty())
+		PossibleMove::FindOneMove(Board);
+	std::vector<GameManager *> Childs = Board->getChilds();
 
-// int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer)
-// {
-// 	int v;
+	for (size_t i = 0; i < Childs.size(); i++)
+	{
+		Value = MiniMax(Childs[i], MAX_DEPTH - 1, false);
+		if (Value > v)
+		{
+			BestMove = Childs[i];
+			v = Value;
+		}
+		Childs[i]->setHeuristicValue(v);
+		Childs[i]->setParent(Board);
+	}
+	Solution = BestMove->getLastMove();
+	for (size_t i = 0; i < Childs.size(); i++)
+		delete Childs[i];
+	Time = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
+	ReturnDepth = MAX_DEPTH;
+	ReturnValue = Value;
+}
 
-// 	if (depth == 0 || Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
-// 	{
-// 		Heuristic init = Heuristic(Player1, Player2, Node);
-// 		int iValue = init.BoardValue();
-// 		return iValue;
-// 	}
-// 	if (MaximizingPlayer)
-// 	{
-// 		v = MIN_INFINIT;
-// 		PossibleMove possibleMove = PossibleMove(Node);
-// 		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
-// 		if (Childs.empty())
-// 		{
-// 			PossibleMove::FindOneMove(Node);
-// 		}
-// 		for (size_t i = 0; i < Childs.size(); i++)
-// 		{
-// 			v = std::max(v, AlphaBeta(Childs[i], depth - 1, Alpha, Beta, false));
-// 			Alpha = std::max(Alpha, v);
-// 			if (Beta <= Alpha)
-// 			{
-// 				for (; i < Childs.size(); i++)
-// 				{
-// 					delete Childs[i];
-// 				}
-// 				break;
-// 			}
-// 			delete Childs[i];
+int MinMax::MiniMax(GameManager * Node, int depth, bool MaximizingPlayer)
+{
+	int v;
 
-// 		}
-// 		return v;
-// 	}
-// 	else
-// 	{
-// 		v = MAX_INFINIT;
-// 		PossibleMove possibleMove = PossibleMove(Node);
-// 		std::vector<GameManager *> Childs = possibleMove.getPossibleMove();
-// 		if (Childs.empty())
-// 		{
-// 			PossibleMove::FindOneMove(Node);
-// 		}
-// 		for (size_t i = 0; i < Childs.size(); i++)
-// 		{
-// 			v = std::min(v, AlphaBeta(Childs[i], depth - 1, Alpha, Beta, true));
-// 			Beta = std::min(Beta, v);
-// 			if (Beta <= Alpha)
-// 			{
-// 				for (; i < Childs.size(); i++)
-// 				{
-// 					delete Childs[i];
-// 				}
-// 				break;
-// 			}
-// 			delete Childs[i];
-// 		}
-// 		return v;
-// 	}
-// }
+	if (depth == 0 || Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
+	{
+		Heuristic init = Heuristic(Player1, Player2, Node);
+		int iValue = init.BoardValue();
+		return iValue;
+	}
+	if (MaximizingPlayer)
+	{
+		v = MIN_INFINIT;
+		PossibleMove possibleMove = PossibleMove(Node);
+		if (Node->getChilds().empty())
+			PossibleMove::FindOneMove(Node);
+		std::vector<GameManager *> Childs = Node->getChilds();
+
+		for (size_t i = 0; i < Childs.size(); i++)
+		{
+			v = std::max(v, MiniMax(Childs[i], depth - 1,false));
+			delete Childs[i];
+		}
+		return v;
+	}
+	else
+	{
+		v = MAX_INFINIT;
+		PossibleMove possibleMove = PossibleMove(Node);
+		if (Node->getChilds().empty())
+			PossibleMove::FindOneMove(Node);
+		std::vector<GameManager *> Childs = Node->getChilds();
+
+		for (size_t i = 0; i < Childs.size(); i++)
+		{
+			v = std::min(v, MiniMax(Childs[i], depth - 1, true));
+			delete Childs[i];
+		}
+		return v;
+	}
+}
+
+///////////////////////////////
+/////////ALGO_ALPHABETA////////
+///////////////////////////////
+void MinMax::AlphaBetaStart()
+{
+	GameManager *BestMove;
+	int Value;
+	int v = MIN_INFINIT - 1;
+	int Alpha = MIN_INFINIT;
+	int Beta = MAX_INFINIT;
+
+	PossibleMove possibleMove = PossibleMove(Board);
+	if (Board->getChilds().empty())
+		PossibleMove::FindOneMove(Board);
+	std::vector<GameManager *> Childs = Board->getChilds();
+
+	for (size_t i = 0; i < Childs.size(); i++)
+	{
+		Value = AlphaBeta(Childs[i], MAX_DEPTH - 1, Alpha, Beta, false);
+		if (Value > v)
+		{
+			BestMove = Childs[i];
+			v = Value;
+		}
+		Alpha = std::max(Alpha, v);
+		if (Beta <= Alpha)
+			break;
+		Childs[i]->setHeuristicValue(v);
+		Childs[i]->setParent(Board);
+	}
+	Solution = BestMove->getLastMove();
+	for (size_t i = 0; i < Childs.size(); i++)
+		delete Childs[i];
+	Time = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
+	ReturnDepth = MAX_DEPTH;
+	ReturnValue = Value;
+}
+
+int MinMax::AlphaBeta(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer)
+{
+	int v;
+
+	if (depth == 0 || Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
+	{
+		Heuristic init = Heuristic(Player1, Player2, Node);
+		int iValue = init.BoardValue();
+		return iValue;
+	}
+	if (MaximizingPlayer)
+	{
+		v = MIN_INFINIT;
+		PossibleMove possibleMove = PossibleMove(Node);
+		if (Node->getChilds().empty())
+			PossibleMove::FindOneMove(Node);
+		std::vector<GameManager *> Childs = Node->getChilds();
+
+		for (size_t i = 0; i < Childs.size(); i++)
+		{
+			v = std::max(v, AlphaBeta(Childs[i], depth - 1, Alpha, Beta, false));
+			Alpha = std::max(Alpha, v);
+			if (Beta <= Alpha)
+			{
+				for (; i < Childs.size(); i++)
+				{
+					delete Childs[i];
+				}
+				break;
+			}
+			delete Childs[i];
+
+		}
+		return v;
+	}
+	else
+	{
+		v = MAX_INFINIT;
+		PossibleMove possibleMove = PossibleMove(Node);
+		if (Node->getChilds().empty())
+			PossibleMove::FindOneMove(Node);
+		std::vector<GameManager *> Childs = Node->getChilds();
+
+		for (size_t i = 0; i < Childs.size(); i++)
+		{
+			v = std::min(v, AlphaBeta(Childs[i], depth - 1, Alpha, Beta, true));
+			Beta = std::min(Beta, v);
+			if (Beta <= Alpha)
+			{
+				for (; i < Childs.size(); i++)
+				{
+					delete Childs[i];
+				}
+				break;
+			}
+			delete Childs[i];
+		}
+		return v;
+	}
+}
+
+/////////////////////////////////////////
+/////////ALGO_ITERATIVE_ALPHABETA////////
+/////////////////////////////////////////
+void MinMax::IterativeAlphaBetaStart()
+{
+	if (Board->getBlackWin() || Board->getWhiteWin() || Board->getBlackScore() >= 10 || Board->getWhiteScore() >= 10)
+	{
+		return;
+	}
+	ReturnDepth = 0;
+	int FirstGuess = 0;
+	for (int d = 1; d < MAX_DEPTH; d++)
+	{
+		FirstGuess = IterativeAlphaBeta(Board, MIN_INFINIT, MAX_INFINIT, d, true);
+		if (TimeOut)
+			break;
+		ReturnDepth = d;
+		int BestValue = MIN_INFINIT - 1;
+		GameManager *BestMove = NULL;;
+		for (size_t i = 0; i < Board->getChilds().size(); i++)
+		{
+			if (Board->getChilds()[i]->getHeuristicValue() > BestValue)
+			{
+				BestValue = Board->getChilds()[i]->getHeuristicValue();
+				BestMove = Board->getChilds()[i];
+			}
+		}
+		Solution = BestMove->getLastMove();
+		ReturnValue = BestValue;
+	}
+	//	std::cout << "_____________________________________________________________LAST LOOP " << ReturnDepth << " timer  = " << Time << " and Value = " << ReturnValue << std::endl;
+
+}
+
+int MinMax::IterativeAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, bool MaximizingPlayer)
+{
+	if (TimeOut)
+		return 0;
+	double timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
+	if (timer > TIMER_MAX)
+	{
+		Time = timer;
+		TimeOut = true;
+		return 0;
+	}
+	int Value;
+	if (Depth == 0 || Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
+	{
+		Heuristic init = Heuristic(Player1, Player2, Node);
+ 		Node->setHeuristicValue(init.BoardValue());
+		Value = init.BoardValue();
+	}
+	else if (MaximizingPlayer)
+	{
+		Value = MIN_INFINIT;
+		int SavedAlpha = Alpha;
+		if (Node->getChilds().empty())
+		{
+			PossibleMove possibleMove = PossibleMove(Node);
+			if (Node->getChilds().empty())
+				PossibleMove::FindOneMove(Node);
+		}
+		for (size_t i = 0; Value < Beta &&  i < Node->getChilds().size(); i++)
+		{
+			Value = std::max(Value, IterativeAlphaBeta(Node->getChilds()[i], SavedAlpha, Beta, Depth - 1, false));
+			SavedAlpha = std::max(SavedAlpha, Value);
+		}
+	}
+	else
+	{
+		Value = MAX_INFINIT;
+		int SavedBeta = Beta;
+		if (Node->getChilds().empty())
+		{
+			PossibleMove possibleMove = PossibleMove(Node);
+			if (Node->getChilds().empty())
+				PossibleMove::FindOneMove(Node);
+		}
+		for (size_t i = 0; Value > Alpha && i < Node->getChilds().size(); i++)
+		{
+			int tmp = IterativeAlphaBeta(Node->getChilds()[i], Alpha, SavedBeta, Depth - 1, true);
+			Value = std::min(Value, tmp);
+			SavedBeta = std::min(SavedBeta, Value);
+		}
+	} 
+	Node->setHeuristicValue(Value);
+	return Value;
+}
