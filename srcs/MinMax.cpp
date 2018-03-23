@@ -90,8 +90,8 @@ void MinMax::IterativeDeepning()
 		}
 		Solution = BestMove->getLastMove();
 		ReturnValue = BestValue;
-		if (FirstGuess == MAX_INFINIT || FirstGuess == MIN_INFINIT)
-					break;
+		// if (FirstGuess == MAX_INFINIT || FirstGuess == MIN_INFINIT)
+		// 			break;
 	}
 	TranspositionTable::TranspoTable.clear();
 	std::cout << "_____________________________________________________________LAST LOOP " << ReturnDepth << " timer  = " << Time << " and Value = " << ReturnValue << std::endl;
@@ -148,9 +148,15 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 	if ((RetrieveNode = TranspositionTable::Retrieve(Node)))
 	{
 		if (RetrieveNode->getLowerBound() >= Beta)
+		{
+			Node->setHeuristicValue(RetrieveNode->getLowerBound());
 			return RetrieveNode->getLowerBound();
+		}
 		if (RetrieveNode->getUpperBound() <= Alpha)
+		{
+			Node->setHeuristicValue(RetrieveNode->getUpperBound());
 			return RetrieveNode->getUpperBound();
+		}
 		Alpha = std::max(Alpha, RetrieveNode->getLowerBound());
 		Beta = std::min(Beta, RetrieveNode->getUpperBound());
 	}

@@ -415,7 +415,7 @@ int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bB
 
 void Heuristic::addMove(int y, int x, int score) {
 
-	if (score <= HighestPriority &&  Rules::EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x]) && !(Instance->getBoard()[y * BOARD_WIDTH + x] == ((Player == STONE_BLACK) ? STONE_BLACKDOUBLETREE : STONE_WHITEDOUBLETREE))) {
+	if (score <= HighestPriority &&  Rules::EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x]) && ((Instance->getBoard()[y * BOARD_WIDTH + x] & ((Player == STONE_BLACK) ? STONE_BLACKDOUBLETREE : STONE_WHITEDOUBLETREE)) == 0)) {
 		// std::cout << " y " << y << " x " << x << " Score " << score << " et " << HighestPriority  << std::endl;
 		if (score != CAPTURE && score < HighestPriority)
 			HighestPriority = score;
@@ -494,21 +494,19 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 			}
 		}
 	}
-	if (size == 2 && potentialSize > 5 && !bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
-		score = who ? STRONG_MOVE : AVERAGE_MOVE;
+	if (size == 2 && potentialSize > 5 && !bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd && who) {
+		score = STRONG_MOVE;
 
 		if (!Unbound) {
 			if (x - xVar * 2 >= 0 && y - yVar * 2 >= 0 && Instance->getBoard()[pos - xVar * 2 - yVar * 2 * BOARD_WIDTH] == 0)
 			{
 				addMove((y - yVar), (x - xVar), score);
-				if (who)
-					addMove(y - yVar * 2, x - xVar * 2, score);
+				addMove(y - yVar * 2, x - xVar * 2, score);
 			}
 			if (x + xVar * (size + 1) < BOARD_WIDTH && y + yVar * (size + 1) < BOARD_HEIGHT && Instance->getBoard()[pos + xVar * (size + 1) + yVar * (size + 1) * BOARD_WIDTH] == 0)
 			{
 				addMove(y + yVar * size, x + xVar * size, score);
-				if (who)
-					addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
+				addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
 			}
 		}
 		else {
@@ -518,12 +516,12 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 		}
 	}
 	if (size == 2 && potentialSize > 2 && !Unbound && (bBlockStart || bBlockEnd)) {
-		score = who ? CAPTURE : CAPTURE;
+		score = CAPTURE;
 		if (!bBlockEnd)
 		{
 			addMove(y + yVar * size, x + xVar * size, score);
 		}
-		else
+		else if(!bBlockStart)
 		{
 			addMove((y - yVar), (x - xVar), score);
 		}

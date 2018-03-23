@@ -45,7 +45,6 @@ public class Settings : MonoBehaviour {
 	
 	public void OnClick()
 	{
-		Debug.Log("Ye");
 		if (PlayerToggle.isOn)
 		{
 			if (Black)

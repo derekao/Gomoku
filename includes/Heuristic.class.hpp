@@ -17,8 +17,7 @@
 #define TTW_PLAYER 3
 #define TTW_OPPONENT 4
 #define STRONG_MOVE 5
-#define AVERAGE_MOVE 6
-#define BAD_MOVE 7
+#define BAD_MOVE 6
 
 // #define FIRST_STONE_TAKEN 80
 // #define SECOND_STONE_TAKEN 320

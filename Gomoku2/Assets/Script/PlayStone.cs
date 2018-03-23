@@ -68,14 +68,14 @@ public class PlayStone : MonoBehaviour {
 
 	void Update () {
 
-		if (BlackStoneImage.enabled && LastMoveImage.enabled)
+		if (LastMoveImage.enabled)
 		{
-			if (GameManager.Instance.currentState.bPlayerOneTurn == true || MoveSet < GameManager.Instance.currentState.iTurn + 1)
+			if (MoveSet < GameManager.Instance.currentState.iTurn)
 				LastMoveImage.enabled = false;
 		}
-		if (WhiteStoneImage.enabled && LastMoveImage.enabled)
+		if (LastMoveImage.enabled)
 		{
-			if (GameManager.Instance.currentState.bPlayerOneTurn == false || MoveSet < GameManager.Instance.currentState.iTurn + 1)
+			if (MoveSet < GameManager.Instance.currentState.iTurn)
 				LastMoveImage.enabled = false;
 		}
 	}
@@ -102,10 +102,10 @@ public class PlayStone : MonoBehaviour {
 			bool SomethingEaten = checkStoneEaten();
 			BlackStoneImage.enabled = true;
 			LastMoveImage.enabled = true;
-			MoveSet = GameManager.Instance.currentState.iTurn;
 			GameManager.Instance.currentState.bPlayerOneTurn = false;
 			GameManager.Instance.currentState.Board[y, x] = GameManager.Stone.Black;
 			GameManager.Instance.currentState.iTurn += 1;
+			MoveSet = GameManager.Instance.currentState.iTurn;
 			GameManager.BoardHistoric tmp = GameManager.Instance.currentState.Clone();
 			GameManager.Instance.lBoardHisto.Insert(0, tmp);
 			int win;
@@ -143,6 +143,7 @@ public class PlayStone : MonoBehaviour {
 			LastMoveImage.enabled = true;
 			GameManager.Instance.currentState.bPlayerOneTurn = true;
 			GameManager.Instance.currentState.iTurn += 1;
+			MoveSet = GameManager.Instance.currentState.iTurn;
 			GameManager.Instance.currentState.Board[y, x] = GameManager.Stone.White;
 			GameManager.BoardHistoric tmp = GameManager.Instance.currentState.Clone();
 			GameManager.Instance.lBoardHisto.Insert(0, tmp);

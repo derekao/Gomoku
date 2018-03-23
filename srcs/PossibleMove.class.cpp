@@ -97,6 +97,11 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		Board->getWhiteStones().push_back(Coord(y, x));
 	}
 
+	if ((Board->getBoard()[y * BOARD_WIDTH + x] == STONE_BLACKDOUBLETREE && PlayerOne == STONE_BLACK)
+		|| (Board->getBoard()[y * BOARD_WIDTH + x] == STONE_WHITEDOUBLETREE && PlayerOne == STONE_WHITE))
+	{
+		exit(0);
+	}
 	Board->getBoard()[y * BOARD_WIDTH + x] = PlayerOne;
 	int win;
 	if (Board->getHasWon())

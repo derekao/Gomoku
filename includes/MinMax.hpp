@@ -24,7 +24,7 @@
 #include "TranspositionTable.class.hpp"
 
 #define TIMER_MAX 0.5f
-#define MAX_DEPTH 60
+#define MAX_DEPTH 20
 
 class MinMax 
 {
