@@ -22,33 +22,48 @@
 // 	}
 // }
 
-PossibleMove::PossibleMove(GameManager * src) : Board(src),
+PossibleMove::PossibleMove(GameManager * src, bool OnlyOne) : Board(src),
 	HighestHeuristicValue(src->getHeuristicValue()), LowestHeuristicValue(src->getHeuristicValue())
 {
-	Compute();
+	if (!OnlyOne)
+		SetChilds();
 }
 
-void PossibleMove::Compute()
+void PossibleMove::SetChilds()
 {
 	GameManager * tmp;
 
-//	std::cout << "---------------------- y = " << Board->getLastMove().y << " et x = " << Board->getLastMove().x << std::endl;
 	for (size_t i = 0; i < Board->getPotentialMove().size(); i++)
 	{
 		if (Board->getPotentialMove()[i].priority <= Board->getHighestPriority()) {
 			tmp = new GameManager(Board);
 			PlayStone(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x, tmp);
  			Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
-//			std::cout << "Moved " << i << " = " << PlayedMove.y << " " << PlayedMove.x << " et priority = " << Board->getPotentialMove()[i].priority << std::endl;
 			tmp->setLastMove(PlayedMove);
 			Board->getChilds().push_back(tmp);
 		}
-		else
-		{
-//			std::cout << "Moved Cancel " << i << " = " << Board->getPotentialMove()[i].y << " " << Board->getPotentialMove()[i].x << " et priority = " << Board->getPotentialMove()[i].priority  << std::endl;
-		}
 	}
+}
 
+GameManager * PossibleMove::SetOneChild()
+{
+	GameManager * tmp;
+	size_t i = Board->getCounterChild();
+
+	while (i < Board->getPotentialMove().size() && Board->getPotentialMove()[i].priority > Board->getHighestPriority())
+	{
+		i++;
+	}
+	if (i >= Board->getPotentialMove().size())
+		return NULL;
+	tmp = new GameManager(Board);
+	PlayStone(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x, tmp);
+	Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
+	tmp->setLastMove(PlayedMove);
+	Board->getChilds().push_back(tmp);
+	i++;
+	Board->setCounterChild(i);
+	return tmp;
 }
 
 // Return True if there is a stone 2 cells around the stone in parameter
@@ -149,7 +164,7 @@ bool PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 	if (x >= 3 && Board->getBoard()[y * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x - 3] == Player1)
 		SomethingEaten = DeadStone(y, x -1, y, x - 2, &iScore, Player1, Board);
 	// Eat Right
-	if (x < BOARD_WIDTH - 3 && Board->getBoard()[y * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 3] == Player1)
+	if (x <= BOARD_WIDTH - 3 && Board->getBoard()[y * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 3] == Player1)
 		SomethingEaten = DeadStone(y, x + 1, y, x + 2, &iScore, Player1, Board);
 	// Eat Top
 	if (y >= 3 && Board->getBoard()[(y - 1) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x] == Player1)
@@ -164,7 +179,7 @@ bool PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 	if (x < BOARD_WIDTH - 3 && y >= 3 && Board->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x + 3] == Player1)
 		SomethingEaten = DeadStone(y - 1, x + 1, y - 2, x + 2, &iScore, Player1, Board);
 	// Eat Bottom Right
-	if (x < BOARD_WIDTH - 3 && y < BOARD_HEIGHT - 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x + 3] == Player1)
+	if (x < BOARD_WIDTH - 3 && y < BOARD_HEIGHT- 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x + 3] == Player1)
 		SomethingEaten = DeadStone(y + 1, x + 1, y + 2, x + 2, &iScore, Player1, Board);
 	// Eat Bottom Left
 	if (x >= 3 && y < BOARD_HEIGHT - 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x - 3] == Player1)

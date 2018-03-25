@@ -32,6 +32,7 @@
 #define ALGO_ITERATIVE_ALPHABETA 3
 #define ALGO_NEGASCOUT 4
 #define ALGO_ITERATIVE_NEGASCOUT 5
+#define ALGO_MCTS 6
 
 class MinMax 
 {
@@ -71,11 +72,20 @@ private:
 	void IterativeAlphaBetaStart();
 	int IterativeAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, bool MaximizingPlayer);
 
+	//ALGO_MCTS
+	void MCTS();
+	GameManager * getChildWithMaxScore();
+	GameManager * SelectPromisingNode(GameManager * Root);
+	GameManager * findBestNodeWithUCT(GameManager * Node);
+	double UCTValue(int TotalVisit, double WinScore, int Visit);
+	void ExpandNode(GameManager * Node);
+	void BackPropagation(GameManager * Node, bool BlackPlayer);
+	bool SimulateRandomPlayout(GameManager * Node);
 
 	MinMax();
 
 public:
-	MinMax(GameManager * src, int _AlgoType = 3);
+	MinMax(GameManager * src, int _AlgoType = 6);
 	~MinMax();
 
 	int getDepth() { return ReturnDepth; }

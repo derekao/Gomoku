@@ -17,7 +17,7 @@ double MinMax::MaxTimer;
 
 MinMax::~MinMax()
 {
-	if (AlgoType == ALGO_MTDF || AlgoType == ALGO_ITERATIVE_ALPHABETA)
+	if (AlgoType == ALGO_MTDF || AlgoType == ALGO_ITERATIVE_ALPHABETA || AlgoType == ALGO_MCTS)
 	{
 		// std::cout << "Destructor start timer  = " << (clock() - startTime) / static_cast<int>(CLOCKS_PER_SEC) << std::endl;
 		for (size_t i = 0; i < Board->getChilds().size(); i++)
@@ -61,7 +61,8 @@ MinMax::MinMax(GameManager * src, int _AlgoType) : AlgoType(_AlgoType), Board(sr
 		AlphaBetaStart();
 	else if (AlgoType == ALGO_ITERATIVE_ALPHABETA)
 		IterativeAlphaBetaStart();
-}
+	else if (AlgoType == ALGO_MCTS)
+		MCTS();
 
 ///////////////////////////////
 /////////ALGO_MTDF//////////
@@ -489,4 +490,173 @@ int MinMax::IterativeAlphaBeta(GameManager * Node, int Alpha, int Beta, int Dept
 	} 
 	Node->setHeuristicValue(Value);
 	return Value;
+}
+
+///////////////////////////////
+/////////ALGO_MCTS/////////////
+///////////////////////////////
+void MinMax::MCTS()
+{
+	double timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
+	while (timer < MinMax::MaxTimer)
+	{
+		GameManager * PromisingNode = SelectPromisingNode(Board);;
+		if (!(Board->getBlackWin() || Board->getWhiteWin() || Board->getBlackScore() >= 10 || Board->getWhiteScore() >= 10))
+		{
+			ExpandNode(PromisingNode);
+		}
+		GameManager * NodeToExplore;
+		if (PromisingNode->getPotentialMove().empty())
+		{
+			PossibleMove::FindOneMove(PromisingNode);
+			NodeToExplore = PromisingNode->getChilds().back();
+		}
+		PossibleMove possibleMove = PossibleMove(PromisingNode, true);
+		NodeToExplore = possibleMove.SetOneChild();
+		if (NodeToExplore == NULL)
+		{
+			int i = std::rand() % PromisingNode->getChilds().size();
+			NodeToExplore = PromisingNode->getChilds()[i];
+		}
+		bool BlackWin = SimulateRandomPlayout(NodeToExplore);
+		BackPropagation(NodeToExplore, BlackWin);
+		timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
+	}
+	Time = timer;
+	GameManager *BestMove = getChildWithMaxScore();
+	Solution = BestMove->getLastMove();
+	printBoard(BestMove);
+	std::cout << "NUM CHILD = " << BestMove->getChilds().size() << " et " <<  BestMove << std::endl;
+	std::cout << " y = " << BestMove->getChilds()[0]->getLastMove().y << " et x = " << BestMove->getChilds()[0]->getLastMove().x << std::endl;
+}
+
+GameManager * MinMax::getChildWithMaxScore()
+{
+	int Value = 0;
+	GameManager *tmp;
+
+	for (size_t i = 0; i < Board->getChilds().size(); i++)
+	{
+		std::cout << Board->getChilds()[i]->getCounterVisit() << " And number of win = " <<  Board->getChilds()[i]->getWinScore() << std::endl;
+		if (Board->getChilds()[i]->getCounterVisit() > Value)
+		{
+			Value = Board->getChilds()[i]->getCounterVisit();
+			tmp = Board->getChilds()[i];
+		}
+//		std::cout << "Y-----------------------" << std::endl;
+		GameManager * tmpBis;
+		for (size_t j = 0;  j < Board->getChilds()[i]->getChilds().size(); j++)
+		{
+//			std::cout << Board->getChilds()[i]->getChilds()[j]->getCounterVisit() << " And number of win = " <<  Board->getChilds()[i]->getChilds()[j]->getWinScore() << std::endl;
+			if (Board->getChilds()[i]->getChilds()[j]->getCounterVisit() > Value)
+			{
+				Value = Board->getChilds()[i]->getChilds()[j]->getCounterVisit();
+				tmpBis = Board->getChilds()[i]->getChilds()[j];
+			}
+		}
+//		std::cout << "X-----------------------" << std::endl;
+	}
+
+	return tmp;
+}
+
+GameManager * MinMax::SelectPromisingNode(GameManager * Root)
+{
+	while (Root->getChilds().size() != 0 && Root->getAlreadyExpand() == true)
+	{
+		Root = findBestNodeWithUCT(Root);
+	}
+//	std::cout << " ADRESSE = " << Root << std::endl;
+	return Root;
+}
+
+GameManager * MinMax::findBestNodeWithUCT(GameManager * Node)
+{
+	int ParentVisit = Node->getCounterVisit();
+	double Value = -1;
+	double tmp;
+	GameManager * ReturnNode = NULL;
+	for (size_t i = 0; i < Node->getChilds().size(); i++)
+	{
+		tmp = UCTValue(ParentVisit, Node->getChilds()[i]->getWinScore(), Node->getChilds()[i]->getCounterVisit());
+		if (tmp > Value)
+		{
+			ReturnNode = Node->getChilds()[i];
+			Value = tmp;
+		}
+	}
+//	std::cout << "Return Value" << Value << std::endl;
+	if (ReturnNode == NULL)
+	{
+		std::cerr << "Wierd UTC" << std::endl;
+		exit(0);
+	}
+	return ReturnNode;
+}
+
+double MinMax::UCTValue(int TotalVisit, double WinScore, int Visit)
+{
+	if (Visit == 0)
+		return INT_MAX;
+	return (WinScore / static_cast<double>(Visit)) + 1.41 * sqrt(log(TotalVisit) / static_cast<double>(Visit));
+}
+
+void MinMax::ExpandNode(GameManager * Node)
+{
+	Node->setAlreadyExpand(true);
+	if (Node->getPotentialMove().empty())
+	{
+		PossibleMove::FindOneMove(Node);
+	}
+	PossibleMove possibleMove = PossibleMove(Node, true);
+	GameManager * tmp = possibleMove.SetOneChild();
+	if (!tmp)
+//		std::cout << "NULL" << std::endl;
+	while (tmp)
+	{
+		tmp = possibleMove.SetOneChild();
+	}
+//	std::cout << "NUM CHILD = " << Node->getChilds().size() << " et " <<  Node << std::endl;
+//	std::cout << " y = " << Node->getLastMove().y << " et x = " << Node->getLastMove().x << std::endl;
+}
+
+void MinMax::BackPropagation(GameManager * Node, bool BlackPlayer)
+{
+	GameManager * tmpNode = Node;
+//	std::cout << "===================" << std::endl;
+	while (tmpNode != NULL)
+	{
+		tmpNode->InscrementVisit();
+//		std::cout << "NUM CHILD increment = " << tmpNode->getChilds().size() << " et nb visit =  " << tmpNode->getCounterVisit() << std::endl;
+		if (tmpNode->getbPlayerOneTurn() == BlackPlayer)
+		{
+			tmpNode->AddScore(1); // TODO
+		}
+		tmpNode = tmpNode->getParent();
+	}
+//	std::cout << "---------------------------" << std::endl;
+}
+
+bool MinMax::SimulateRandomPlayout(GameManager * Node)
+{
+	GameManager * tmpNode = Node;
+
+	while (!((tmpNode->getBlackWin() || tmpNode->getWhiteWin() || tmpNode->getBlackScore() >= 10 || tmpNode->getWhiteScore() >= 10)))
+	{
+		if (tmpNode->getPotentialMove().empty())
+			PossibleMove::FindOneMove(tmpNode);
+		PossibleMove possibleMove = PossibleMove(tmpNode, true);
+		GameManager * tmp = possibleMove.SetOneChild();
+		if (tmp == NULL)
+		{
+			int i = std::rand() % tmpNode->getChilds().size();
+			tmpNode = tmpNode->getChilds()[i];
+		}
+		else
+			tmpNode = tmp;
+	}
+	if (tmpNode->getBlackScore() >= 10 || tmpNode->getBlackWin())
+		return true;
+	else
+		return false;
 }
