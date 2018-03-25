@@ -29,12 +29,14 @@ private:
 	int HighestHeuristicValue;
 	int LowestHeuristicValue;
 
-	void Compute();
+	void SetChilds();
 	bool StoneNearby(int y, int x);
 
 public:
-	PossibleMove(GameManager *);
+	PossibleMove(GameManager *, bool OnlyOne = false);
 	~PossibleMove() {};
+
+	GameManager * SetOneChild();
 
 	static void PlayStone(int y, int x, GameManager * Board);
 	static bool CheckStoneEaten(int y, int x, GameManager * Board);

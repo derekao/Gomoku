@@ -66,6 +66,13 @@ private:
 	
 	std::vector<Coord> ListEatCoord;
 
+	//Monte Carlo
+	int CounterChild;
+	int CounterVisit;
+	double WinScore;
+	bool AlreadyExpand;
+
+
 public:
 	//Constructor
 	GameManager(int _Board[], bool _HasWon, bool _bPlayerOneTurn, int _WhiteScore, int _BlackScore, int WinY, int WinX);
@@ -73,58 +80,70 @@ public:
 	GameManager(GameManager * src) :
 		HeuristicValue(src->HeuristicValue), Parent(src), LastMove(0,0), LowerBound(MIN_INFINIT), UpperBound(MAX_INFINIT), BoundDepth(1) ,BlackWin(src->BlackWin), WhiteWin(src->WhiteWin), HasWon(src->HasWon), bPlayerOneTurn(src->bPlayerOneTurn),
 		WhiteScore(src->WhiteScore), BlackScore( src->BlackScore), HighestPriority(src->HighestPriority), Board(src->Board),
-		BlackStones(src->BlackStones), WhiteStones(src->WhiteStones), WinPos(src->WinPos.y, src->WinPos.x)
+		BlackStones(src->BlackStones), WhiteStones(src->WhiteStones), WinPos(src->WinPos.y, src->WinPos.x), CounterChild(0), CounterVisit(0), WinScore(0), AlreadyExpand(false)
 	{
 		return ;
 	}
 
 	// Accessor
-	int getHeuristicValue() { return HeuristicValue; };
-	GameManager * getParent() { return Parent; };
-	std::vector<GameManager *> & getChilds() { return Childs; };
-	Coord & getLastMove() { return LastMove; };
+	int getHeuristicValue() { return HeuristicValue; }
+	GameManager * getParent() { return Parent; }
+	std::vector<GameManager *> & getChilds() { return Childs; }
+	Coord & getLastMove() { return LastMove; }
 
-	int getLowerBound() { return LowerBound; } ;
-	int getUpperBound() { return UpperBound; } ;
-	int getBoundDepth() { return BoundDepth; } ;
+	int getLowerBound() { return LowerBound; } 
+	int getUpperBound() { return UpperBound; } 
+	int getBoundDepth() { return BoundDepth; } 
 
-	bool getBlackWin() { return BlackWin; };
-	bool getWhiteWin() { return WhiteWin; };
-	bool getHasWon() { return HasWon; };
-	bool getbPlayerOneTurn() { return bPlayerOneTurn; };
+	bool getBlackWin() { return BlackWin; }
+	bool getWhiteWin() { return WhiteWin; }
+	bool getHasWon() { return HasWon; }
+	bool getbPlayerOneTurn() { return bPlayerOneTurn; }
 
-	int getWhiteScore() { return WhiteScore; };
-	int getBlackScore() { return BlackScore; };
-	int getHighestPriority() { return HighestPriority; };
+	int getWhiteScore() { return WhiteScore; }
+	int getBlackScore() { return BlackScore; }
+	int getHighestPriority() { return HighestPriority; }
 
-	std::vector<char> & getBoard() { return Board; };
-	std::vector<Coord> & getBlackStones() { return BlackStones; };
-	std::vector<Coord> & getWhiteStones() { return WhiteStones; };
-	std::vector<PotentialMove> & getPotentialMove() { return lPotentialMove; };
+	std::vector<char> & getBoard() { return Board; }
+	std::vector<Coord> & getBlackStones() { return BlackStones; }
+	std::vector<Coord> & getWhiteStones() { return WhiteStones; }
+	std::vector<PotentialMove> & getPotentialMove() { return lPotentialMove; }
 
-	Coord & getWinPos() { return WinPos; };
+	Coord & getWinPos() { return WinPos; }
 
-	std::vector<Coord> & getListEatCoord() { return ListEatCoord; };
+	std::vector<Coord> & getListEatCoord() { return ListEatCoord; }
+
+	int getCounterChild() { return CounterChild; }
+	int getCounterVisit() { return CounterVisit; }
+	double getWinScore() { return WinScore; }
+	bool getAlreadyExpand() { return AlreadyExpand; }
 
 	// Mutator
-	void setHeuristicValue(int n) { HeuristicValue = n; };
-	void setParent(GameManager * Board) { Parent = Board; };
+	void setHeuristicValue(int n) { HeuristicValue = n; }
+	void setParent(GameManager * Board) { Parent = Board; }
 	void setLastMove(Coord & move) { LastMove.y = move.y; LastMove.x = move.x; ;}
 
-	void setLowerBound(int n) { LowerBound = n; }; 
-	void setUpperBound(int n) { UpperBound = n; };
-	void setBoundDepth(int n) { BoundDepth = n; };
+	void setLowerBound(int n) { LowerBound = n; }
+	void setUpperBound(int n) { UpperBound = n; }
+	void setBoundDepth(int n) { BoundDepth = n; }
 
-	void setBlackWin(bool b) { BlackWin = b; };
-	void setWhiteWin(bool b) { WhiteWin = b; };
-	void setHasWon(bool b) { HasWon = b; };
-	void setbPlayerOneTurn(bool b) { bPlayerOneTurn = b; };
+	void setBlackWin(bool b) { BlackWin = b; }
+	void setWhiteWin(bool b) { WhiteWin = b; }
+	void setHasWon(bool b) { HasWon = b; }
+	void setbPlayerOneTurn(bool b) { bPlayerOneTurn = b; }
 
-	void setBlackScore(int n) { BlackScore = n; };
-	void setWhiteScore(int n) { WhiteScore = n; };
-	void setHighestPriority(int n) { HighestPriority = n; };
+	void setBlackScore(int n) { BlackScore = n; }
+	void setWhiteScore(int n) { WhiteScore = n; }
+	void setHighestPriority(int n) { HighestPriority = n; }
 
-	void setWinCoord(Coord & tmp) { WinPos.y = tmp.y; WinPos.x = tmp.x; };
-	void setWinCoord(int y, int x) { WinPos.y = y; WinPos.x = x; };
+	void setWinCoord(Coord & tmp) { WinPos.y = tmp.y; WinPos.x = tmp.x; }
+	void setWinCoord(int y, int x) { WinPos.y = y; WinPos.x = x; }
+
+	void setCounterChild(int n) { CounterChild = n; }
+	void setCounterVisit(int n) { CounterVisit = n; }
+	void InscrementVisit() { CounterVisit++; }
+	void setWinScore(double x) { WinScore = x; }
+	void AddScore(double x) { WinScore += x; }
+	void setAlreadyExpand(bool b) { AlreadyExpand = b; };
 
 };
