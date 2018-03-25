@@ -63,6 +63,7 @@ MinMax::MinMax(GameManager * src, int _AlgoType) : AlgoType(_AlgoType), Board(sr
 		IterativeAlphaBetaStart();
 	else if (AlgoType == ALGO_MCTS)
 		MCTS();
+}
 
 ///////////////////////////////
 /////////ALGO_MTDF//////////
