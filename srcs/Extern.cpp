@@ -57,9 +57,12 @@ extern "C"
 	CoordIA IAPlay(GameStatus Game)
 	{
 		CoordIA MoveChosed;
-		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
-
 		int PlayerOne, PlayerTwo;
+		
+		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
+		MinMax::MaxDepth = Game.Depth;
+		MinMax::MaxTimer = Game.Timer;
+
 		if (Game.bPlayerOneTurn)
 		{
 			PlayerOne = STONE_BLACK;
@@ -71,13 +74,15 @@ extern "C"
 			PlayerTwo = STONE_BLACK;
 		}
 
+		std::srand(std::clock());
 		Heuristic bestMoves = Heuristic(PlayerOne, PlayerTwo, &Board);
+		Heuristic::ramdomMove = (std::rand() % 2 == 0 ? true : false);
 		bestMoves.searchMoves();
 		
+		// PossibleMove::PlayStone(0, 0, &Board);
 		// PossibleMove::PlayStone(9, 9, &Board);
-		// PossibleMove::PlayStone(8, 8, &Board);
 
-		// PossibleMove::PlayStone(9, 11, &Board);
+		// PossibleMove::PlayStone(1, 1, &Board);
 		// PossibleMove::PlayStone(9, 8, &Board);
 
 		// PossibleMove::PlayStone(7, 8, &Board);
@@ -156,7 +161,7 @@ extern "C"
 		std::cout << "MDR2" << std::endl;
 		printBoard(&Board);
 		
-		MinMax Algo = MinMax(&Board);
+		MinMax Algo = MinMax(&Board, Game.Algo);
 		Coord tmp = Algo.getSolution();
 		MoveChosed.Depth = Algo.getDepth();
 		MoveChosed.Time = Algo.getTime();

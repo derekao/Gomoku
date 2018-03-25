@@ -23,8 +23,8 @@
 #include "PossibleMove.class.hpp"
 #include "TranspositionTable.class.hpp"
 
-#define TIMER_MAX 0.5f
-#define MAX_DEPTH 30
+// #define TIMER_MAX 0.5f
+// #define MAX_DEPTH 30
 
 #define ALGO_MTDF 0
 #define ALGO_MINIMAX 1
@@ -82,5 +82,8 @@ public:
 	Coord & getSolution() { return Solution ;}
 	double getTime() { return Time; }
 	int getValue() { return ReturnValue; }
+
+	static int MaxDepth;
+	static double MaxTimer;
 
 };

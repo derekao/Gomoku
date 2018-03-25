@@ -149,7 +149,7 @@ bool PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 	if (x >= 3 && Board->getBoard()[y * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x - 3] == Player1)
 		SomethingEaten = DeadStone(y, x -1, y, x - 2, &iScore, Player1, Board);
 	// Eat Right
-	if (x <= BOARD_WIDTH - 3 && Board->getBoard()[y * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 3] == Player1)
+	if (x < BOARD_WIDTH - 3 && Board->getBoard()[y * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[y * BOARD_WIDTH + x + 3] == Player1)
 		SomethingEaten = DeadStone(y, x + 1, y, x + 2, &iScore, Player1, Board);
 	// Eat Top
 	if (y >= 3 && Board->getBoard()[(y - 1) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x] == Player1)
@@ -164,7 +164,7 @@ bool PossibleMove::CheckStoneEaten(int y, int x, GameManager * Board)
 	if (x < BOARD_WIDTH - 3 && y >= 3 && Board->getBoard()[(y - 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y - 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y - 3) * BOARD_WIDTH + x + 3] == Player1)
 		SomethingEaten = DeadStone(y - 1, x + 1, y - 2, x + 2, &iScore, Player1, Board);
 	// Eat Bottom Right
-	if (x < BOARD_WIDTH - 3 && y < BOARD_HEIGHT- 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x + 3] == Player1)
+	if (x < BOARD_WIDTH - 3 && y < BOARD_HEIGHT - 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x + 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x + 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x + 3] == Player1)
 		SomethingEaten = DeadStone(y + 1, x + 1, y + 2, x + 2, &iScore, Player1, Board);
 	// Eat Bottom Left
 	if (x >= 3 && y < BOARD_HEIGHT - 3 && Board->getBoard()[(y + 1) * BOARD_WIDTH + x - 1] == Player2 && Board->getBoard()[(y + 2) * BOARD_WIDTH + x - 2] == Player2 && Board->getBoard()[(y + 3) * BOARD_WIDTH + x - 3] == Player1)
@@ -268,9 +268,24 @@ void PossibleMove::FindOneMove(GameManager * Node)
 	int j = 9;
 	int cmpt = 0;
 	int size = 3;
+	int rand = std::rand() % 8;
 
 	while (Node->getChilds().empty())
 	{
+		cmpt = 0;
+		size = 3;
+		for (int cnt = 0; cnt < rand; cnt++) {
+			if (cmpt == size * size)
+			{
+				cmpt = 0;
+				size +=2;
+			}
+			cmpt++;
+			if (9 - (size / 2) + cmpt % size == 9 && 9 - (size / 2) + cmpt / size == 9)
+				cmpt++;
+		}
+		i = 9 - (size / 2) + cmpt % size;
+		j = 9 - (size / 2) + cmpt / size;
 		if (Node->getBoard()[j * BOARD_WIDTH + i] == 0)
 		{
 			GameManager * tmp = new GameManager(Node);
@@ -279,18 +294,6 @@ void PossibleMove::FindOneMove(GameManager * Node)
 			tmp->setLastMove(PlayedMove);
 			Node->getChilds().push_back(tmp);
 		}
-		else
-		{
-			if (cmpt == size * size)
-			{
-				cmpt = 0;
-				size +=2;
-			}
-			if (9 - (size / 2) + cmpt % size == 9 && 9 - (size / 2) + cmpt / size == 9)
-				cmpt++;
-			i = 9 - (size / 2) + cmpt % size;
-			j = 9 - (size / 2) + cmpt / size;
-			cmpt++;
-		}
+		rand = std::rand() % 8;
 	}
 }

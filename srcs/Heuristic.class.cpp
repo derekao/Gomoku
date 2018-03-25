@@ -10,12 +10,11 @@
 // 	}
 // }
 
-std::ofstream myfile;
+bool Heuristic::ramdomMove;
 
 Heuristic::Heuristic(int iPlayer, int iOpponent, GameManager * gInstance) 
 	: Player(iPlayer), Opponent(iOpponent), Instance(gInstance), HighestPriority(7)
 {
-	myfile.open("debug.txt");
 }
 
 int Heuristic::BoardValue() {
@@ -404,22 +403,40 @@ int Heuristic::CountHeuristicAlignmentScore(int size, int potentialSize, bool bB
 		{
 			size = 4;
 		}
-		if (bBlockStart || bBlockEnd || bBorder)
-			score += (pow(10, size) / BLOCK_REDUCTION) / 10;
-		else
-			score += pow(10, size) / 10;
+		if (bBlockStart || bBlockEnd || bBorder) {
+			if (size == 1)
+				score += SIZE_1 / BLOCK_REDUCTION;
+			else if (size == 2)
+				score += SIZE_2 / BLOCK_REDUCTION;
+			else if (size == 3)
+				score += SIZE_3 / BLOCK_REDUCTION;
+			else if (size == 4)
+				score += SIZE_4 / BLOCK_REDUCTION;
+		}
+		else {
+			if (size == 1)
+				score += SIZE_1;
+			else if (size == 2)
+				score += SIZE_2;
+			else if (size == 3)
+				score += SIZE_3;
+			else if (size == 4)
+				score += SIZE_4;
+		}
 	}
 
 	return score;
 }
 
 void Heuristic::addMove(int y, int x, int score) {
-
-	if (score <= HighestPriority &&  Rules::EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x]) && ((Instance->getBoard()[y * BOARD_WIDTH + x] & ((Player == STONE_BLACK) ? STONE_BLACKDOUBLETREE : STONE_WHITEDOUBLETREE)) == 0)) {
-		// std::cout << " y " << y << " x " << x << " Score " << score << " et " << HighestPriority  << std::endl;
+	if (y >= 0 && x >= 0 && y < BOARD_HEIGHT && x < BOARD_WIDTH && 
+		score <= HighestPriority &&  Rules::EmptyCase(Instance->getBoard()[y * BOARD_WIDTH + x]) && ((Instance->getBoard()[y * BOARD_WIDTH + x] & ((Player == STONE_BLACK) ? STONE_BLACKDOUBLETREE : STONE_WHITEDOUBLETREE)) == 0)) {
 		if (score != CAPTURE && score < HighestPriority)
 			HighestPriority = score;
-		Instance->getPotentialMove().push_back(PotentialMove(y, x, score));
+		if (ramdomMove)
+			Instance->getPotentialMove().push_back(PotentialMove(y, x, score));
+		else
+			Instance->getPotentialMove().insert(Instance->getPotentialMove().begin(), PotentialMove(y, x, score));
 	}
 }
 

@@ -12,6 +12,7 @@
 #define DIAGORIGHT 3
 #define DIAGOLEFT 4
 
+#define CAPTURE 0 
 #define OTW_PLAYER 1
 #define OTW_OPPONENT 2
 #define TTW_PLAYER 3
@@ -41,10 +42,12 @@
 #define THIRD_STONE_TAKEN 800
 #define FOURTH_STONE_TAKEN 1000
 
-
+#define SIZE_1 1
+#define SIZE_2 10
+#define SIZE_3 100
+#define SIZE_4 1000
 #define BLOCK_REDUCTION 2
 
-#define CAPTURE 0 
 
 class Heuristic {
 
@@ -67,6 +70,7 @@ public:
 	Heuristic(int iPlayer, int iOpponent, GameManager * gInstance);
 	int BoardValue();
 	void searchMoves();
+	static bool ramdomMove;
 
 };
 

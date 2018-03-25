@@ -19,6 +19,9 @@ public class IA : MonoBehaviour {
 		public int BlackScore;
 		public int WinY;
 		public int WinX;
+		public int Depth;
+		public double Timer;
+		public int Algo;
 	}
 	[StructLayout(LayoutKind.Sequential)]
 	public struct CoordIA
@@ -28,7 +31,7 @@ public class IA : MonoBehaviour {
 		public int Depth;
 		public double Timer;
 		public int Value;
-	};
+	}
 
 	[DllImport("Extern.dll")]
 	public static extern CoordIA IAPlay(GameStatus Game);
@@ -45,6 +48,9 @@ public class IA : MonoBehaviour {
 		game.BlackScore = GameManager.Instance.currentState.BlackScore;
 		game.WinY = GameManager.Instance.currentState.winY;
 		game.WinX = GameManager.Instance.currentState.winX;
+		game.Depth = 8;
+		game.Timer = 0.5;
+		game.Algo = 2;
 		for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
 		{
 			for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)

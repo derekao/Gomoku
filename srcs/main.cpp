@@ -21,6 +21,9 @@ int main()
 	game.BlackScore = 0;
 	game.WinY = -1;
 	game.WinX = -1;
+	game.Depth = 30;
+	game.Timer = 0.5f;
+	game.Algo = 0;
 
 	for (int i = 0; i < 361; i ++)
 	{

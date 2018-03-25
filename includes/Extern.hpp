@@ -27,6 +27,9 @@ extern "C"
 		int BlackScore;
 		int WinY;
 		int WinX;
+		int Depth;
+		double Timer;
+		int Algo;
 
 	};
 

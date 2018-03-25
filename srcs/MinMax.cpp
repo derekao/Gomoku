@@ -12,6 +12,9 @@
 
 #include "MinMax.hpp"
 
+int MinMax::MaxDepth;
+double MinMax::MaxTimer;
+
 MinMax::~MinMax()
 {
 	if (AlgoType == ALGO_MTDF || AlgoType == ALGO_ITERATIVE_ALPHABETA)
@@ -71,7 +74,7 @@ void MinMax::IterativeDeepning()
 	}
 	ReturnDepth = 0;
 	int FirstGuess = 0;
-	for (int d = 1; d < MAX_DEPTH; d++)
+	for (int d = 1; d < MinMax::MaxDepth; d++)
 	{
 		FirstGuess = MTDF(FirstGuess, d);
 		if (TimeOut)
@@ -135,7 +138,7 @@ int MinMax::MemoryAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, 
 	if (TimeOut)
 		return 0;
 	double timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
-	if (timer > TIMER_MAX)
+	if (timer > MinMax::MaxTimer)
 	{
 		Time = timer;
 		TimeOut = true;
@@ -241,7 +244,7 @@ void MinMax::MiniMaxStart()
 
 	for (size_t i = 0; i < Childs.size(); i++)
 	{
-		Value = MiniMax(Childs[i], MAX_DEPTH - 1, false);
+		Value = MiniMax(Childs[i], MinMax::MaxDepth - 1, false);
 		if (Value > v)
 		{
 			BestMove = Childs[i];
@@ -254,7 +257,7 @@ void MinMax::MiniMaxStart()
 	for (size_t i = 0; i < Childs.size(); i++)
 		delete Childs[i];
 	Time = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
-	ReturnDepth = MAX_DEPTH;
+	ReturnDepth = MinMax::MaxDepth;
 	ReturnValue = Value;
 }
 
@@ -318,7 +321,7 @@ void MinMax::AlphaBetaStart()
 
 	for (size_t i = 0; i < Childs.size(); i++)
 	{
-		Value = AlphaBeta(Childs[i], MAX_DEPTH - 1, Alpha, Beta, false);
+		Value = AlphaBeta(Childs[i], MinMax::MaxDepth - 1, Alpha, Beta, false);
 		if (Value > v)
 		{
 			BestMove = Childs[i];
@@ -334,7 +337,7 @@ void MinMax::AlphaBetaStart()
 	for (size_t i = 0; i < Childs.size(); i++)
 		delete Childs[i];
 	Time = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
-	ReturnDepth = MAX_DEPTH;
+	ReturnDepth = MinMax::MaxDepth;
 	ReturnValue = Value;
 }
 
@@ -410,7 +413,7 @@ void MinMax::IterativeAlphaBetaStart()
 	}
 	ReturnDepth = 0;
 	int FirstGuess = 0;
-	for (int d = 1; d < MAX_DEPTH; d++)
+	for (int d = 1; d < MinMax::MaxDepth; d++)
 	{
 		FirstGuess = IterativeAlphaBeta(Board, MIN_INFINIT, MAX_INFINIT, d, true);
 		if (TimeOut)
@@ -438,7 +441,7 @@ int MinMax::IterativeAlphaBeta(GameManager * Node, int Alpha, int Beta, int Dept
 	if (TimeOut)
 		return 0;
 	double timer = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
-	if (timer > TIMER_MAX)
+	if (timer > MinMax::MaxTimer)
 	{
 		Time = timer;
 		TimeOut = true;
