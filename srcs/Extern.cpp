@@ -62,6 +62,7 @@ extern "C"
 		GameManager Board = GameManager(Game.Board, Game.HasWon, Game.bPlayerOneTurn, Game.WhiteScore, Game.BlackScore, Game.WinY, Game.WinX);
 		MinMax::MaxDepth = Game.Depth;
 		MinMax::MaxTimer = Game.Timer;
+		PossibleMove::MaxMove = Game.MaxMove;
 
 		if (Game.bPlayerOneTurn)
 		{

@@ -22,17 +22,18 @@
 // 	}
 // }
 
+int PossibleMove::MaxMove;
+
 PossibleMove::PossibleMove(GameManager * src, bool OnlyOne) : Board(src),
 	HighestHeuristicValue(src->getHeuristicValue()), LowestHeuristicValue(src->getHeuristicValue())
 {
 	if (!OnlyOne)
 		SetChilds();
 }
-
 void PossibleMove::SetChilds()
 {
 	GameManager * tmp;
-
+	int nbMove = 0;
 	for (size_t i = 0; i < Board->getPotentialMove().size(); i++)
 	{
 		if (Board->getPotentialMove()[i].priority <= Board->getHighestPriority()) {
@@ -40,7 +41,14 @@ void PossibleMove::SetChilds()
 			PlayStone(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x, tmp);
  			Coord PlayedMove = Coord(Board->getPotentialMove()[i].y, Board->getPotentialMove()[i].x);
 			tmp->setLastMove(PlayedMove);
-			Board->getChilds().push_back(tmp);
+			if (Board->getHighestPriority() <= TTW_OPPONENT) {
+				Board->getChilds().push_back(tmp);
+				nbMove++;
+			}
+			else if (nbMove < MaxMove) {
+				Board->getChilds().push_back(tmp);
+				nbMove++;
+			}
 		}
 	}
 }

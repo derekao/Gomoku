@@ -44,6 +44,7 @@ public:
 	static void FindOneMove(GameManager * Node);
 
 	enum Type { Empty, Black, White, Eat, DoubleTree, Forbidden };
+	static int MaxMove;
 
 
 };

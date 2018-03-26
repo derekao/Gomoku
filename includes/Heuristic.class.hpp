@@ -12,7 +12,7 @@
 #define DIAGORIGHT 3
 #define DIAGOLEFT 4
 
-#define CAPTURE 0 
+#define CAPTURE 0
 #define OTW_PLAYER 1
 #define OTW_OPPONENT 2
 #define TTW_PLAYER 3

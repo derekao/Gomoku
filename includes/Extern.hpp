@@ -30,6 +30,7 @@ extern "C"
 		int Depth;
 		double Timer;
 		int Algo;
+		int MaxMove;
 
 	};
 

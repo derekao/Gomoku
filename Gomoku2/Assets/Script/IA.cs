@@ -22,6 +22,7 @@ public class IA : MonoBehaviour {
 		public int Depth;
 		public double Timer;
 		public int Algo;
+		public int MaxMove;
 	}
 	[StructLayout(LayoutKind.Sequential)]
 	public struct CoordIA
@@ -48,9 +49,10 @@ public class IA : MonoBehaviour {
 		game.BlackScore = GameManager.Instance.currentState.BlackScore;
 		game.WinY = GameManager.Instance.currentState.winY;
 		game.WinX = GameManager.Instance.currentState.winX;
-		game.Depth = 8;
+		game.Depth = 30;
 		game.Timer = 0.5;
-		game.Algo = 2;
+		game.Algo = 0;
+		game.MaxMove = 1;
 		for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
 		{
 			for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)
