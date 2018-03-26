@@ -66,29 +66,6 @@ GameManager * PossibleMove::SetOneChild()
 	return tmp;
 }
 
-// Return True if there is a stone 2 cells around the stone in parameter
-bool PossibleMove::StoneNearby(int y, int x)
-{
-	for (int i = y - 1; i <= y + 1; i++)
-	{
-		if (i < 0)
-			continue;
-		if (i >= BOARD_HEIGHT)
-			break;
-		for (int j = x - 1; j <= x + 1; j++)
-		{
-			if (j < 0)
-				continue;
-			if (j >= BOARD_WIDTH)
-				break;
-			if (!Rules::EmptyCase(Board->getBoard()[i * BOARD_WIDTH + j]))
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
 
 // Static function that play a stone.
 void PossibleMove::PlayStone(int y, int x, GameManager * Board)
@@ -279,17 +256,36 @@ bool PossibleMove::DeadStone(int y1, int x1, int y2, int x2, int * iScore, int P
 
 void PossibleMove::FindOneMove(GameManager * Node)
 {
+	if (Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
+	{
+		for (size_t i = 0; i < Node->getBoard().size(); i++)
+		{
+			if (Node->getBoard()[i] == 0)
+			{
+				GameManager * tmp = new GameManager(Node);
+				PlayStone(i / BOARD_WIDTH, i % BOARD_WIDTH, tmp);
+ 				Coord PlayedMove = Coord(i / BOARD_WIDTH, i % BOARD_WIDTH);
+				tmp->setLastMove(PlayedMove);
+				Node->getChilds().push_back(tmp);
+				return;
+			}
+		}
+	}
 	int i = 9;
 	int j = 9;
 	int cmpt = 0;
 	int size = 3;
-	int rand = std::rand() % 8;
+	int random = std::rand() % 8;
 
+	int k = 0;
 	while (Node->getChilds().empty())
 	{
+		k++;
+		if (k >= 50)
+			exit(0);
 		cmpt = 0;
 		size = 3;
-		for (int cnt = 0; cnt < rand; cnt++) {
+		for (int cnt = 0; cnt < random; cnt++) {
 			if (cmpt == size * size)
 			{
 				cmpt = 0;
@@ -309,6 +305,6 @@ void PossibleMove::FindOneMove(GameManager * Node)
 			tmp->setLastMove(PlayedMove);
 			Node->getChilds().push_back(tmp);
 		}
-		rand = std::rand() % 8;
+		random = std::rand() % 8;
 	}
 }

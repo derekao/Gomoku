@@ -30,7 +30,6 @@ private:
 	int LowestHeuristicValue;
 
 	void SetChilds();
-	bool StoneNearby(int y, int x);
 
 public:
 	PossibleMove(GameManager *, bool OnlyOne = false);

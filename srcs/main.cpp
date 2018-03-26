@@ -23,7 +23,7 @@ int main()
 	game.WinX = -1;
 	game.Depth = 30;
 	game.Timer = 0.5f;
-	game.Algo = 0;
+	game.Algo = 6;
 
 	for (int i = 0; i < 361; i ++)
 	{

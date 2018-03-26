@@ -12,6 +12,19 @@
 
 #include "MinMax.hpp"
 
+// static void printBoard(GameManager * Board)
+// {
+// 	for (int i = 0; i < 361; i ++)
+// 	{
+// 		if (Board->getBoard()[i]  > 2)
+// 			std::cout << "0 ";
+// 		else
+// 			std::cout << (int)Board->getBoard()[i] << " ";
+// 		if (i % 19 == 18)
+// 			std::cout << std::endl;
+// 	}
+// }
+
 int MinMax::MaxDepth;
 double MinMax::MaxTimer;
 
@@ -526,9 +539,10 @@ void MinMax::MCTS()
 	Time = timer;
 	GameManager *BestMove = getChildWithMaxScore();
 	Solution = BestMove->getLastMove();
-	printBoard(BestMove);
-	std::cout << "NUM CHILD = " << BestMove->getChilds().size() << " et " <<  BestMove << std::endl;
-	std::cout << " y = " << BestMove->getChilds()[0]->getLastMove().y << " et x = " << BestMove->getChilds()[0]->getLastMove().x << std::endl;
+	ReturnValue = Board->getCounterVisit();
+	ReturnDepth = 100 * BestMove->getWinScore() / BestMove->getCounterVisit();
+//	std::cout << "NUM CHILD = " << Board->getChilds().size() << " et " << Board->getPotentialMove().size() << std::endl;
+//	std::cout << " y = " << BestMove->getChilds()[0]->getLastMove().y << " et x = " << BestMove->getChilds()[0]->getLastMove().x << std::endl;
 }
 
 GameManager * MinMax::getChildWithMaxScore()
@@ -538,24 +552,11 @@ GameManager * MinMax::getChildWithMaxScore()
 
 	for (size_t i = 0; i < Board->getChilds().size(); i++)
 	{
-		std::cout << Board->getChilds()[i]->getCounterVisit() << " And number of win = " <<  Board->getChilds()[i]->getWinScore() << std::endl;
 		if (Board->getChilds()[i]->getCounterVisit() > Value)
 		{
 			Value = Board->getChilds()[i]->getCounterVisit();
 			tmp = Board->getChilds()[i];
 		}
-//		std::cout << "Y-----------------------" << std::endl;
-		GameManager * tmpBis;
-		for (size_t j = 0;  j < Board->getChilds()[i]->getChilds().size(); j++)
-		{
-//			std::cout << Board->getChilds()[i]->getChilds()[j]->getCounterVisit() << " And number of win = " <<  Board->getChilds()[i]->getChilds()[j]->getWinScore() << std::endl;
-			if (Board->getChilds()[i]->getChilds()[j]->getCounterVisit() > Value)
-			{
-				Value = Board->getChilds()[i]->getChilds()[j]->getCounterVisit();
-				tmpBis = Board->getChilds()[i]->getChilds()[j];
-			}
-		}
-//		std::cout << "X-----------------------" << std::endl;
 	}
 
 	return tmp;
@@ -579,14 +580,16 @@ GameManager * MinMax::findBestNodeWithUCT(GameManager * Node)
 	GameManager * ReturnNode = NULL;
 	for (size_t i = 0; i < Node->getChilds().size(); i++)
 	{
-		tmp = UCTValue(ParentVisit, Node->getChilds()[i]->getWinScore(), Node->getChilds()[i]->getCounterVisit());
+		if ((Node->getbPlayerOneTurn() && Player1 == STONE_BLACK) || (!Node->getbPlayerOneTurn() && Player1 == STONE_WHITE))
+			tmp = UCTValue(ParentVisit, Node->getChilds()[i]->getWinScore(), Node->getChilds()[i]->getCounterVisit());
+		else
+			tmp = UCTValue(ParentVisit, Node->getChilds()[i]->getCounterVisit() - Node->getChilds()[i]->getWinScore(), Node->getChilds()[i]->getCounterVisit());
 		if (tmp > Value)
 		{
 			ReturnNode = Node->getChilds()[i];
 			Value = tmp;
 		}
 	}
-//	std::cout << "Return Value" << Value << std::endl;
 	if (ReturnNode == NULL)
 	{
 		std::cerr << "Wierd UTC" << std::endl;
@@ -604,21 +607,23 @@ double MinMax::UCTValue(int TotalVisit, double WinScore, int Visit)
 
 void MinMax::ExpandNode(GameManager * Node)
 {
+	if (Node->getBlackWin() || Node->getWhiteWin() || Node->getBlackScore() >= 10 || Node->getWhiteScore() >= 10)
+		return;
 	Node->setAlreadyExpand(true);
 	if (Node->getPotentialMove().empty())
 	{
 		PossibleMove::FindOneMove(Node);
 	}
-	PossibleMove possibleMove = PossibleMove(Node, true);
-	GameManager * tmp = possibleMove.SetOneChild();
-	if (!tmp)
-//		std::cout << "NULL" << std::endl;
-	while (tmp)
+	else
 	{
-		tmp = possibleMove.SetOneChild();
+		PossibleMove possibleMove = PossibleMove(Node, true);
+		GameManager * tmp = possibleMove.SetOneChild();
+		while (tmp)
+		{
+			tmp = possibleMove.SetOneChild();
+		}
 	}
-//	std::cout << "NUM CHILD = " << Node->getChilds().size() << " et " <<  Node << std::endl;
-//	std::cout << " y = " << Node->getLastMove().y << " et x = " << Node->getLastMove().x << std::endl;
+
 }
 
 void MinMax::BackPropagation(GameManager * Node, bool BlackPlayer)
@@ -629,7 +634,7 @@ void MinMax::BackPropagation(GameManager * Node, bool BlackPlayer)
 	{
 		tmpNode->InscrementVisit();
 //		std::cout << "NUM CHILD increment = " << tmpNode->getChilds().size() << " et nb visit =  " << tmpNode->getCounterVisit() << std::endl;
-		if (tmpNode->getbPlayerOneTurn() == BlackPlayer)
+		if ((BlackPlayer && Player1 == STONE_BLACK) || (!BlackPlayer && Player1 == STONE_WHITE))
 		{
 			tmpNode->AddScore(1); // TODO
 		}
@@ -641,9 +646,17 @@ void MinMax::BackPropagation(GameManager * Node, bool BlackPlayer)
 bool MinMax::SimulateRandomPlayout(GameManager * Node)
 {
 	GameManager * tmpNode = Node;
+	int iteration = 0;
 
 	while (!((tmpNode->getBlackWin() || tmpNode->getWhiteWin() || tmpNode->getBlackScore() >= 10 || tmpNode->getWhiteScore() >= 10)))
 	{
+		if (iteration >= 100)
+		{
+			if (Player1 == STONE_BLACK)
+				return false;
+			else
+				return true;
+		}
 		if (tmpNode->getPotentialMove().empty())
 			PossibleMove::FindOneMove(tmpNode);
 		PossibleMove possibleMove = PossibleMove(tmpNode, true);
@@ -655,6 +668,7 @@ bool MinMax::SimulateRandomPlayout(GameManager * Node)
 		}
 		else
 			tmpNode = tmp;
+		iteration++;
 	}
 	if (tmpNode->getBlackScore() >= 10 || tmpNode->getBlackWin())
 		return true;
