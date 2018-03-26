@@ -84,6 +84,10 @@ public class PlayStone : MonoBehaviour {
 	/// Called by Unity when the Player click on the board
 	/// </summary>
 	public void OnClick() {
+
+		if (GameManager.Instance.currentState.BlackWin || GameManager.Instance.currentState.BlackScore >= 10 || GameManager.Instance.currentState.WhiteWin || GameManager.Instance.currentState.WhiteScore >= 10)
+			return ;
+			
 		if (GameManager.Instance.currentState.bPlayerOneTurn) {
 			OnBlackPlay();
 		}

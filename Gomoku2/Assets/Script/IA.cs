@@ -49,10 +49,10 @@ public class IA : MonoBehaviour {
 		game.BlackScore = GameManager.Instance.currentState.BlackScore;
 		game.WinY = GameManager.Instance.currentState.winY;
 		game.WinX = GameManager.Instance.currentState.winX;
-		game.Depth = 30;
-		game.Timer = 0.5;
-		game.Algo = 0;
-		game.MaxMove = 1;
+		game.Depth = PlayerPrefs.GetInt("Depth");
+		game.Timer = PlayerPrefs.GetFloat("Timer");
+		game.Algo = PlayerPrefs.GetInt("Algo");
+		game.MaxMove = PlayerPrefs.GetInt("Move");
 		for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
 		{
 			for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)

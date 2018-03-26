@@ -43,7 +43,6 @@ void PossibleMove::SetChilds()
 			tmp->setLastMove(PlayedMove);
 			if (Board->getHighestPriority() <= TTW_OPPONENT) {
 				Board->getChilds().push_back(tmp);
-				nbMove++;
 			}
 			else if (nbMove < MaxMove) {
 				Board->getChilds().push_back(tmp);
@@ -286,6 +285,15 @@ void PossibleMove::FindOneMove(GameManager * Node)
 	int random = std::rand() % 8;
 
 	int k = 0;
+	if (Node->getBoard()[180] == 0)
+	{
+		GameManager * tmp = new GameManager(Node);
+		PlayStone(9,9, tmp);
+ 		Coord PlayedMove = Coord(9,9);
+		tmp->setLastMove(PlayedMove);
+		Node->getChilds().push_back(tmp);
+		return;
+	}
 	while (Node->getChilds().empty())
 	{
 		k++;
