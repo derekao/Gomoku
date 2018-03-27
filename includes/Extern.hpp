@@ -18,6 +18,7 @@
 
 extern "C" 
 {
+	// Share struct between C# and C++ for the IAPlay Param
 	struct GameStatus
 	{
 		int Board[BOARD_HEIGHT * BOARD_WIDTH];
@@ -34,6 +35,7 @@ extern "C"
 
 	};
 
+	// Share struct between C# and C++ for the IAPlay return
 	struct CoordIA
 	{
 		int y;
@@ -42,8 +44,6 @@ extern "C"
 		double Time;
 		int Value;
 	};
-
-	//bool CheckDoubleTree(int y, int x, GameStatus Game);
 
 	CoordIA IAPlay(GameStatus);
 }

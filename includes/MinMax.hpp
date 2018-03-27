@@ -23,9 +23,6 @@
 #include "PossibleMove.class.hpp"
 #include "TranspositionTable.class.hpp"
 
-// #define TIMER_MAX 0.5f
-// #define MAX_DEPTH 30
-
 #define ALGO_MTDF 0
 #define ALGO_MINIMAX 1
 #define ALGO_ALPHABETA 2
@@ -71,6 +68,14 @@ private:
 	//ALGO_ITERATIVE_ALPHABETA
 	void IterativeAlphaBetaStart();
 	int IterativeAlphaBeta(GameManager * Node, int Alpha, int Beta, int Depth, bool MaximizingPlayer);
+
+	//ALGO_NEGASCOUT
+	void NegaScoutStart();
+	int NegaScout(GameManager * Node, int depth, int Alpha, int Beta, bool MaximizingPlayer);
+
+	//ALGO_ITERATIVE_NEGASCOUT
+	void IterativeNegaScoutStart();
+	int IterativeNegaScout(GameManager * Node, int Alpha, int Beta, int Depth);
 
 	//ALGO_MCTS
 	void MCTS();

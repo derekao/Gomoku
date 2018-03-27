@@ -21,24 +21,15 @@ int main()
 	game.BlackScore = 0;
 	game.WinY = -1;
 	game.WinX = -1;
-	game.Depth = 30;
+	game.Depth = 5;
 	game.Timer = 0.5f;
-	game.Algo = 6;
+	game.Algo = 1;
+	game.MaxMove = 100;
 
 	for (int i = 0; i < 361; i ++)
 	{
 		game.Board[i] = 0;
 	}
-//	game.Board[180] = STONE_BLACK;
-
-	// for (int i = 0; i < 361; i ++)
-	// {
-	// 	std::cout << game.Board[i] << " ";
-	// 	if (i % 19 == 18)
-	// 		std::cout << std::endl;
-	// }
-
 	CoordIA tmp = IAPlay(game);
 	std::cout << "x = " << tmp.x << " et y = " << tmp.y << std::endl;
-	// while(1);
 }

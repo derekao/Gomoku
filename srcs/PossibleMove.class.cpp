@@ -12,16 +12,6 @@
 
 #include "PossibleMove.class.hpp"
 
-// static void printBoard(GameManager * Board)
-// {
-// 	for (int i = 0; i < 361; i ++)
-// 	{
-// 		std::cout << Board->getBoard()[i] << " ";
-// 		if (i % 19 == 18)
-// 			std::cout << std::endl;
-// 	}
-// }
-
 int PossibleMove::MaxMove;
 
 PossibleMove::PossibleMove(GameManager * src, bool OnlyOne) : Board(src),
@@ -120,10 +110,8 @@ void PossibleMove::PlayStone(int y, int x, GameManager * Board)
 		Rules::youWin(PlayerOne, PlayerTwo, y, x, Board);
 	}
 	CheckBoardState(y, x, SomethingEaten, Board);
-//	std::cout << " 4)" << Board->getBlackStones().size() << " et " << Board->getWhiteStones().size() << std::endl;
 	Heuristic bestMoves = Heuristic(PlayerTwo, PlayerOne, Board);
 	bestMoves.searchMoves();
-//	std::cout << "testR = " <<  Board->getPotentialMove().size() << std::endl;
 }
 
 // static function

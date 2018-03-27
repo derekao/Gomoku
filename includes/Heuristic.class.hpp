@@ -20,27 +20,16 @@
 #define STRONG_MOVE 5
 #define BAD_MOVE 6
 
-// #define FIRST_STONE_TAKEN 80
-// #define SECOND_STONE_TAKEN 320
-// #define THIRD_STONE_TAKEN 1280
-// #define FOURTH_STONE_TAKEN 5120
-// #define FITH_STONE_TAKEN 21920
-
-// #define FIRST_STONE_TAKEN 0.5f
-// #define SECOND_STONE_TAKEN 2
-// #define THIRD_STONE_TAKEN 8
-// #define FOURTH_STONE_TAKEN 16
-
 #define FIRST_STONE_THREAT 8
 #define SECOND_STONE_THREAT 32
 #define THIRD_STONE_THREAT 128
 #define FOURTH_STONE_THREAT 512
 #define FITH_STONE_THREAT 2192
 
-#define FIRST_STONE_TAKEN 400
-#define SECOND_STONE_TAKEN 600
-#define THIRD_STONE_TAKEN 800
-#define FOURTH_STONE_TAKEN 1000
+#define FIRST_STONE_TAKEN 600
+#define SECOND_STONE_TAKEN 900
+#define THIRD_STONE_TAKEN 1200
+#define FOURTH_STONE_TAKEN 1500
 
 #define SIZE_1 1
 #define SIZE_2 10
@@ -68,18 +57,13 @@ private:
 
 public:
 	Heuristic(int iPlayer, int iOpponent, GameManager * gInstance);
+
+	// Return the value of the Board
 	int BoardValue();
+
+	// Search move aviable and fill Potential move in Instance
 	void searchMoves();
+
 	static bool ramdomMove;
 
 };
-
-// 1. Win Instant > All
-// 2. Blocker une Win 
-// 3. Win en deux coups Sois meme
-// 4. Win deux coups de l’adversaire
-// 5. Prise de pierre
-// 6. Menance de prise de pierre
-// 7. Menace de win de deux coups
-
-// 8.Double deux

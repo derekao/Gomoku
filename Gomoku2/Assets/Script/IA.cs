@@ -53,6 +53,16 @@ public class IA : MonoBehaviour {
 		game.Timer = PlayerPrefs.GetFloat("Timer");
 		game.Algo = PlayerPrefs.GetInt("Algo");
 		game.MaxMove = PlayerPrefs.GetInt("Move");
+
+		if (game.Depth < 2 || game.Depth> 30)
+			game.Depth = 2;
+		if (game.Timer < 0.5f || game.Timer > 10.0f)
+			game.Timer = 0.5f;
+		if (game.MaxMove < 3 || game.MaxMove > 100)
+			game.MaxMove = 3;
+		if (game.Algo  < 0 || game.Algo  > 7)
+			game.Algo  = 0;
+
 		for (int i = 0; i < GameManager.Instance.iHeightBoard; i++)
 		{
 			for (int j = 0; j < GameManager.Instance.iWidthBoard; j++)

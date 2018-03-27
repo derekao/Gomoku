@@ -1,14 +1,5 @@
 #include "Heuristic.class.hpp"
 
-// static void printBoard(GameManager * Board)
-// {
-// 	for (int i = 0; i < 361; i ++)
-// 	{
-// 		myfile << Board->getBoard()[i] << " ";
-// 		if (i % 19 == 18)
-// 			myfile << std::endl;
-// 	}
-// }
 
 bool Heuristic::ramdomMove;
 
@@ -459,8 +450,6 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 		xVar = -1;
 		yVar = 1;
 	}
-	// std::cout << "Size: " << size << " potentialSize: " << potentialSize << " bBorderStart: " << bBorderStart << " bBorderEnd: " << bBorderEnd << " bBlockStart: " << bBlockStart << " bBlockEnd: " << bBlockEnd << " Unbound: " << Unbound << " pos: " << pos << " type: " << type << " Who: " << who << std::endl;
-
 	if (size >= 4 && potentialSize > 4) {
 		score = who ? OTW_PLAYER : OTW_OPPONENT;
 		if (!bBlockStart && !bBorderStart && !Unbound)
@@ -468,11 +457,7 @@ void Heuristic::getMovePriority(int size, int potentialSize, bool bBorderStart, 
 		if (!bBlockEnd && !bBorderEnd && !Unbound)
 			addMove(y + yVar * size, x + xVar * size, score);
 		if (Unbound)
-		{
-//			addMove((y - yVar), (x - xVar), score);
 			addMove(y + yVar * Unbound, x + xVar * Unbound, score);
-//			addMove(y + yVar * (size + 1), x + xVar * (size + 1), score);
-		}
 	}
 	if (size == 3 && potentialSize > 4) {
 		if (!bBorderStart && !bBorderEnd && !bBlockStart && !bBlockEnd) {
@@ -575,28 +560,18 @@ void Heuristic::searchMoves() {
 		vPlayer = Instance->getWhiteStones();
 	}
 	Instance->getPotentialMove().clear();
-	// std::cout << std::endl;
-	// std::cout << std::endl;
-	// std::cout << " Taille " << vPlayer.size() << " Taille2 " << vOpponent.size() << std::endl;
 	for (size_t i = 0; i < vPlayer.size(); i++) {
-		// std::cout << "PLA Y: "<< vPlayer[i].y << " X: " << vPlayer[i].x << " " << ((Player & STONE_BLACK ) != 0 ? "Black" : "White") << std::endl;
 		pos = (vPlayer[i].y) * BOARD_HEIGHT + vPlayer[i].x ;
 		//Horizontale
 		CountHorizontalAlignmentScore(pos, true, true);
-
 		// Vertical
 		CountVerticalAlignmentScore(pos, true, true);
-
 		// Diagonnal Right
 		CountDiagonnalRightAlignmentScore(pos, true, true);
-
 		// Diagonnal Left
 		CountDiagonnalLeftAlignmentScore(pos, true, true);
 	}
-	// std::cout << std::endl;
-	// std::cout << std::endl;
 	for (size_t i = 0; i < vOpponent.size(); i++) {
-		// std::cout << "OPP Y: "<< vOpponent[i].y << " X: " << vOpponent[i].x << " " << ((Player & STONE_BLACK ) != 0 ? "Black" : "White") << std::endl;
 		pos = (vOpponent[i].y) * BOARD_HEIGHT + vOpponent[i].x ;
 		// Horizontal
 		CountHorizontalAlignmentScore(pos, false, true);

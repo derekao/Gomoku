@@ -16,13 +16,37 @@ public class SliderSettings : MonoBehaviour {
 		SliderValue = GetComponent<Text>();
 
 		if (SliderType == 0)
-			TextUpdate(PlayerPrefs.GetInt("Depth"));
+		{
+			int n = PlayerPrefs.GetInt("Depth");
+			if (n < 2 || n > 30)
+				TextUpdate(2);
+			else
+				TextUpdate(n);
+		}
 		else if (SliderType == 1)
-			TextUpdate(PlayerPrefs.GetFloat("Timer"));
+		{
+			float f = PlayerPrefs.GetFloat("Timer");
+			if (f < 0.5f || f > 10.0f)
+				TextUpdate(0.5f);
+			else
+				TextUpdate(f);
+		}
 		else if (SliderType == 2)
-			TextUpdate(PlayerPrefs.GetInt("Move"));
+		{
+			int n = PlayerPrefs.GetInt("Move");
+			if (n < 3 || n > 100)
+				TextUpdate(3);
+			else
+				TextUpdate(n);
+		}
 		else if (SliderType == 3)
-			TextUpdate(PlayerPrefs.GetInt("Algo"));
+		{
+			int n = PlayerPrefs.GetInt("Algo");
+			if (n < 0 || n > 7)
+				TextUpdate(0);
+			else
+				TextUpdate(n);;
+		}
 	}
 	
 	public void TextUpdate(float Value)
